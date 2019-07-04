@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kolibri</string>
+    <string name="jouer">Fortsetzen</string>
+    <string name="campagne">Kampagne</string>
+    <string name="aleat">Zufallskarte</string>
+    <string name="multi">Multiplayer-Challenge</string>
+    <string name="fac">Anfänger</string>
+    <string name="moy">Mittlere</string>
+    <string name="dif">Könner</string>
+    <string name="pause">-= Pause =-</string>
+    <string name="reprendre">Fortsetzen</string>
+    <string name="recommencer">Wiederholen</string>
+    <string name="sortir">Verlassen</string>
+    <string name="solution">Lösung</string>
+    <string name="info">Informationen</string>
+	<string name="instru">Anweisungen</string>
+	<string name="nouveau_defi">Neue Herausforderung</string>
+	<string name="score">Spielstand :</string>
+	<string name="info_text">Applikation entwickelt während der Entwicklungsprojekt in Telecom Bretagne durch die folgenden Studenten :\n Durand Louis, Guyard Valentin, Jacquemod Laura and Thiam Mariam\n </string>
+	<string name="info_text2">Wir bedanken unseren Tutor, Gwenaël Brunet, Informationen- und Netzwerktechniker in der Abteilung Bild und Behandlung von Informationen.</string>
+	<string name="instru_text">Sie sind ein Kolibri in eine Hinkelsteinfeld in Bretagne und Sie müssen jede Blumen fressen, die auf dem weiche bretonische Erde liegen. Sie können aber nur geradehaus fliegen und ihre Richtung nur gegenüber ein Hindernis (Hinkelstein oder Zaun).\n\n PASSEN SIE AUF vor die Zauberblumen, die einst vom Pollen, die Ihr Schnabel trägt befruchteten werden, wandeln sich zu Hinkelsteine !</string>
+	<string name="accept">OK</string>
+	<string name="annuler">Abbrechen</string>
+	<string name="name">Name</string>
+	<string name="bravo">Gut gespielt !</string>
+	<string name="temps">Zeit</string>
+	<string name="exp">Erfahrung</string>
+	<string name="defis_joues">Spiele</string>
+	<string name="defis_gagnés">Siege</string>
+	<string name="etat">Spielen</string>
+	<string name="perso">Maßgeschneidert</string>
+	<string name="paramAleat">Zufallskarte - Einstellung</string>
+	<string name="defaut">Standardmäßig</string>
+	<string name="vaches">Kühe</string>
+	<string name="dynamites">Dynamite</string>
+	<string name="chats">Katzen</string>
+	<string name="arcs">Regenbogen</string>
+	<string name="progression">Progression in der Kampagne:</string>
+	<string name="longueur">Länge:</string>
+	<string name="base_niveau">Menhirs Muster</string>
+	<string name="param_descript">\u0009Die Länge sowie der Anzahl von zusätzlichen Elementen erhöht die Schwierigkeit, aber auch die Menge an Erfahrung erworben!</string>
+	<string name="did_he_dieded">Oops!</string>
+	<string name="oui">Ja</string>
+	<string name="non">Nein</string>
+	<string name="aide">Hilfe</string>
+	<string name="bloque">Sie haben die nächste Niveau noch nicht entsperren!</string>
+	<string name="solution_bloque">You didn\'t unlock the solution of this level yet!</string>
+	<string name="aleatoire">Zufällig</string>
+	<string name="joueur_suivant">\u0009\u21AA Spieler 2: Bereit?</string>
+	<string name="forfait">Verwirken</string>
+	<string name="forfait_msg">Wollen Sie verwirken?</string>
+	<string name="c_est_parti">Los</string>
+	<string name="joueur">Spieler</string>
+	<string name="the_results">Die Ergebnisse&#8230;</string>
+	<string name="penalite_aide">Strafe für Hilfe</string>
+	<string name="victoire">Sieg!!</string>
+	<string name="resultats">\u0009\u21D2 Weiter für die Ergebnisse!</string>
+	<string name="the_end">ENDE</string>
+	<string name="toast_fin">Genial! Sie haben die ganze Kampagne Mode gelöst!!</string>
+	<string name="toast_fin2">Verbessern Sie Ihre Erfahrung mit den Zufallskarten!\nEine Rangliste und Netzwerkherausforderungen werden bald erscheinen&#8230;</string>
+	
+</resources>

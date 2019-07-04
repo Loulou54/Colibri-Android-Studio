@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "533995009920",
+    "firebase_url": "https://api-project-533995009920.firebaseio.com",
+    "project_id": "api-project-533995009920",
+    "storage_bucket": "api-project-533995009920.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533995009920:android:c90d2900fe261367",
+        "android_client_info": {
+          "package_name": "com.game.colibri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533995009920-892u4uefoji66vfqq969neqq0rrs5nq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsjiTz8vsdfArtErUh9XLtmaSZVBHKTZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533995009920-892u4uefoji66vfqq969neqq0rrs5nq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

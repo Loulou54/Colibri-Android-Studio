@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+<ImageView
+    android:src="@drawable/affiche"
+    android:scaleType="fitXY"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_alignTop="@+id/windowPaperDialog"
+    android:layout_alignBottom="@+id/windowPaperDialog"
+    android:layout_alignLeft="@+id/windowPaperDialog"
+    android:layout_alignRight="@+id/windowPaperDialog"
+    android:contentDescription="@string/app_name" />
+
+<LinearLayout
+    android:id="@+id/windowPaperDialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp"
+    android:minHeight="160dp"
+    android:minWidth="270dp"
+    android:orientation="vertical"
+    android:paddingBottom="56dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp" >
+    
+	<TextView
+        android:id="@+id/titrePaperDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textColor="@color/theme_vert"
+        android:textSize="24sp"
+        android:shadowColor="@color/choco"
+        android:shadowDy="3"
+        android:shadowRadius="2"
+        android:visibility="gone"/>
+	
+	<TextView
+        android:id="@+id/msgPaperDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:visibility="gone"/>
+	
+	<ScrollView
+	    android:id="@+id/contentPaperDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+	</ScrollView>
+	
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/buttonsPaperDialog"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_alignBottom="@+id/windowPaperDialog"
+    android:layout_alignLeft="@+id/windowPaperDialog"
+    android:layout_alignRight="@+id/windowPaperDialog"
+    android:layout_margin="18dp"
+    android:visibility="gone">
+    
+    <Button
+        android:id="@+id/negativePaperDialog"
+        style="@style/pencil_button"
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="1dp"
+        android:text="@string/annuler"
+        android:visibility="invisible"/>
+    
+    <Button
+        android:id="@+id/neutralPaperDialog"
+        style="@style/pencil_button"
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="1dp"
+        android:text="@string/defaut"
+        android:visibility="invisible"/>
+    
+    <Button
+        android:id="@+id/positivePaperDialog"
+        style="@style/pencil_button"
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="1dp"
+        android:text="@string/accept"
+        android:visibility="invisible"/>
+    
+</LinearLayout>
+
+</RelativeLayout>

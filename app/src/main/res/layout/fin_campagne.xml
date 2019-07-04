@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.game.colibri.Artifices xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_fin_campagne"
+    android:id="@+id/artifices_doge" >
+
+    <TextView
+        android:id="@+id/the_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/the_end"
+        android:fontFamily="serif"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:shadowColor="@color/vert_fonce"
+        android:shadowDx="4"
+        android:shadowDy="3"
+        android:shadowRadius="4" />
+
+</com.game.colibri.Artifices>

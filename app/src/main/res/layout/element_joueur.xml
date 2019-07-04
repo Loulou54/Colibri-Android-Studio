@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/avatarAdv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/colibri_d1" />
+
+    <TextView
+        android:id="@+id/nomAdv"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3"
+        android:paddingLeft="5dp"
+        android:paddingRight="0dp"
+        android:textSize="18sp"
+        android:textColor="@color/theme_gris"
+        android:text="@string/joueur"
+        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true" />
+    
+    <ImageView
+        android:id="@+id/paysAdv"
+        android:layout_width="0dip"
+        android:layout_height="18dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/colibri_d1" />
+    
+    <TextView
+        style="@style/valueListJoueur"
+        android:id="@+id/expAdv"
+        android:layout_weight="2"
+        android:textSize="12sp" />
+    
+    <TextView
+        style="@style/valueListJoueur"
+        android:id="@+id/scoreAdv"
+        android:layout_weight="2"
+        android:textSize="12sp" />
+
+    <ImageButton
+        android:id="@+id/poubelle"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/tiret"
+        android:src="@android:drawable/ic_menu_delete"
+        android:visibility="gone" />
+
+</LinearLayout>

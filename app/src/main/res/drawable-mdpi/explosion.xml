@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" 
+    			android:oneshot="true" >
+    <item android:drawable="@drawable/dynamite_allumee" android:duration="600" />
+    <item android:drawable="@drawable/explo0" android:duration="100" />
+    <item android:drawable="@drawable/explo1" android:duration="100" />
+    <item android:drawable="@drawable/explo2" android:duration="100" />
+    <item android:drawable="@drawable/explo3" android:duration="100" />
+    <item android:drawable="@drawable/explo4" android:duration="100" />
+    <item android:drawable="@drawable/explo5" android:duration="100" />
+</animation-list>

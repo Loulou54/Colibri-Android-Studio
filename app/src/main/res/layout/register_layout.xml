@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".RegisterUser" >
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="2dp"
+        android:background="@color/theme_beige" >
+
+        <TextView
+            android:id="@+id/sw_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:background="@color/theme_gris_alpha"
+            android:text="@string/register"
+            android:textColor="@color/theme_gris"
+            android:clickable="false" />
+
+        <TextView
+            android:id="@+id/sw_con"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:background="@color/theme_vert"
+            android:text="@string/connect"
+            android:textColor="@color/theme_gris" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="0dp"
+        android:text="@string/enter_pseudo" />
+
+    <EditText
+        android:id="@+id/pseudo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="10"
+        android:hint="@string/name"
+        android:inputType="textPersonName"
+        android:imeOptions="flagNoExtractUi" >
+        <requestFocus />
+    </EditText>
+    
+    <EditText
+        android:id="@+id/mdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="10"
+        android:hint="@string/mdp"
+        android:inputType="textPassword"
+        android:imeOptions="flagNoExtractUi" >
+    </EditText>
+    
+    <TextView
+        android:id="@+id/expToSyncMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/expToSyncMsg"
+        android:textColor="@color/red"
+        android:visibility="gone" />
+    
+    <LinearLayout
+        android:id="@+id/lostPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+        
+        <TextView
+            android:id="@+id/lost_exp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lost_mdp_expl"
+            android:visibility="gone" />
+        
+        <CheckBox
+            android:id="@+id/lost_chkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/lost_mdp_chk" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/pickAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <EditText
+	        android:id="@+id/mail"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:ems="10"
+	        android:hint="@string/mail"
+	        android:inputType="textEmailAddress"
+	        android:imeOptions="flagNoExtractUi" >
+	    </EditText>
+	    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/pick_avatar" />
+	
+	    <ImageView
+	        android:id="@+id/avatarReg"
+	        android:layout_width="wrap_content"
+	        android:layout_height="50dp"
+	        android:layout_gravity="center"
+	        android:contentDescription="@string/pick_avatar"
+	        android:src="@drawable/colibri_d1"
+	        android:visibility="gone" />
+	
+	    <HorizontalScrollView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center" >
+	
+	        <LinearLayout
+	            android:id="@+id/imagePicker"
+	            android:layout_width="wrap_content"
+	            android:layout_height="40dp"
+	            android:layout_marginBottom="5dp"
+	            android:layout_marginTop="5dp"
+	            android:orientation="horizontal" >
+	        </LinearLayout>
+	    </HorizontalScrollView>
+	    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/mail_exp"
+	        android:textStyle="italic" />
+	    
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:background="@drawable/affiche" >
+
+    <TextView
+        android:id="@+id/titreColibrains"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/colibrains"
+        android:textColor="@color/theme_vert"
+        android:textSize="32sp"
+        android:shadowColor="@color/choco"
+        android:shadowDy="4"
+        android:shadowRadius="3" />
+	
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titreColibrains"
+        android:layout_above="@+id/quitColibrains" >
+        
+        <LinearLayout
+            android:id="@+id/contentColibrains"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:gravity="center" >
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/colibrains_info1"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/colibrains_info2"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <ImageButton
+		        android:id="@+id/unlimitedColibrains"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="2dp"
+		        android:contentDescription="@string/solution"
+		        android:src="@drawable/cerveau"
+		        android:background="@drawable/bouton_lateral" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/colibrains_info3"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <ImageButton
+		        android:id="@+id/limitedColibrains"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="2dp"
+		        android:contentDescription="@string/solution"
+		        android:src="@drawable/cerveau"
+		        android:background="@drawable/bouton_lateral" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/colibrains_info4"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/colibrains_info5"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/colibrains_info6"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		    
+		    <Button
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+				android:layout_marginTop="2dp"
+                android:background="@drawable/bouton_toast"
+                android:text="@string/sol_colibrain"
+                android:textSize="14sp"
+	        	android:textColor="@color/noir"
+	        	android:drawableRight="@drawable/cerveau" />
+		    
+		    <TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/colibrains_info7"
+				android:textColor="@color/theme_gris"
+				android:textSize="15sp" />
+		
+		</LinearLayout>
+        
+    </ScrollView>
+     
+    <Button
+        android:id="@+id/quitColibrains"
+        style="@style/pencil_button"
+        android:layout_width="180dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="quitColiBrainsInfos"
+        android:text="@string/accept" />
+
+</RelativeLayout>

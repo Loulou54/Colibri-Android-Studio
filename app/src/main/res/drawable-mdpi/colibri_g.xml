@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/colibri_g1" android:duration="60" />
+    <item android:drawable="@drawable/colibri_g2" android:duration="40" />
+    <item android:drawable="@drawable/colibri_g3" android:duration="60" />
+    <item android:drawable="@drawable/colibri_g2" android:duration="40" />
+</animation-list>

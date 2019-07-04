@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<string name="app_name">Colibrí</string>
+	<string name="jouer">Continuar</string>
+	<string name="campagne">Campaña</string>
+	<string name="aleat">Mapa Aleatorio</string>
+	<string name="multi">Desafío Multijugador</string>
+	<string name="fac">Principiantes</string>
+	<string name="moy">Intermedio</string>
+	<string name="dif">Experto</string>
+	<string name="pause">-= Pausa =-</string>
+	<string name="reprendre">Reanudar</string>
+	<string name="recommencer">Recomenzar</string>
+	<string name="sortir">Dejar</string>
+	<string name="solution">Solución</string>
+	<string name="info">Informatión</string>
+	<string name="instru">Instrucción</string>
+	<string name="nouveau_defi">Nuevo desafío</string>
+	<string name="score">Score :</string>
+	<string name="info_text">Aplicación desarrollada durante el proyecto de desarrollo en Telecom Bretagne por los siguientes estudiantes :\n Durand Louis, Guyard Valentin, Jacquemod Laura y Thiam Mariam\n </string>
+	<string name="info_text2">Agradecemos a nuestro tutor, Gwenaël Brunet, técnico en computación y en red, en el departamento Imagen y Procesamiento de Información </string>
+	<string name="instru_text">Usted es un pequeño colibrí en un campo de menhires en Bretaña y debe disfrutar todas las flores que cubrían la pradera.\n\n Se puede sólo volar en una línea recta y cambiar de dirección cuando se enfrentan a un obstáculo (menhir o valla). \n \n PRECAUCIÓN flores mágicas, tan pronto como son fecundados por el polen que lleva su pico, se transforman en un menhir !</string>
+	<string name="accept">OK</string>
+	<string name="annuler">Cancelar</string>
+	<string name="name">Nombre</string>
+	<string name="bravo">Bien jugado!</string>
+	<string name="temps">Tiempo</string>
+	<string name="exp">Experiencia</string>
+	<string name="defis_joues">Desafios</string>
+	<string name="defis_gagnés">Victorias</string>
+	<string name="etat">Jugar</string>
+	<string name="perso">Personalizado</string>
+	<string name="paramAleat">Mapa aleatoria - Parámetros</string>
+	<string name="defaut">Por defecto</string>
+	<string name="vaches">Vacas</string>
+	<string name="dynamites">Dinamitas</string>
+	<string name="chats">Gatos</string>
+	<string name="arcs">Arco iris</string>
+	<string name="progression">Progresión de la campaña:</string>
+	<string name="longueur">Longitud:</string>
+	<string name="base_niveau">Patrón de los menhires</string>
+	<string name="param_descript">\u0009La longitud y el número de elementos adicionales aumentan la dificultad, sino también la cantidad de experiencia ganada!</string>
+	<string name="did_he_dieded">¡Oops!</string>
+	<string name="oui">Sí</string>
+	<string name="non">No</string>
+	<string name="aide">Ayuda</string>
+	<string name="bloque">¡No has desbloqueado el próximo nivel todavía!</string>
+	<string name="solution_bloque">¡No has desbloqueado la próxima solución todavía!</string>
+	<string name="aleatoire">Aleatorio</string>
+	<string name="joueur_suivant">\u0009\u21AA ¿Jugador 2: Listo?</string>
+	<string name="forfait">Abandonar</string>
+	<string name="forfait_msg">¿Quieres abandonar?</string>
+	<string name="c_est_parti">¡Vamos!</string>
+	<string name="joueur">Jugador</string>
+	<string name="the_results">Resultados&#8230;</string>
+	<string name="penalite_aide">Penalidad de ayuda</string>
+	<string name="victoire">¡¡Victoria!!</string>
+	<string name="resultats">\u0009\u21D2 ¡Apreta Continuar para los resulados!</string>
+	<string name="the_end">FÍN</string>
+	<string name="toast_fin">¡Impresionante! ¡¡ Usted acaba de vencer el modo Campaña !!</string>
+	<string name="toast_fin2">¡Mejore su experiencia con los mapas aleatorias! clasificación y desafíos online vienen pronto&#8230;</string>
+	
+</resources>

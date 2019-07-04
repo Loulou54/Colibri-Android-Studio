@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/nomDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textStyle="bold|italic"
+        android:textColor="@color/theme_vert"
+        android:textSize="22sp"
+        android:shadowColor="@color/choco"
+        android:shadowDy="3"
+        android:shadowRadius="2" />
+    
+    <ImageView
+        android:id="@+id/avatarDetails"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@drawable/colibri_d1"
+        android:contentDescription="@string/app_name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/paysDetails"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/flagDetails"
+            android:layout_width="0dip"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:src="@drawable/colibri_d1"
+            android:contentDescription="@string/app_name" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+	        android:layout_width="0dip"
+	        android:layout_height="20dp"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:contentDescription="@string/app_name"
+	        android:src="@drawable/horloge" />
+
+        <TextView
+            android:id="@+id/lastConnectDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tiret"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/campagne" />
+
+        <TextView
+            android:id="@+id/progressDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/campagne"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/exp" />
+
+        <TextView
+            android:id="@+id/expDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/exp"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/score_compet" />
+
+        <TextView
+            android:id="@+id/scoreDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/score_compet"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_joues" />
+
+        <TextView
+            android:id="@+id/defisDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_joues"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_gagnés"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/winsDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_gagnés"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_perdus"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/looseDetails"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/defis_perdus"
+            android:textColor="@color/orange" />
+
+    </LinearLayout>
+
+</LinearLayout>

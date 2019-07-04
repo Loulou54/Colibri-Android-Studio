@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_gris_alpha" >
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/affiche" >
+
+        <View
+            android:id="@+id/perdu_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/perdu_background_vache" />
+
+        <Button
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bouton_restart"
+            android:gravity="center"
+            android:onClick="recommencer" />
+
+        <TextView
+            android:id="@+id/perdu_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:padding="8dp"
+            android:shadowColor="@color/choco"
+            android:shadowDy="4"
+            android:shadowRadius="3"
+            android:text="@string/did_he_dieded"
+            android:textColor="@color/theme_vert"
+            android:textSize="32sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

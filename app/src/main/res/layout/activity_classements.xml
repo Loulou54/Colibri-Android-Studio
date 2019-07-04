@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_beige"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_gris" >
+
+        <Button
+            style="@style/tabStyle"
+            android:tag="0"
+            android:text="@string/exp" />
+
+        <Button
+            style="@style/tabStyle"
+            android:tag="1"
+            android:text="@string/score_titre" />
+        
+        <Button
+            style="@style/tabStyle"
+            android:tag="2"
+            android:text="@string/defis_joues" />
+        
+        <Button
+            style="@style/tabStyle"
+            android:tag="3"
+            android:text="@string/winlost" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:background="@android:drawable/btn_default_small"
+            android:textColor="@color/theme_gris"
+            android:textOff="@string/global"
+            android:textOn="@string/amis"
+            android:onClick="filterFriends" />
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" >
+			
+			<EditText
+				android:id="@+id/searchClassement"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginBottom="2dp"
+				android:background="@drawable/shape_edittext"
+				android:hint="@string/chercher_adv"
+				android:imeOptions="flagNoExtractUi"
+				android:inputType="text|textNoSuggestions"
+				android:textSize="14sp"
+				android:visibility="invisible" />
+
+	        <ToggleButton
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical|right"
+	            android:background="@drawable/bouton_recherche"
+	            android:textOff=""
+	            android:textOn=""
+	            android:onClick="search" />
+		
+		</FrameLayout>
+
+    </LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+	    
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:text="@string/rank"
+		    android:layout_weight="2" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:layout_width="50dp"
+		    android:layout_weight="0"
+		    android:text="@string/avatar" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:layout_weight="4"
+		    android:text="@string/name" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:text="@string/pays"
+		    android:layout_weight="2" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:id="@+id/expTitleRanking"
+		    android:text="@string/exp"
+		    android:layout_weight="3" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:id="@+id/scoreTitleRanking"
+		    android:text="@string/score_titre"
+		    android:layout_weight="3" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:id="@+id/defisTitleRanking"
+		    android:text="@string/defis_joues"
+		    android:layout_weight="2" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:text="@string/defis_gagnés"
+		    android:layout_weight="2" />
+		<TextView
+		    style="@style/titleListJoueur"
+		    android:id="@+id/winLostTitleRanking"
+		    android:text="@string/winlost"
+		    android:layout_weight="2" />
+
+	</LinearLayout>
+    
+	<View
+	    android:layout_width="match_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/theme_gris" />
+	
+	<ViewFlipper
+		android:id="@+id/rankingFlipper"
+		android:layout_width="match_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1" >
+
+        <ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+        <ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+        <ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+        <ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+	    
+	</ViewFlipper>
+	
+	<View
+	    android:layout_width="match_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/theme_gris" />
+	
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" >
+	
+		<include
+		    android:id="@+id/userRank"
+		    layout="@layout/element_classement" />
+		
+		<TextView
+		    android:id="@+id/nJoueurs"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="bottom|left"
+		    android:layout_marginLeft="8dp"
+		    android:textColor="@color/theme_vert"
+		    android:textSize="14sp"
+		    android:text="@string/tiret" />
+	
+	</FrameLayout>
+
+</LinearLayout>

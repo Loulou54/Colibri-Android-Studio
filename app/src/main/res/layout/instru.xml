@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:background="@drawable/affiche" >
+
+    <TextView
+        android:id="@+id/titreInstru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/instru"
+        android:textColor="@color/theme_vert"
+        android:textSize="32sp"
+        android:shadowColor="@color/choco"
+        android:shadowDy="4"
+        android:shadowRadius="3" />
+	
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titreInstru"
+        android:layout_above="@+id/quitInstru" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            
+            <TextView
+                android:id="@+id/instru1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/instru_text"
+		        android:textColor="@color/theme_gris"
+		        android:textSize="16sp" />
+            
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/demo_instru"
+                android:contentDescription="@string/tiret" />
+            
+            <TextView
+                android:id="@+id/instru2"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/instru_text2"
+		        android:textColor="@color/theme_gris"
+		        android:textSize="16sp" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="10dp" >
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/fleur"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/fleurm"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/menhir"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/dynamite"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/vache_0"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/chat_0"
+	                android:contentDescription="@string/tiret" />
+                <ImageView
+	                style="@style/imgs_horiz"
+	                android:src="@drawable/rainbow"
+	                android:contentDescription="@string/tiret" />
+            </LinearLayout>
+            
+            <TextView
+                android:id="@+id/instru3"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/instru_text3"
+		        android:textColor="@color/theme_gris"
+		        android:textSize="16sp" />
+            
+        </LinearLayout>
+        
+    </ScrollView>
+     
+    <Button
+        android:id="@+id/quitInstru"
+        style="@style/pencil_button"
+        android:layout_width="180dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="quitInstrus"
+        android:text="@string/accept" />
+
+</RelativeLayout>

@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Application theme. -->
+	<style name="AppTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+		<!-- All customizations that are NOT specific to a particular API-level can go here. -->
+		<item name="android:windowContentOverlay">@null</item>
+		<item name="android:windowBackground">@null</item>
+	</style>
+	
+	<style name="button_blue">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">4dp</item>
+		<item name="android:background">@drawable/boutons</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">16sp</item>
+    </style>
+    
+	<style name="button_green">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">0dip</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_marginTop">6dp</item>
+		<item name="android:background">@drawable/boutons2</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">14sp</item>
+    </style>
+	
+    <style name="tabStyle">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:background">@color/theme_vert</item>
+		<item name="android:padding">6dp</item>
+		<item name="android:layout_marginRight">1dp</item>
+		<item name="android:layout_marginBottom">2dp</item>
+		<item name="android:textColor">@color/theme_gris</item>
+		<item name="android:onClick">dispClassement</item>
+    </style>
+    
+	<style name="valueListJoueur">
+		<item name="android:layout_width">0dip</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:gravity">center</item>
+		<item name="android:layout_gravity">center_vertical</item>
+		<item name="android:text">@string/tiret</item>
+		<item name="android:textColor">@color/orange</item>
+		<item name="android:textSize">15sp</item>
+	</style>
+	
+	<style name="titleListJoueur">
+		<item name="android:layout_width">0dip</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:gravity">center</item>
+		<item name="android:textColor">@color/theme_gris</item>
+		<item name="android:textSize">11sp</item>
+	</style>
+	
+	<style name="bouton_papier">
+		<item name="android:background">@drawable/bouton_papier</item>
+		<item name="android:layout_marginLeft">1dp</item>
+		<item name="android:layout_marginRight">1dp</item>
+		<item name="android:layout_marginTop">1dp</item>
+		<item name="android:layout_marginBottom">2dp</item>
+	</style>
+	
+	<style name="pencil_button">
+		<item name="android:background">@drawable/pencil_button</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginTop">6dp</item>
+		<item name="android:textColor">@color/theme_gris</item>
+		<item name="android:textSize">16sp</item>
+	</style>
+	
+	<style name="imgs_horiz">
+	    <item name="android:layout_width">0dip</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:layout_weight">1</item>
+	</style>
+	
+	<style name="paper_dialog">
+	    <item name="android:layout_marginTop">20dp</item>
+	    <item name="android:layout_marginBottom">20dp</item>
+	    <item name="android:layout_marginLeft">40dp</item>
+	    <item name="android:layout_marginRight">40dp</item>
+	</style>
+	
+</resources>

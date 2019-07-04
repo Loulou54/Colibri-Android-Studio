@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wood_tiles" >
+    
+    <TextView
+        android:id="@+id/the_res"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/toast"
+        android:text="@string/the_results"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/theme_vert"
+        android:textSize="32sp"
+        android:fontFamily="serif"
+        android:textStyle="italic"
+        android:shadowColor="@color/choco"
+        android:shadowDy="3"
+        android:shadowRadius="2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/the_res"
+        android:orientation="vertical"
+        android:background="@drawable/affiche" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                style="@style/titleListJoueur"
+	            android:id="@+id/nomDefiRes"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="7"
+	            android:layout_gravity="center_vertical"
+	            android:text="@string/joueur"
+	            android:fontFamily="serif"
+				android:textSize="18sp"
+				android:textStyle="bold"
+				android:textColor="@color/theme_gris"
+				android:shadowColor="@color/choco"
+				android:shadowDx="-4"
+				android:shadowDy="3"
+	    		android:shadowRadius="3" />
+            
+            <TextView
+                style="@style/titleListJoueur"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="3"
+	            android:layout_gravity="center_vertical"
+	            android:text="@string/temps"
+	            android:fontFamily="serif" />
+            
+            <TextView
+                style="@style/titleListJoueur"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="3"
+	            android:layout_gravity="center_vertical"
+	            android:text="@string/score_match"
+	            android:fontFamily="serif" />
+            
+            <TextView
+                style="@style/titleListJoueur"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="3"
+	            android:layout_gravity="center_vertical"
+	            android:text="@string/score_cumul"
+	            android:fontFamily="serif"
+	            android:textStyle="bold" />
+            
+        </LinearLayout>
+        
+        <ListView
+	        android:id="@+id/listRes"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
+
+    </LinearLayout>
+    
+    <ImageButton
+        android:id="@+id/nextRes"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_margin="6dp"
+	    android:background="@drawable/bouton_toast"
+	    android:src="@drawable/fw"
+	    android:contentDescription="@string/tiret"
+	    android:onClick="displayNextResults" />
+    
+    <com.game.colibri.Artifices
+        android:id="@+id/artifices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
+    
+    <com.game.colibri.Carte
+	    android:id="@+id/apercuResMini"
+	    android:layout_width="100dp"
+	    android:layout_height="60dp"
+	    android:layout_alignParentTop="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_margin="6dp"
+	    android:background="@drawable/herbe_nv2"
+	    android:onClick="clickApercu" />
+    
+    <com.game.colibri.Carte
+	    android:id="@+id/apercuResMaxi"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_margin="6dp"
+	    android:background="@drawable/herbe_nv2"
+	    android:onClick="clickApercu"
+	    android:visibility="invisible" />
+
+</RelativeLayout>

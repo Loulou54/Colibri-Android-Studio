@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="0dip"
+        android:layout_height="35dp"
+        android:layout_weight="2"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/colibri_d1" />
+
+    <TextView
+        android:id="@+id/nomJoueur"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3"
+        android:textSize="18sp"
+        android:textColor="@color/theme_gris"
+        android:text="@string/joueur"
+        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true" />
+    
+    <TextView
+        android:id="@+id/scoreJoueur"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:text="@string/score"
+        android:textStyle="italic"
+        android:textColor="@color/orange"
+        android:textSize="16sp" />
+    
+    <ImageView
+        android:id="@+id/etatJoueur"
+        android:layout_width="0dip"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/check" />
+    
+    <TextView
+        android:id="@+id/expJoueur"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
+        android:text="@string/exp"
+        android:textColor="@color/orange"
+        android:textSize="12sp" />
+
+</LinearLayout>

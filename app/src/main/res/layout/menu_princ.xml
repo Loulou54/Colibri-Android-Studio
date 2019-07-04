@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menu_nv"
+    tools:context=".MenuPrinc" >
+    
+    <TextView
+        android:id="@+id/main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="130dp"
+        android:textSize="60sp"
+        android:textColor="@color/theme_gris"
+        android:text="@string/app_name" />
+    
+    <Button
+        style="@style/button_blue"
+        android:id="@+id/bout1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/jouer"
+        android:onClick="continuer" />
+    
+    <Button
+        style="@style/button_blue"
+        android:id="@+id/bout2"
+        android:layout_alignLeft="@+id/bout1"
+        android:layout_below="@+id/bout1"
+        android:text="@string/campagne"
+        android:onClick="campagne" />
+    
+    <Button
+        style="@style/button_blue"
+        android:id="@+id/bout3"
+        android:layout_alignLeft="@+id/bout2"
+        android:layout_below="@+id/bout2"
+        android:text="@string/aleat"
+        android:onClick="aleatoire" />
+    
+    <include
+        layout="@layout/choix_niveau_aleat"
+        android:id="@+id/opt_aleat"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bout1"
+	    android:layout_below="@+id/bout1"
+	    android:layout_marginTop="10dp"
+	    android:visibility="invisible"/>
+    
+    <Button
+        style="@style/button_blue"
+        android:id="@+id/bout4"
+        android:layout_alignLeft="@+id/bout3"
+        android:layout_below="@+id/bout3"
+        android:text="@string/multi"
+        android:onClick="multijoueur" />
+    
+    <Button
+        style="@style/button_blue"
+        android:id="@+id/bout5"
+        android:layout_alignLeft="@+id/bout4"
+        android:layout_below="@+id/bout4"
+        android:text="@string/classements"
+        android:onClick="classements" />
+    
+    <Button
+        android:id="@+id/colibrains_home"
+		android:layout_width="80dp"
+		android:layout_height="46dp"
+		android:layout_marginLeft="4dp"
+		android:layout_marginTop="4dp"
+		android:background="@drawable/bouton_toast"
+		android:text=""
+		android:textSize="12sp"
+       	android:textColor="@color/noir"
+       	android:gravity="left"
+       	android:drawableLeft="@drawable/cerveau"
+       	android:onClick="coliBrainsInfos" />
+    
+    <ImageButton
+        android:id="@+id/bout_musique"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bouton_toast"
+        android:src="@drawable/sound"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:onClick="musique" />
+
+    <TextView
+        android:id="@+id/exp_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:gravity="center_vertical"
+        android:text="@string/app_name"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:shadowColor="@color/choco"
+        android:shadowDy="4"
+        android:shadowRadius="3" />
+
+    <ImageView
+        android:id="@+id/coupe"
+        android:layout_width="42dp"
+        android:layout_height="56dp"
+        android:layout_above="@+id/bout_musique"
+        android:layout_alignLeft="@+id/bout_musique"
+        android:src="@drawable/coupe"
+        android:contentDescription="@string/victoire"
+        android:onClick="finCampagne"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/infos"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom = "4dp"
+        android:onClick="reglages"
+        android:background="@drawable/bouton_toast"
+        android:src="@drawable/info"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/info" />
+    
+    <LinearLayout
+        android:id="@+id/opt_infos"
+        android:layout_width="136dp"
+        android:layout_height="64dp"
+        android:layout_alignBottom="@+id/infos"
+        android:layout_toLeftOf="@+id/infos"
+        android:background="@drawable/toast"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <Button
+            style="@style/button_green"
+            android:layout_marginTop="0dp"
+            android:onClick="instrus"
+            android:text="@string/instru" />
+        
+        <Button
+            style="@style/button_green"
+            android:layout_marginTop="2dp"
+            android:onClick="infos"
+            android:text="@string/info" />
+
+    </LinearLayout>
+    
+    <ViewStub
+	    android:id="@+id/instrus"
+	    android:layout="@layout/instru"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    android:layout_marginLeft="40dp"
+	    android:layout_marginRight="40dp" />
+    
+    <ViewStub
+	    android:id="@+id/a_propos"
+	    android:layout="@layout/info"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    android:layout_marginLeft="40dp"
+	    android:layout_marginRight="40dp" />
+    
+    <ViewStub
+	    android:id="@+id/colibrains_infos"
+	    android:layout="@layout/colibrains_info"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    android:layout_marginLeft="40dp"
+	    android:layout_marginRight="40dp" />
+
+</RelativeLayout>

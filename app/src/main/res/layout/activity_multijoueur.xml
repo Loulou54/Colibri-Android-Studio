@@ -1,0 +1,181 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:background="@drawable/wood_tiles"
+    tools:context=".Multijoueur" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="70"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/titreMulti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="34dp"
+            android:gravity="center"
+            android:textStyle="bold|italic"
+            android:text="@string/multi"
+            android:textColor="@color/theme_vert"
+            android:shadowColor="@color/theme_gris"
+            android:shadowRadius="4"
+            android:shadowDy="1"
+            android:textSize="18sp" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+	        
+	        <Button
+	            style="@style/bouton_papier"
+	            android:id="@+id/nvDefi"
+	            android:layout_width="0dip"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:background="@drawable/bouton_toast"
+	            android:onClick="nouveauDefi"
+	            android:text="@string/nouveau_defi"
+	            android:textSize="12sp" />
+	        
+	        <Button
+	            style="@style/bouton_papier"
+	            android:id="@+id/nvPRapide"
+	            android:layout_width="0dip"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:background="@drawable/bouton_toast"
+	            android:onClick="partieRapide"
+	            android:text="@string/partie_rapide"
+	            android:textSize="12sp" />
+	        
+        </LinearLayout>
+
+        <ViewSwitcher
+            style="@style/bouton_papier"
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bouton_toast"
+            android:onClick="syncTotale">
+            
+            <ImageView
+                android:layout_width="wrap_content"
+	            android:layout_height="50dp"
+	            android:layout_gravity="center"
+	            android:layout_marginBottom="2dp"
+	            android:src="@drawable/repeat"
+	            android:contentDescription="@string/sync_fail" />
+            
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+            
+        </ViewSwitcher>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/panneau_hq"
+            android:orientation="vertical" >
+        
+        <ImageView
+	        android:id="@+id/user_avatar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="0dip"
+	        android:maxHeight="70dp"
+	        android:layout_weight="1"
+	        android:layout_gravity="center"
+	        android:contentDescription="@string/app_name"
+	        android:src="@drawable/colibri_d1"
+	        android:onClick="profileClick" />
+        
+        <TextView
+	        android:id="@+id/user_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="2dp"
+	        android:layout_gravity="center"
+	        android:text="@string/app_name"
+	        android:textColor="@color/theme_gris"
+	        android:textSize="20sp" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        
+	        <TextView
+		        android:id="@+id/user_exp"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="4dp"
+		        android:layout_marginLeft="12dp"
+		        android:text="@string/exp"
+		        android:textStyle="bold"
+		        android:textColor="@android:color/white"
+		        android:textSize="12sp" />
+	        
+	        <ImageButton
+		        android:id="@+id/colibrains_multi"
+				android:layout_width="match_parent"
+				android:layout_height="35dp"
+				android:background="@android:color/transparent"
+		       	android:src="@drawable/cerveau"
+		       	android:contentDescription="@string/aide"
+		       	android:scaleType="centerInside" />
+        
+        </LinearLayout>
+        
+        <TextView
+	        android:id="@+id/user_score"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="12dp"
+	        android:text="@string/score_compet"
+	        android:textStyle="bold"
+	        android:textColor="@android:color/white"
+	        android:textSize="12sp" />
+        
+        <TextView
+	        android:id="@+id/user_defis"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="3dp"
+	        android:layout_marginLeft="12dp"
+	        android:text="@string/defis_joues"
+	        android:textStyle="bold"
+	        android:textColor="@android:color/white"
+	        android:textSize="12sp" />
+        
+        </LinearLayout>
+        
+    </LinearLayout>
+	
+    <ExpandableListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="30"
+        android:background="@drawable/affiche" />
+    
+    <TextView
+        android:id="@+id/defaultViewDefis"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="30"
+        android:background="@drawable/affiche"
+        android:gravity="center"
+        android:text="@string/nodefis"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:textColor="@color/bleu_moyen"
+        android:visibility="gone" />
+
+</LinearLayout>

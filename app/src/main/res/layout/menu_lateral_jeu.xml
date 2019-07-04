@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_lateral"
+    android:layout_width="100dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/temps"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="@color/theme_beige"
+        android:textStyle="bold"
+        android:text="@string/etat"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="20sp"
+        android:shadowColor="@color/theme_gris"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="4" />
+
+    <LinearLayout
+        android:id="@+id/menu_lateral_boutons"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:gravity="left"
+	    android:alpha="0.8" >
+
+	    <ImageButton
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="-16dp"
+	        android:contentDescription="@string/recommencer"
+	        android:src="@drawable/repeat"
+	        android:background="@drawable/bouton_lateral"
+	        android:onClick="recommencer" />
+	    
+	    <ImageButton
+	        android:id="@+id/av_rapide"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="-22dp"
+	        android:layout_marginTop="-10dp"
+	        android:paddingLeft="6dp"
+	        android:contentDescription="@string/temps"
+	        android:src="@drawable/fw"
+	        android:background="@drawable/bouton_lateral" />
+	    
+	    <ImageButton
+            android:id="@+id/colibrains_ingame"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="-28dp"
+		    android:layout_marginTop="-10dp"
+	        android:paddingLeft="16dp"
+	        android:contentDescription="@string/solution"
+	        android:src="@drawable/cerveau"
+	        android:background="@drawable/bouton_lateral"
+	        android:onClick="coliBrainHelp" />
+	    
+	    <ImageButton
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="-34dp"
+	        android:layout_marginTop="-10dp"
+	        android:paddingLeft="18dp"
+	        android:contentDescription="@string/jouer"
+	        android:src="@drawable/next"
+	        android:background="@drawable/bouton_lateral"
+	        android:onClick="passer" />
+
+    </LinearLayout>
+</LinearLayout>

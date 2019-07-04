@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="red">#ff0808</color>
+	<color name="cyan_opaque">#20EEEE</color>
+	<color name="orange">#FF8C00</color>
+	<color name="choco">#AA8B4513</color>
+	<color name="noir">#000000</color>
+	<color name="vert_fonce">#ff669900</color>
+	<color name="bleu_moyen">#29b9e5</color>
+	<color name="bleu_nuit">#101040</color>
+	<color name="gris_sombre">#101010</color>
+	<color name="violet">#BF3EFF</color>
+	<color name="start_fond_gradient">#E0E0E0</color>
+	<color name="theme_gris">#4A535A</color>
+	<color name="theme_vert">#4BC0A1</color>
+	<color name="theme_beige">#E6E6DC</color>
+	<color name="theme_gris_alpha">#704A535A</color>
+	<color name="path_viewer_bg">#704A535A</color>
+	
+</resources>

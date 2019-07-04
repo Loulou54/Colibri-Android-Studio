@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Colibri</string>
+    <string name="jouer">Continue</string>
+    <string name="campagne">Campaign</string>
+    <string name="aleat">Random Map</string>
+    <string name="multi">Multiplayer Challenge</string>
+    <string name="classements">Rankings</string>
+    <string name="fac">Beginner</string>
+    <string name="moy">Intermediate</string>
+    <string name="dif">Expert</string>
+    <string name="pause">-= Pause =-</string>
+    <string name="reprendre">Resume</string>
+    <string name="recommencer">Start over</string>
+    <string name="sortir">Quit</string>
+    <string name="solution">Solution</string>
+    <string name="info">About</string>
+	<string name="instru">Instructions</string>
+	<string name="nouveau_defi">New Challenge</string>
+	<string name="score">Score :</string>	
+	<string name="info_text">C o l i b r i © 2014&#8211;2016\n\nOriginal concept and maintenance: Louis DURAND\nlouis.dur54@gmail.com\n</string>
+	<string name="info_text2">\u0009Application launched during the development project in Telecom Bretagne by the following students:\nDurand Louis, Guyard Valentin, Jacquemod Laura et Thiam Mariam\n\n\u0009We wanted to thank our tutor, Gwenaël Brunet, information and network technician at the department Image and Information Analysis.</string>
+	<string name="instru_text">\u0009You are a hummingbird in a field full of menhirs in Brittany and you have to taste all the flowers covering the meadow.\n\nYou can only fly straight and change direction when you are in front of an obstacle (menhir, cow or edge).</string>
+	<string name="instru_text2">\u0009It\'s up to you to discover the different elements of the game along your progression, like the magical flowers, the dynamites, the cows, the cats and the rainbows! (You unlock them in the Campaign.)</string>
+	<string name="instru_text3">\u0009Start with some Campaign levels, then you could try the Multiplayer Challenges to confront your friends or other players from around the world!\n\nHave fun!!</string>
+	<string name="accept">OK</string>
+	<string name="annuler">Cancel</string>
+	<string name="name">Name</string>
+	<string name="bravo">Well played !</string>
+	<string name="temps">Time</string>
+	<string name="exp">Experience</string>
+	<string name="defis_joues">Challenges</string>
+	<string name="defis_gagnés">Wins</string>
+	<string name="etat">Play</string>
+	<string name="perso">Custom</string>
+	<string name="paramAleat">Random Map - Parameters</string>
+	<string name="defaut">Default</string>
+	<string name="vaches">Cows</string>
+	<string name="dynamites">Dynamites</string>
+	<string name="chats">Cats</string>
+	<string name="arcs">Rainbows</string>
+	<string name="progression">Campaign progression:</string>
+	<string name="longueur">Length:</string>
+	<string name="base_niveau">Menhirs pattern</string>
+	<string name="param_descript">\u0009The length as well as the number of additional elements increases the difficulty but also the amount of experience earned!</string>
+	<string name="did_he_dieded">Oops!</string>
+	<string name="oui">Yes</string>
+	<string name="non">No</string>
+	<string name="aide">Help</string>
+	<string name="bloque">You didn\'t unlock the next level yet!</string>
+	<string name="solution_bloque">You didn\'t unlock the solution of this level yet!</string>
+	<string name="aleatoire">Random</string>
+	<string name="joueur_suivant">\u21AA This level and your results will be sent to your opponent.</string>
+	<string name="forfait">Forfeit</string>
+	<string name="forfait_msg">Do you wish to abandon by forfeit?</string>
+	<string name="c_est_parti">Let\'s go</string>
+	<string name="joueur">Player</string>
+	<string name="the_results">The Results&#8230;</string>
+	<string name="penalite_aide">Help penalty</string>
+	<string name="victoire">Victory!!</string>
+	<string name="resultats">\u0009\u21D2 Press continue for the results!</string>
+	<string name="the_end">THE END</string>
+	<string name="toast_fin">Congratulations!|You beat the Campaign mode!!</string>
+	<string name="toast_fin2">And now&#8230;|Have you tried the Random Levels and the Multiplayer Challenges yet? ;)</string>
+	<string name="enter_pseudo">Please enter your nickname and your password:</string>
+	<string name="register">Register</string>
+	<string name="progress">Transfer&#8230;</string>
+	<string name="err404">Error 404: resource not found.</string>
+	<string name="err500">Error 500: something went wrong at server end.</string>
+	<string name="err">Unknown error. Are you connected to Internet?</string>
+	<string name="errServ">Oops, error on the servor side!</string>
+	<string name="deja_pris">This username is already taken.\nTry something else!</string>
+	<string name="enregistre">Welcome!|You\'ve been successfully registered!</string>
+	<string name="hors_connexion">You\'re currently offline.</string>
+	<string name="gcm_register">Registering to Google Cloud Messaging service&#8230;</string>
+	<string name="gcm_success">Done!</string>
+	<string name="sync_fail">Synchronization with remote database failed!</string>
+	<string name="nom_invalide">Invalid name (3 to 20 characters)</string>
+	<string name="nom_invalide_defi">Invalid name (not more than 30 characters)</string>
+	<string name="etat_attente">Waiting</string>
+	<string name="etat_resultats">Results!</string>
+	<string name="etat_relever">Solve</string>
+	<string name="etat_lancer">New one</string>
+	<string name="etat_obsolete">Obsolete</string>
+	<string name="tiret"> - </string>
+	<string name="chercher_adv">Search for a player&#8230;</string>
+	<string name="adversaires">Opponents:</string>
+	<string name="nojoueur">No opponent yet.</string>
+	<string name="nojoueurfound">No additional opponent found!</string>
+	<string name="nom_defi">Challenge\'s name (optional)</string>
+	<string name="creer">Create!</string>
+	<string name="pick_avatar">\u0009And pick your avatar:</string>
+	<string name="defis_perdus">Defeats</string>
+	<string name="not_played">Not played!</string>
+	<string name="deletedPart">> %1$s has withdrawn from challenge %2$s.</string>
+	<string name="deletedDef">> Challenge %1$s has been cancelled.</string>
+	<string name="notification">Notification</string>
+	<string name="temps_restant">%1$d days %2$d hr</string>
+	<string name="temps_restant2">%1$d hr %2$d min</string>
+	<string name="obsolete_txt">The deadline has been surpassed.\nConnect to the network and refresh!</string>
+	<string name="newNivDejaCree">Another participant in the challenge %1$s has already submitted a new level. Yours has been therefore discarded.</string>
+	<string name="partObsolete">Your last participation to the challenge %1$s has been submitted after the deadline!</string>
+	<string name="triche">CHEATER spotted! Seems like you used two devices to solve one level of the challenge "%1$s"&#8230; You get a 10000 exp penalty! Don\'t do that again ;)</string>
+	<string name="connexion_register">You must be connected to register for multiplayer mode!</string>
+	<string name="nodefis">No challenge yet!\n\nCreate a new challenge with\nthe button on the left.</string>
+	<string name="notif_newdefi">%1$s launched a new challenge!</string>
+	<string name="notif_results">%1$s finished the challenge. Check the results!</string>
+	<string name="notif_results_exp">The challenge expired. Check the results!</string>
+	<string name="time_limit">Time limit per match:</string>
+	<string-array name="time_limits">
+	    <item>None</item>
+	    <item>1 day</item>
+	    <item>2 days</item>
+	    <item>3 days</item>
+	    <item>5 days</item>
+	    <item>7 days</item>
+	    <item>10 days</item>
+	    <item>2 weeks</item>
+	    <item>3 weeks</item>
+	    <item>4 weeks</item>
+	</string-array>
+	<string name="supprDefi">Delete challenge</string>
+	<string name="supprDefiConf">Do you really wish to cancel your participation to the challenge \"%1$s\" and remove it from your list?</string>
+	<string name="winlost">Wins-Losts</string>
+	<string name="rank">Rank</string>
+	<string name="avatar">Avatar</string>
+	<string name="pays">Country</string>
+	<string name="global">Global</string>
+	<string name="amis">Opponents</string>
+	<string name="connexion_ranking">You must be connected to view the rankings!</string>
+	<string name="commencer">Start</string>
+	<string name="minutesAgo">%1$d minute%2$s ago</string>
+	<string name="hoursAgo">%1$d hour%2$s ago</string>
+	<string name="daysAgo">%1$d day%2$s ago</string>
+	<string name="partie_rapide">Quick match</string>
+	<string name="disconnect_title">Disconnection</string>
+	<string name="disconnect">Do you want to disconnect from this account?\nYou won\'t loose any data and you can reconnect later with your name and password.</string>
+	<string name="multi_pres">\u0009Welcome to the multiplayer mode!</string>
+	<string name="connect">Connect</string>
+	<string name="mdp">Password</string>
+	<string name="mdp_invalide">Invalid password (6 characters at least)</string>
+	<string name="not_registered">This nickname or e-mail is not registered. Switch to "Register" if you want to create a new account.</string>
+	<string name="wrong_password">Wrong password!</string>
+	<string name="connected">Connected!|You\'ve been successfully connected!</string>
+	<string name="force_quit_msg">You killed the application during a challenge: Forfeit.</string>
+	<string name="left_arrow">&#9664;</string>
+	<string name="right_arrow">&#9654;</string>
+	<string name="expToSyncMsg">%1$s of experience earned offline will be synchronized with this account!</string>
+	<string name="mail">Mail address *</string>
+	<string name="mail_exp">\u0009* In case of lost password. No commercial use.</string>
+	<string name="mail_invalide">Invalid e-mail address.</string>
+	<string name="lost_mdp_chk">I forgot my password!</string>
+	<string name="lost_mdp_expl">\u0009(i) You will receive an e-mail at the address you specified when creating the account. Please follow the instructions in it then.</string>
+	<string name="lost_mdp_already_sent">Already sent less than a day ago!\nCheck your mails! ;) (Possibly in SPAM)</string>
+	<string name="lost_mdp_pb">Sending problem! Did you provide a valid address??</string>
+	<string name="lost_mdp_ok">Password recovery|Done! Check your e-mails! :)</string>
+	<string name="patience">Be patient!|Everybody has not played this match yet. ;)</string>
+	<string name="notif_n_newmatch">You have %1$d new challenges to solve!</string>
+	<string name="notif_n_results">The results of %1$d challenges are available!</string>
+	<string name="maj_req">You have to update Colibri to the latest version!</string>
+	<string name="cancel_sol">Cancelled!|</string>
+	<string name="no_solution">Ouch!|No solution&#8230;</string>
+	<string name="sol_colibrain">ColiBrain solution</string>
+	<string name="sol_generated">Generated solution</string>
+	<string name="score_titre">Score</string>
+	<string name="score_compet">Competitive score</string>
+	<string name="score_match">Score Match</string>
+	<string name="score_cumul">Total Score</string>
+	<string name="name_or_mail">Name or e-mail</string>
+	<string name="colibrains">ColiBrains</string>
+	<string name="colibrains_info1">\u0009The « ColiBrains » provide in-game hints by suggesting you the next steps, or by indicating you if you are blocked.</string>
+	<string name="colibrains_info2">\u0009The ColiBrains are accessible during the game using the side menu by a simple clic on the screen.</string>
+	<string name="colibrains_info3">\u21AA For Random Maps or levels you already solved, ColiBrains are unlimited and you can use them freely to exercise.</string>
+	<string name="colibrains_info4">\u21AA For Multiplayer Challenges or for unsolved Campaign levels, ColiBrains are limited ! The number of remaining ColiBrains is indicated over the icon.</string>
+	<string name="colibrains_info5">\u0009You simply have to solve levels to earn new ColiBrains progressively! However, you won\'t be able to accumulate more than the limit indicated on the main menu.</string>
+	<string name="colibrains_info6">\u0009In addition to help unblock you, ColiBrains can be used strategically in Multiplayer Mode to accelerate the resolution of levels of important stake! (with numerous or high-ranked opponents)</string>
+	<string name="colibrains_info7">\u21AA Finally, the « ColiBrain » algorithm is also accessible at the end of each levels to let you visualize the fastest solution found by the algorithm!</string>
+	<string name="unlocked_title">New element available!</string>
+	<string name="unlocked_msg">\u2605 Congratulations!! \u2605\nYou just unlocked a new game element:</string>
+	<string name="unlocked_msg_2_1">Next element available after %1$d levels:</string>
+	<string name="unlocked_msg_2_2">You unlocked all game elements!</string>
+	
+</resources>

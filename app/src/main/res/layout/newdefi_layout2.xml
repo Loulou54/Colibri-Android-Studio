@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+		
+        <View
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:layout_weight="2" />
+        
+        <View
+            android:id="@+id/anchorDropDown"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical" >
+
+        <FrameLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" >
+	        <com.game.colibri.SuggestionsEditText
+	            android:id="@+id/searchAdv"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ems="10"
+	            android:dropDownAnchor="@+id/anchorDropDown"
+	            android:dropDownHeight="80dp"
+	            android:completionThreshold="1"
+	            android:inputType="textNoSuggestions|textFilter"
+	            android:imeOptions="flagNoExtractUi"
+	            android:hint="@string/chercher_adv" />
+	        <ProgressBar
+				android:id="@+id/loading_indicator"
+	            style="?android:attr/progressBarStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical|right"
+	            android:layout_marginRight="15dp"
+	            android:visibility="gone" />
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/advAuto"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_help"
+            android:contentDescription="@string/aleatoire"
+            android:background="@drawable/pencil_button" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/advTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="20sp"
+        android:textColor="@color/bleu_nuit"
+        android:text="@string/adversaires" />
+    
+    <ListView
+        android:id="@+id/listAdv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    <TextView
+        android:id="@+id/defaultView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="@string/nojoueur"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:textColor="@color/bleu_moyen"
+        android:visibility="gone" />
+
+</LinearLayout>
