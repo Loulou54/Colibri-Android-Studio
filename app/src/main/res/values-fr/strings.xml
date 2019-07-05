@@ -178,5 +178,11 @@
 	<string name="unlocked_msg">\u2605 Félicitations !! \u2605\nVous avez débloqué un nouvel élément :</string>
 	<string name="unlocked_msg_2_1">Prochain élément après %1$d niveaux :</string>
 	<string name="unlocked_msg_2_2">Vous avez débloqué tous les éléments du jeu !</string>
+	<string name="channel_new_match">Nouveaux défis</string>
+	<string name="channel_new_match_desc">Lorsqu\'un joueur a lancé un nouveau jeu avec vous.</string>
+	<string name="channel_results">Résultats</string>
+	<string name="channel_results_desc">Lorsque les résultats d\'un défi sont disponibles.</string>
+	<string name="channel_message">Messages</string>
+	<string name="channel_message_desc">Information générale à propos du jeu : nouvelles ou événements.</string>
 	
 </resources>

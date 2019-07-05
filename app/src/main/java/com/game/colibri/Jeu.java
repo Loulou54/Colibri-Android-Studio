@@ -393,7 +393,6 @@ public class Jeu extends Activity {
 				MyApp.avancement++;
 				unlockedElementPopup(n_niv);
 			}
-			unlockedElementPopup(n_niv);
 			MyApp.experience+=exp;
 			MyApp.expToSync+=exp;
 			MyApp.updateExpProgCB(exp);

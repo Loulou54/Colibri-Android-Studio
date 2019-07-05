@@ -54,7 +54,7 @@ public class MenuPrinc extends Activity {
 		setContentView(R.layout.activity_menu_princ);
 		root=(RelativeLayout) findViewById(R.id.root);
 		n_niv = MyApp.avancement;
-		//displayMenu();
+		PushNotificationService.createNorificationsChannels(this);
 		// Lancé depuis une notification ?
 		if(getIntent().getExtras()!=null && getIntent().getExtras().getString("com.game.colibri.notification")!=null) {
 			((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();

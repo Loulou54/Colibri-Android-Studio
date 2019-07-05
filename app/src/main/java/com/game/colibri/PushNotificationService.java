@@ -1,11 +1,13 @@
 package com.game.colibri;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -16,6 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PushNotificationService extends FirebaseMessagingService {
+
+	private static String CHANNEL_NEW_MATCH = "NEW_MATCH";
+	private static String CHANNEL_RESULTS = "RESULTS";
+	private static String CHANNEL_MESSAGE = "MESSAGE";
 
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -49,13 +55,39 @@ public class PushNotificationService extends FirebaseMessagingService {
 	}
 
 	/**
+	 * Déclaration des notification channels, au lancement de l'application.
+	 * @param context le contexte de l'appli
+	 */
+	public static void createNorificationsChannels(Context context) {
+		createNotificationChannel(context, CHANNEL_NEW_MATCH, R.string.channel_new_match, R.string.channel_new_match_desc);
+		createNotificationChannel(context, CHANNEL_RESULTS, R.string.channel_results, R.string.channel_results_desc);
+		createNotificationChannel(context, CHANNEL_MESSAGE, R.string.channel_message, R.string.channel_message_desc);
+	}
+
+	/**
+	 * Pour les API >= 26, il faut déclarer des notification channels
+	 */
+	private static void createNotificationChannel(Context context, String channelId, int nameResId, int descResId) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			CharSequence name = context.getString(nameResId);
+			String description = context.getString(descResId);
+			int importance = NotificationManager.IMPORTANCE_DEFAULT;
+			NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+			channel.setDescription(description);
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(channel);
+		}
+	}
+
+	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
 	private static void generateNotification(Context context, String message) {
+		// Détermination du contenu de la notification
 		int icon = R.drawable.ic_launcher;
 		int id = 3 + (int) (Math.random()*(Integer.MAX_VALUE-3));
 		long when = System.currentTimeMillis();
-		String title = context.getString(R.string.app_name), msg=message;
+		String title = context.getString(R.string.app_name), msg=message, channel=CHANNEL_MESSAGE;
 		SharedPreferences pref = MyApp.getApp().pref;
 		SharedPreferences.Editor editor = MyApp.getApp().editor;
 		int nNewM = pref.getInt("nNewM", 0), nRes = pref.getInt("nRes", 0);
@@ -73,6 +105,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 					title = o.getString("nomDefi");
 					msg = context.getString(R.string.notif_newdefi, o.getString("initPlayer"));
 				}
+				channel = CHANNEL_NEW_MATCH;
 			} else if(typ.equals("results")) {
 				id = 2;
 				nRes++;
@@ -86,6 +119,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 					else
 						msg = context.getString(R.string.notif_results_exp);
 				}
+				channel = CHANNEL_RESULTS;
 			} else if(typ.equals("message")) {
 				if(o.has("title"))
 					title = o.getString("title");
@@ -98,6 +132,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		// Génération de la notification
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Intent notificationIntent = new Intent(context, MenuPrinc.class);
 		// On ajoute les infos dans l'Intent :
@@ -106,7 +141,7 @@ public class PushNotificationService extends FirebaseMessagingService {
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 		// The notification :
-		Notification notification = new NotificationCompat.Builder(context)
+		Notification notification = new NotificationCompat.Builder(context, channel)
 				.setContentIntent(intent)
 				.setSmallIcon(icon)
 				.setContentTitle(title)
@@ -122,5 +157,6 @@ public class PushNotificationService extends FirebaseMessagingService {
 		if(when - lastNotif > 5000) // Pour ne pas faire vibrer le téléphone à chaque notif lors de rafales !
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
 		notificationManager.notify(id, notification);
+		System.out.println("NOTIF : "+title+" "+msg);
 	}
 }
