@@ -15,7 +15,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
@@ -111,8 +111,24 @@ public class Jeu extends Activity {
 			@Override
 			public void onInflate(ViewStub stub, View inflated) {
 				pause = inflated;
+				// Hack inespéré pour rétrécir légèrement le 1er et 3è bouton de manière robuste
+				pause.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+					@Override
+					public boolean onPreDraw() {
+						if (pause.getViewTreeObserver().isAlive())
+							pause.getViewTreeObserver().removeOnPreDrawListener(this);
+						LinearLayout buts = pause.findViewById(R.id.pause_buttons);
+						for(int i=2; i <=4; i+=2) {
+							View but = buts.getChildAt(i);
+							LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) but.getLayoutParams();
+							lp.width = but.getWidth()*4/5;
+							but.setLayoutParams(lp);
+						}
+						return true;
+					}
+				});
 				((TextView) pause.findViewById(R.id.titlePause)).setTypeface(font);
-				LinearLayout buts = (LinearLayout) pause.findViewById(R.id.pause_buttons);
+				LinearLayout buts = pause.findViewById(R.id.pause_buttons);
 				for(int i=0; i<buts.getChildCount(); i++) {
 					((TextView) buts.getChildAt(i)).setTypeface(font);
 				}
@@ -152,7 +168,13 @@ public class Jeu extends Activity {
 			MyApp.getApp().editor.commit();
 		}
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		multijoueur = null;
+		super.onDestroy();
+	}
+
 	@Override
 	protected void onStart() {
 		MyApp.resumeActivity();
@@ -284,7 +306,7 @@ public class Jeu extends Activity {
 	
 	public void updateMenuLateral() {
 		if(menu_lateral.getVisibility()==View.VISIBLE) {
-			int t_ms = (play.total_frames+play.frame)*MoteurJeu.PERIODE;
+			int t_ms = (play.total_frames+play.frame)*MoteurJeu.PERIODE_NORMALE;
 			((TextView) menu_lateral.findViewById(R.id.temps)).setText(
 					String.format("%d.%02d s", t_ms/1000, (t_ms%1000)/10)
 			);

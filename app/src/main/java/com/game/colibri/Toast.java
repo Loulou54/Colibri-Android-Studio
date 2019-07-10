@@ -20,15 +20,15 @@ import android.widget.TextView;
 public class Toast extends android.widget.Toast {
 	
 	public static Toast makeText(Context context, int resId, int duration) {
-		return new Toast(context, context.getText(resId).toString(), duration, false);
+		return new Toast(context.getApplicationContext(), context.getText(resId).toString(), duration, false);
 	}
 	
 	public static Toast makeText(Context context, CharSequence text, int duration) {
-		return new Toast(context, text.toString(), duration, false);
+		return new Toast(context.getApplicationContext(), text.toString(), duration, false);
 	}
 	
 	public static Toast makeText(Context context, CharSequence text, int duration, boolean inGame) {
-		return new Toast(context, text.toString(), duration, inGame);
+		return new Toast(context.getApplicationContext(), text.toString(), duration, inGame);
 	}
 	
 	@SuppressLint("InflateParams")

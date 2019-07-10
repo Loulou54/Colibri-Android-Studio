@@ -24,7 +24,7 @@
         android:textSize="18sp"
         android:textColor="@color/theme_gris"
         android:text="@string/joueur"
-        android:maxLines="1"
+        android:singleLine="true"
         android:ellipsize="marquee"
         android:scrollHorizontally="true" />
     

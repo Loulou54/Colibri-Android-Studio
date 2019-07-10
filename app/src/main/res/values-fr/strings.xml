@@ -19,7 +19,7 @@
 	<string name="instru">Instructions</string>
 	<string name="nouveau_defi">Nouveau Défi</string>
 	<string name="score">Score :</string>
-	<string name="info_text">C o l i b r i © 2014&#8211;2016\n\nConcept original et maintenance : Louis DURAND\nlouis.dur54@gmail.com\n</string>
+	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nConcept original et maintenance : Louis DURAND\nlouis.dur54@gmail.com\n</string>
 	<string name="info_text2">\u0009Application lancée au sein du projet développement à Télécom Bretagne par les élèves suivants :\nDurand Louis, Guyard Valentin, Jacquemod Laura et Thiam Mariam\n\n\u0009Nous tenons à remercier notre tuteur, Gwenaël Brunet, technicien informatique et réseau au département Image et Traitement de l\'Information.</string>
 	<string name="instru_text">\u0009Vous êtes un colibri dans un champ de menhirs en Bretagne et vous devez goûter à chacune des fleurs qui jonchent la prairie.\n\n\u0009Vous ne pouvez voler qu\'en ligne droite et changer de direction seulement lorsque vous faites face à un obstacle (menhir, vache ou bord).</string>
 	<string name="instru_text2">\u0009À vous de découvrir les différents éléments de jeu tout au long de votre progression, comme les fleurs magiques, les dynamites, les vaches, les chats et les arcs-en-ciel ! (À débloquer dans Campagne.)</string>
@@ -40,7 +40,7 @@
 	<string name="dynamites">Dynamites</string>
 	<string name="chats">Chats</string>
 	<string name="arcs">Arc-en-ciels</string>
-	<string name="progression">Progression campagne :</string>
+	<string name="progression">Progression campagne : %1$d/%2$d</string>
 	<string name="longueur">Longueur :</string>
 	<string name="base_niveau">Base en menhirs</string>
 	<string name="param_descript">\u0009La longueur ainsi que le nombre d\'éléments additionnels augmentent la difficulté mais aussi l\'expérience à gagner !</string>

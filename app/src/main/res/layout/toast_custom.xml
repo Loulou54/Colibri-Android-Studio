@@ -20,9 +20,10 @@
     <TextView
         android:id="@+id/toast_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         android:layout_marginBottom="4dp"
-        android:gravity="left"
+        android:gravity="center_vertical"
         android:textColor="@color/theme_gris"
         android:textSize="14sp" />
 

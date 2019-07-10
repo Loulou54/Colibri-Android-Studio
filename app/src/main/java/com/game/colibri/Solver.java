@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
@@ -39,7 +38,6 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	private SolverInterface solverInterface; // La view de visualisation de la solution
 	public int sol_r=-1, sol_c=-1; // La position pour laquelle a été calculée "solution".
 	private Heuristic heuristic; // La structure de données pour un calcul rapide de l'heuristique.
-	private HashSet<Hash> closedSet;
 	private PriorityQueue<State> openSet;
 	private HashMap<Integer, Integer> collectiblesIndexes; // Pour une clé r*COL+c, retourne l'index de l'élément ramassable dans l'ordre allant de (0,0) à (ROW,COL) de gauche à droite.
 	private LinkedList<Niveau.Occurrence> emptyCell = new LinkedList<Niveau.Occurrence>(); // Utilisé par DynaGrid.obstacle pour les cases sans obstacles.
@@ -50,10 +48,11 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		public void cancel();
 		public void result(int r, int c, Path path);
 	}
-	
+
 	/**
-	 * Constructeur du Solveur pour le niveau niv.
-	 * @param niv
+	 * Constructeur du Solveur pour le niveau niv. Il s'agit d'une AsyncTask que l'on peut exécuter sans bloquer l'UI.
+	 * @param niv le niveau en question, dans l'état courant
+	 * @param solverInterface les fonctions permettant de communiquer le progrès ou les résultats
 	 */
 	public Solver(Niveau niv, SolverInterface solverInterface) {
 		this.niv = niv;
@@ -85,10 +84,11 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	
 	/**
 	 * Affiche la meilleure solution actuelle.
-	 * @param values
+	 * @param values la liste des mouvements de la meilleure solution actuelle
 	 */
+	@SafeVarargs
 	@Override
-	protected void onProgressUpdate(LinkedList<Move>... values) {
+	protected final void onProgressUpdate(LinkedList<Solver.Move>... values) {
 		solverInterface.progressUpdate(sol_r, sol_c, values[0]);
 		super.onProgressUpdate(values);
 	}
@@ -141,10 +141,11 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	 * Retourne la solution à partir de la position (r,c), ayant nFleurs à ramasser et
 	 * nDynas en stock. Si elle est invalide, on la calcule.
 	 * @param frame l'instant actuel en frames
-	 * @param r
-	 * @param c
+	 * @param r ligne
+	 * @param c colonne
 	 * @param nFleurs le nombre de fleurs à ramasser
 	 * @param nDynas le nombre de dynamites en stock
+	 * @param opt_time spécifie si l'on désire l'optimisation du temps ou des mouvements
 	 * @return solution null si impossible
 	 */
 	private Path getSolution(int frame, int r, int c, int nFleurs, int nDynas, boolean opt_time) {
@@ -170,12 +171,12 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	 * @param frame l'instant actuel en frames
 	 * @param rd ligne de départ
 	 * @param cd colonne de départ
-	 * @param nFleurs
-	 * @param nDynas
+	 * @param nFleurs nombre de fleurs restantes
+	 * @param nDynas nombre de dynamites en stock
 	 */
 	@SuppressWarnings("unchecked")
 	private Path findSolution(int frame, int rd, int cd, int nFleurs, int nDynas) {
-		closedSet = new HashSet<Hash>(); // Contient les hash des états déjà visités.
+		HashSet<Hash> closedSet = new HashSet<Hash>(); // Contient les hash des états déjà visités.
 		openSet = new PriorityQueue<State>(); // Contient les états à la frontière.
 		long startTime = System.currentTimeMillis();
 		int h_param_lim = niv.h_param!=-1 ? niv.h_param : (int)Math.ceil((60.-nFleurs)/6.);
@@ -282,10 +283,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Constructeur pour l'état racine, partant de la position (r,c).
 		 * @param frame l'instant actuel en frames
-		 * @param r
-		 * @param c
-		 * @param nFleurs
-		 * @param nDynas
+		 * @param r ligne
+		 * @param c colonne
+		 * @param nFleurs fleurs restantes
+		 * @param nDynas dynamites restantes
 		 */
 		public State(int frame, int r, int c, int nFleurs, int nDynas) {
 			parent = null;
@@ -300,8 +301,8 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Constructeur pour un état voisin obtenu à partir de s et du mouvement m.
-		 * @param s
-		 * @param m
+		 * @param s l'état d'origine
+		 * @param m le mouvement à effectuer
 		 */
 		public State(State s, Move m) {
 			parent = s;
@@ -438,10 +439,9 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		}
 		
 		/**
-		 * Crée un état avec un départ compris dans les intervals spécifiés et l'ajoute
-		 * aux voisins ET à l'open set. (Appelé par un fils.)
-		 * @param dest destination (= pos du fils)
-		 * @param dir la direction du mouvement
+		 * Crée un état tel que l'instant d'arrivée du Move m soit inclus dans les intervals arrivVoulue.
+		 * (Appelé par un fils.)
+		 * @param m le mouvement à effectuer
 		 * @param arrivVoulue les intervals d'arrivée voulus
 		 */
 		protected void createDelayedMoveTo(Move m, IntervalsModulo arrivVoulue) {
@@ -478,8 +478,8 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Constructeur de la grille d'origine correspondant au point de départ.
-		 * @param nF
-		 * @param nD
+		 * @param nF fleurs restantes
+		 * @param nD dynamites en stock
 		 */
 		public DynaGrid(int nF, int nD) {
 			nFleurs = nF;
@@ -506,8 +506,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 
 		/**
 		 * Constructeur d'une grille copie de dg suivie d'un mouvement m.
-		 * @param dg
-		 * @param m
+		 * @param dg grille d'origine
+		 * @param p_init position initiale dans la grille
+		 * @param m mouvement à effectuer
+		 * @param t_cumul l'instant t
 		 */
 		public DynaGrid(DynaGrid dg, Position p_init, Move m, int t_cumul) {
 			nFleurs = dg.nFleurs;
@@ -517,11 +519,13 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 			flowersBySegment = dg.flowersBySegment.clone();
 			performMove(p_init, m, t_cumul);
 		}
-		
+
 		/**
-		 * Effectue le mouvement m sur la carte courante et répercute les changements
-		 * dans change, nFleurs et nDynas
-		 * @param m
+		 * Effectue le mouvement m sur la carte courante et modifie les données en relation.
+		 * (hash, flowersBySegment, nFleurs, nDynas, ...)
+		 * @param p_init position initiale
+		 * @param m le mouvement à effectuer
+		 * @param t_cumul l'instant t
 		 */
 		private void performMove(Position p_init, Move m, int t_cumul) {
 			SimplePos p = new SimplePos(p_init);
@@ -610,8 +614,9 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Retourne les intervalles où la case est non occupée, en rétractant les intervalles de Delta.
 		 * @param pos la position sur la grille
+		 * @param shift décalage à ajouter aux occurrences
 		 * @param delta le temps de présence de l'animal en question (colibri) à prendre en compte
-		 * @return IntervalsModulo correspondant
+		 * @return IntervalsModuloHandler correspondant
 		 */
 		public IntervalsModuloHandler getFreeIntervals(Position pos, int shift, int delta) {
 			LinkedList<Niveau.Occurrence> occs = null;
@@ -698,7 +703,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Constructeur de chemin initial, vide.
-		 * @param frame l'instant actuel en frames
+		 * @param frames l'instant actuel en frames
 		 */
 		public Path(int frames) {
 			move = null;
@@ -709,8 +714,8 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Constructeur d'un chemin copie de p, suivi du mouvement m.
-		 * @param p
-		 * @param m
+		 * @param p le chemin auquel ajouter m
+		 * @param m le mouvement suivant
 		 */
 		public Path(Path p, Move m) {
 			move = m;
@@ -727,7 +732,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Retourne la liste de Moves.
-		 * @return
+		 * @return liste de Moves de ce Path dans l'ordre chronologique
 		 */
 		public LinkedList<Move> getMoves() {
 			if(move==null)
@@ -741,8 +746,8 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * Ajoute le move m à la liste en le décomposant en plusieurs moves s'il
 		 * passe à travers des arcs-en-ciel. (Uniquement pour la visualisation
 		 * de la solution dans PathViewer)
-		 * @param moves
-		 * @param m
+		 * @param moves liste des mouvements à laquelle ajouter m
+		 * @param m le mouvement à ajouter et potentiellement décomposer
 		 */
 		private void addMoveAndDecomposeRainbows(LinkedList<Move> moves, Move m) {
 			if(m.direction>=10) {
@@ -780,8 +785,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Retourne une liste de mouvements interprétables par le jeu.
 		 * (dx, dy, wait)
-		 * @param frame l'instant actuel en frames
-		 * @return
+		 * @return une liste de triplets (dirX, dirY, wait_absolute)
 		 */
 		public LinkedList<int[]> getGamesMoves() {
 			if(move==null)
@@ -830,6 +834,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Retourne un triplet correspondant à un move dans le jeu.
 		 * @param t_cumul le temps cumulé jusqu'à ce move
+		 * @param after_push vrai si après une poussée de vache
 		 * @return le triplet correspondant (dx, dy, wait_absolute)
 		 */
 		public int[] getGameMove(int t_cumul, boolean after_push) {
@@ -847,7 +852,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	}
 	
 	/**
-	 * Une classe basique quin'opère que sur (row, column) d'une position.
+	 * Une classe basique qui n'opère que sur (row, column) d'une position.
 	 */
 	public static class SimplePos {
 		public static final int ROW=12, COL=20;
@@ -1110,10 +1115,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * Évalue l'état du départ à t=0 (sans perte de vitesse). S'il y a collision
 		 * avec l'une des Occurrences dans occs à t_instant avec un temps de présence
 		 * delta, state_t0 est mis à possib.
-		 * @param occs
-		 * @param t_instant
-		 * @param delta
-		 * @param possib
+		 * @param occs les occurrences
+		 * @param t_instant l'instant t
+		 * @param delta le delta de présence
+		 * @param possib l'état à attribuer à state_t0 en cas de collision
 		 */
 		public void evaluateT0(LinkedList<Niveau.Occurrence> occs, int t_instant, int delta, boolean possib) {
 			if(state_t0==possib)
@@ -1130,10 +1135,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Insère l'état possib pour le temps des occurrences occs, rapportées à l'instant
 		 * t_instant et élargies de delta.
-		 * @param occs
-		 * @param t_instant
-		 * @param delta
-		 * @param possib
+		 * @param occs les occurrences
+		 * @param t_instant l'instant t
+		 * @param delta le delta de temps à ajouter
+		 * @param possib l'état à attribuer pour le temps de présence des occurrences
 		 */
 		public void addOccurrences(LinkedList<Niveau.Occurrence> occs, int t_instant, int delta, boolean possib) {
 			for(Niveau.Occurrence o : occs) {
@@ -1295,7 +1300,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Intersecte l'IntervalsModulo avec les instants de présence des occs.
-		 * @param occs
+		 * @param occs les occurrences
 		 * @param t_instant instant de référence de l'IntervalModulo
 		 * @param t_travelVitesseCons t_travel dans le cas départ à t==0
 		 * @param t_travelVitesse0 t_travel dans le cas départ à t!=0
@@ -1373,7 +1378,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		
 		/**
 		 * Crée une copie de im.
-		 * @param im
+		 * @param im l'IntervalsModulo source
 		 */
 		@SuppressWarnings("unchecked")
 		public IntervalsModulo(IntervalsModulo im) {
@@ -1434,7 +1439,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		/**
 		 * Retourne l'état de l'instant t selon l'IntervalsModulo.
 		 * @param t un instant par rapport à la même origine (le 0).
-		 * @return
+		 * @return vrai si l'instant t est valide
 		 */
 		private boolean isInstantValid(int t) {
 			if(intervals.isEmpty())
@@ -1473,9 +1478,9 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * Insère l'état possib pour le temps de l'occurrence o, rapportée à l'instant
 		 * t_instant et élargie de delta.
 		 * @param o l'occurrence qui doit être de même période que l'IntervalsModulo
-		 * @param t_instant
-		 * @param delta
-		 * @param possib
+		 * @param t_instant l'instant t
+		 * @param delta le temps à ajouter aux temps de présence des occurrences
+		 * @param possib l'état à attribuer pour le temps de présence des occurrences
 		 */
 		public void addOccurrence(Niveau.Occurrence o, int t_instant, int delta, boolean possib) {
 			if(empty_state==possib && intervals.isEmpty()) // Déjà complet
@@ -1496,20 +1501,14 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		public void addInterval(int open, int close, boolean state) {
 			Bound b0 = new Bound(modulo(open), state);
 			Bound b1 = new Bound(modulo(close), !state);
-			// TODO: Remove debug
-			String s = intervals.toString()+"\n";
 			// Borne ouvrante
 			addOpenBound(b0);
-			s += intervals.toString()+"\n";
 			// Supprime les bornes entre les deux
 			cleanInBetween(b0,b1,state);
-			s += intervals.toString()+"\n";
 			// Borne fermante
 			addCloseBound(b1);
 			if(intervals.isEmpty())
 				setFullWithState(state);
-			if(intervals.size()%2==1)
-				System.out.println("PB INTERVALS b0="+b0+" ; b1="+b1+":\n"+s+"  -->\n"+intervals.toString());
 		}
 		
 		private void cleanInBetween(Bound b0, Bound b1, boolean stateIfFull) {
@@ -1649,7 +1648,6 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * d'itinéraire entre ces derniers.
 		 * @param coli la position du colibri dans l'état considéré
 		 * @param grid DynaGrid de l'état actuel de niv
-		 * @return
 		 */
 		public void compute(SimplePos coli, DynaGrid grid) {
 			int i = 0;
@@ -1706,9 +1704,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 				distToSegments.put(coli.r*Position.COL + coli.c, distantSegments);
 			}
 			// Récupère le segment le plus proche qui n'est pas encore totalement ramassé
-			Iterator<DistantSegment> it = distantSegments.iterator();
-			while(it.hasNext()) {
-				DistantSegment dSeg = it.next();
+			for(DistantSegment dSeg : distantSegments) {
 				if(grid.flowersBySegment[dSeg.segment.index]>0) { // Segment non ramassé
 					return dSeg;
 				}

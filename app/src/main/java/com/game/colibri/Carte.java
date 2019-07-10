@@ -15,17 +15,15 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-
+/**
+ * RelativeLayout gérant l'affichage complet d'un niveau.
+ * Le layout contient un fond sur lequel est dessiné la carte (statique) que l'on rafraîchit
+ * seulement lorsque nécessaire avec fond.invalidate() (commandé par le moteur de jeu avec "fond.invalidate()").
+ * Il contient aussi les éléments mobiles sous forme de View. (Animal)
+ * On spécifie le niveau à afficher par la méthode publique loadNiveau.
+ * Nécessité de rafraîchir fond à chaque élément ramassé.
+ */
 public class Carte extends RelativeLayout {
-	
-	/**
-	 * RelativeLayout gérant l'affichage complet d'un niveau.
-	 * Le layout contient un fond sur lequel est dessiné la carte (statique) que l'on rafraîchit
-	 * seulement lorsque nécessaire avec fond.invalidate() (commandé par le moteur de jeu avec "fond.invalidate()").
-	 * Il contient aussi les éléments mobiles sous forme de View. (Animal)
-	 * On spécifie le niveau à afficher par la méthode publique loadNiveau.
-	 * Nécessité de rafraîchir fond à chaque élément ramassé.
-	 */
 	
 	public static int ww,wh; // windowWidth/Height
 	public static double cw,ch; // caseWidth/Height en pixels
@@ -37,38 +35,23 @@ public class Carte extends RelativeLayout {
 	private int index_dyna; // L'index de l'animation courante d'explosion.
 	private Bitmap menhir,fleur,fleurm,dyna,menhir_rouge,rainbow;
 	public Colibri colibri;
-	public LinkedList<Vache> vaches = new LinkedList<Vache>(); // La liste des vaches du niveau
-	public LinkedList<Chat> chats = new LinkedList<Chat>(); // La liste des chats du niveau
-	public LinkedList<View> explo = new LinkedList<View>(); // La liste des explosions
-	public SparseArray<int[]> rainbows = new SparseArray<int[]>();
+	public LinkedList<Vache> vaches = new LinkedList<>(); // La liste des vaches du niveau
+	public LinkedList<Chat> chats = new LinkedList<>(); // La liste des chats du niveau
+	public LinkedList<View> explo = new LinkedList<>(); // La liste des explosions
+	public SparseArray<int[]> rainbows = new SparseArray<>();
 	private int[] colors = new int[] {0x50FAE96C, 0x50552DA2, 0x502FE0D6, 0x50FA9B44, 0x50FA95E5, 0x50F92722, 0x5000FF54};
 	public View mort,sang,fond;
-	
-    /**
-     * Constructeur une carte 
-     * 		@param context
-     * 		@param attrs
-     */
+
     public Carte(Context context, AttributeSet attrs) {
         super(context, attrs);
         loadImg(context);
     }
 
-    /**
-     * Constructeur une  carte
-     * 		@param context
-     * 		@param attrs
-     * 		@param defStyle
-     */
     public Carte(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         loadImg(context);
     }
-    
-    /**
-     * Chargement des images de la carte.
-     * 		@param context
-     */
+
     private void loadImg(Context context) {
     	mort = new View(context);
     	mort.setBackgroundResource(R.drawable.skull);
@@ -124,8 +107,7 @@ public class Carte extends RelativeLayout {
     	    	    }
     	    	};
     }
-    
-    // Méthode publique pour spécifier le niveau à afficher
+
     /**
      * Charge un niveau sur la carte
      * @param niveau le niveau à charger

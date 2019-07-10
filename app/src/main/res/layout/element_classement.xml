@@ -36,7 +36,7 @@
         android:textSize="18sp"
         android:textColor="@color/choco"
         android:text="@string/joueur"
-        android:maxLines="1"
+        android:singleLine="true"
         android:ellipsize="marquee"
         android:scrollHorizontally="true" />
     

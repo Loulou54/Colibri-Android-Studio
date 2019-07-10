@@ -30,7 +30,7 @@ public class SuggestionsEditText extends AutoCompleteTextView {
         	if(act.get()!=null)
         		act.get().filter((CharSequence) msg.obj, msg.arg1);
         }
-    };
+    }
 
     public SuggestionsEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,8 +42,8 @@ public class SuggestionsEditText extends AutoCompleteTextView {
     
     /**
      * Effectue le vrai filtrage (la requête) en appelant la fonction parente.
-     * @param text
-     * @param keyCode
+     * @param text le texte saisi
+     * @param keyCode (non utilisé)
      */
     private void filter(CharSequence text, int keyCode) {
     	super.performFiltering(text, keyCode);

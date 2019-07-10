@@ -145,7 +145,7 @@ public class RegisterUser {
 			public void onClick(View v) {
 				String name = ((EditText) lay.findViewById(R.id.pseudo)).getText().toString().trim();
 				String mdp = ((EditText) lay.findViewById(R.id.mdp)).getText().toString();
-				String mail = ((EditText) lay.findViewById(R.id.mail)).getText().toString();
+				String mail = ((EditText) lay.findViewById(R.id.mail)).getText().toString().trim();
 				boolean lostMdp = ((CheckBox) lay.findViewById(R.id.lost_chkbox)).isChecked();
 				if(name.length()<3 || name.length()>20 && register) {
 					Toast.makeText(context, R.string.nom_invalide, Toast.LENGTH_LONG).show();
@@ -171,16 +171,24 @@ public class RegisterUser {
 				callback.cancelled();
 			}
 		}, null);
+		prgDialog.show();
 		// Récupère l'id firebase avant d'ouvrir la box
 		FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
 			@Override
 			public void onComplete(@NonNull Task<InstanceIdResult> task) {
+				prgDialog.dismiss();
 				if(!task.isSuccessful()) {
-					System.out.println("getInstanceId failed"+task.getException());
-					callback.cancelled();
-					return;
+					if(task.getException().getMessage()=="MISSING_INSTANCEID_SERVICE") { // Firebase isn't available
+						firebaseId = "";
+					} else {
+						Toast.makeText(context, R.string.connexion_register, Toast.LENGTH_LONG).show();
+						System.out.println("getInstanceId failed: "+task.getException().getMessage());
+						callback.cancelled();
+						return;
+					}
+				} else {
+					firebaseId = task.getResult().getToken();
 				}
-				firebaseId = task.getResult().getToken();
 				boxRegister.show();
 			}
 		});

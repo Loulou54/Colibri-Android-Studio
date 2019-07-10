@@ -37,7 +37,7 @@
 	<string name="dynamites">Dinamitas</string>
 	<string name="chats">Gatos</string>
 	<string name="arcs">Arco iris</string>
-	<string name="progression">Progresión de la campaña:</string>
+	<string name="progression">Progresión de la campaña: %1$d/%2$d</string>
 	<string name="longueur">Longitud:</string>
 	<string name="base_niveau">Patrón de los menhires</string>
 	<string name="param_descript">\u0009La longitud y el número de elementos adicionales aumentan la dificultad, sino también la cantidad de experiencia ganada!</string>

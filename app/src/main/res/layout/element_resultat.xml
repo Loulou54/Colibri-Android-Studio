@@ -33,7 +33,7 @@
         android:layout_weight="4"
         android:textSize="18sp"
         android:text="@string/joueur"
-        android:maxLines="1"
+        android:singleLine="true"
         android:ellipsize="marquee"
         android:scrollHorizontally="true" />
     

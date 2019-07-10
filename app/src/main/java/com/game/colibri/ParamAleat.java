@@ -170,7 +170,7 @@ public class ParamAleat {
 				((SeekBar) elem.findViewById(R.id.seekBarParam)).setVisibility(View.GONE);
 				TextView tb = (TextView) elem.findViewById(R.id.blockParam);
 				tb.setVisibility(View.VISIBLE);
-				tb.setText(tb.getText()+" "+avancement+"/"+seuil);
+				tb.setText(context.getString(R.string.progression, avancement, seuil));
 			} else {
 				CheckBox cb = (CheckBox) elem.findViewById(R.id.checkBoxParam);
 				SeekBar sb = (SeekBar) elem.findViewById(R.id.seekBarParam);

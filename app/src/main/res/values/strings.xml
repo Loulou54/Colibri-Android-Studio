@@ -19,7 +19,7 @@
 	<string name="instru">Instructions</string>
 	<string name="nouveau_defi">New Challenge</string>
 	<string name="score">Score :</string>	
-	<string name="info_text">C o l i b r i © 2014&#8211;2016\n\nOriginal concept and maintenance: Louis DURAND\nlouis.dur54@gmail.com\n</string>
+	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nOriginal concept and maintenance: Louis DURAND\nlouis.dur54@gmail.com\n</string>
 	<string name="info_text2">\u0009Application launched during the development project in Telecom Bretagne by the following students:\nDurand Louis, Guyard Valentin, Jacquemod Laura et Thiam Mariam\n\n\u0009We wanted to thank our tutor, Gwenaël Brunet, information and network technician at the department Image and Information Analysis.</string>
 	<string name="instru_text">\u0009You are a hummingbird in a field full of menhirs in Brittany and you have to taste all the flowers covering the meadow.\n\nYou can only fly straight and change direction when you are in front of an obstacle (menhir, cow or edge).</string>
 	<string name="instru_text2">\u0009It\'s up to you to discover the different elements of the game along your progression, like the magical flowers, the dynamites, the cows, the cats and the rainbows! (You unlock them in the Campaign.)</string>
@@ -40,7 +40,7 @@
 	<string name="dynamites">Dynamites</string>
 	<string name="chats">Cats</string>
 	<string name="arcs">Rainbows</string>
-	<string name="progression">Campaign progression:</string>
+	<string name="progression">Campaign progression: %1$d/%2$d</string>
 	<string name="longueur">Length:</string>
 	<string name="base_niveau">Menhirs pattern</string>
 	<string name="param_descript">\u0009The length as well as the number of additional elements increases the difficulty but also the amount of experience earned!</string>

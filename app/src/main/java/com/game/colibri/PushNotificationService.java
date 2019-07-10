@@ -17,6 +17,8 @@ import com.network.colibri.DBController;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.network.colibri.CommonUtilities.broadcastMessage;
+
 public class PushNotificationService extends FirebaseMessagingService {
 
 	private static String CHANNEL_NEW_MATCH = "NEW_MATCH";
@@ -30,7 +32,10 @@ public class PushNotificationService extends FirebaseMessagingService {
 		// Data message
 		if(remoteMessage.getData().size() > 0) {
 			System.out.println(remoteMessage.getData());
-			generateNotification(this, remoteMessage.getData().get("msg"));
+			String msg = remoteMessage.getData().get("msg");
+			broadcastMessage(this, msg);
+			if(!Multijoueur.active)
+				generateNotification(this, msg);
 		}
 
 		RemoteMessage.Notification notif = remoteMessage.getNotification();

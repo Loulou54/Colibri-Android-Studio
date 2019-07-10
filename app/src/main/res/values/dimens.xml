@@ -1,5 +1,11 @@
 <resources>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-
+    <dimen name="text16">16sp</dimen>
+    <dimen name="text14">14sp</dimen>
+    <dimen name="text60">60sp</dimen>
+    <dimen name="opt_infos_width">136dp</dimen>
+    <dimen name="opt_infos_height">64dp</dimen>
+    <dimen name="pause_menu_margins">10dp</dimen>
+    <dimen name="text20">20sp</dimen>
+    <dimen name="text12">12sp</dimen>
+    <dimen name="spacing_details_joueur">0dp</dimen>
 </resources>

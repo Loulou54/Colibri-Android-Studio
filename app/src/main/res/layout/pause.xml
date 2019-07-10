@@ -54,36 +54,35 @@
 	        android:gravity="center"
 	        android:text="@string/campagne"
 	        android:textColor="@color/theme_gris"
-	        android:textSize="17sp"
-	        android:maxLines="1"
-	        android:ellipsize="marquee"
+	        android:textSize="@dimen/text16"
+			android:singleLine="true"
+			android:ellipsize="marquee"
 	        android:scrollHorizontally="true" />
 
         <TextView
 	        android:id="@+id/niveau_courant"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginBottom="6dp"
+	        android:layout_marginTop="@dimen/pause_menu_margins"
 	        android:text="@string/etat"
 	        android:textColor="@color/choco"
-	        android:textSize="14sp" />
+	        android:textSize="@dimen/text14" />
 
         <Button
             style="@style/pencil_button"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+			android:layout_marginTop="@dimen/pause_menu_margins"
             android:onClick="reprendre"
             android:text="@string/reprendre" />
 
         <Button
             style="@style/pencil_button"
+			android:layout_marginTop="@dimen/pause_menu_margins"
             android:onClick="recommencer"
             android:text="@string/recommencer" />
 
         <Button
             style="@style/pencil_button"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+			android:layout_marginTop="@dimen/pause_menu_margins"
             android:onClick="quitter"
             android:text="@string/sortir" />
     </LinearLayout>

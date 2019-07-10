@@ -37,7 +37,7 @@
 	<string name="dynamites">Dynamite</string>
 	<string name="chats">Katzen</string>
 	<string name="arcs">Regenbogen</string>
-	<string name="progression">Progression in der Kampagne:</string>
+	<string name="progression">Progression in der Kampagne: %1$d/%2$d</string>
 	<string name="longueur">Länge:</string>
 	<string name="base_niveau">Menhirs Muster</string>
 	<string name="param_descript">\u0009Die Länge sowie der Anzahl von zusätzlichen Elementen erhöht die Schwierigkeit, aber auch die Menge an Erfahrung erworben!</string>

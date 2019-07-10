@@ -21,7 +21,8 @@ public class MoteurJeu {
 	private static final boolean DEBUG = false;
 	private static final int LIG=12, COL=20; // Dimensions de la grille
 	private static int SEUIL=15; // seuil de vitesse de glissement du doigt sur l'écran.
-	public static int PERIODE=1000/25; // pour 25 frames par secondes
+	public static final int PERIODE_NORMALE=1000/25; // pour 25 frames par secondes
+	public static int PERIODE=PERIODE_NORMALE; // Peut être modifiée pour accélérer le jeu
 	public static final int DYNA_DELAY=22;
 	public static final int MENHIR=1;
 	public static final int FLEUR=2;
@@ -308,9 +309,7 @@ public class MoteurJeu {
 	}
 	
 	/**
-	 * Vérifie si un item peut être ramassé sur la case (l,c) de la carte, et le ramasse le cas échéant. (fleur, dynamite)
-	 * @param l ligne
-	 * @param c colonne
+	 * Vérifie si un item peut être ramassé sur la case courante de la carte, et le ramasse le cas échéant. (fleur, dynamite)
 	 */
 	private void ramasser() {
 		int l=carte.colibri.getRow(), c=carte.colibri.getCol();
@@ -340,7 +339,7 @@ public class MoteurJeu {
 			dejaPasse=niv.carte[l][c];
 		} else
 			dejaPasse=0;
-		if(carte.n_fleur==0) jeu.gagne((total_frames+frame)*PERIODE);
+		if(carte.n_fleur==0) jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
 	}
 	
 	/**

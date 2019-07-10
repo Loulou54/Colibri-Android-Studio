@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="text16">24sp</dimen>
+	<dimen name="text14">21sp</dimen>
+	<dimen name="text60">90sp</dimen>
+	<dimen name="opt_infos_width">175dp</dimen>
+	<dimen name="opt_infos_height">90dp</dimen>
+	<dimen name="pause_menu_margins">15dp</dimen>
+	<dimen name="text20">30sp</dimen>
+	<dimen name="text12">18sp</dimen>
+	<dimen name="spacing_details_joueur">10dp</dimen>
+</resources>

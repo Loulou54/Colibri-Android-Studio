@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="14dp"
         android:layout_marginRight="130dp"
-        android:textSize="60sp"
+        android:textSize="@dimen/text60"
         android:textColor="@color/theme_gris"
         android:text="@string/app_name" />
     
@@ -106,7 +106,7 @@
         android:layout_marginBottom="6dp"
         android:gravity="center_vertical"
         android:text="@string/app_name"
-        android:textSize="16sp"
+        android:textSize="@dimen/text16"
         android:textColor="@android:color/white"
         android:shadowColor="@color/choco"
         android:shadowDy="4"
@@ -139,8 +139,8 @@
     
     <LinearLayout
         android:id="@+id/opt_infos"
-        android:layout_width="136dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/opt_infos_width"
+        android:layout_height="@dimen/opt_infos_height"
         android:layout_alignBottom="@+id/infos"
         android:layout_toLeftOf="@+id/infos"
         android:background="@drawable/toast"

@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -112,7 +111,7 @@ public class Multijoueur extends Activity {
 		try {
             unregisterReceiver(mHandleMessageReceiver);
         } catch (Exception e) {
-            Log.e("Unregister Receiv. Err.", "> " + e.getMessage());
+            e.printStackTrace();
         }
 		super.onDestroy();
 	}
@@ -440,7 +439,7 @@ public class Multijoueur extends Activity {
 		scoreTxt.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.violet)), dbSpan2, scoreTxt.length(), 0);
 		((TextView) findViewById(R.id.user_score)).setText(scoreTxt);
 		// Affichage défis
-		((TextView) findViewById(R.id.user_defis)).setText(getString(R.string.defis_joues)+" : "+user.getDefis());
+		((TextView) findViewById(R.id.user_defis)).setText(getString(R.string.defis_joues)+" :\n\u0009"+user.getDefis());
 		// Affichage ColiBrains
 		((ColiBrain) ((ImageButton) findViewById(R.id.colibrains_multi)).getDrawable())
 			.setProgress(MyApp.expProgCB/(float)MyApp.EXP_LEVEL_PER_COLI_BRAIN)
