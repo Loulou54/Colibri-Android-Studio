@@ -7,7 +7,6 @@ import java.util.ListIterator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -55,6 +54,7 @@ public class PathViewer extends RelativeLayout {
 	private int moveTime, stepsCount;
 	private float blurStep;
 	private float blurProgress;
+	private float pathWidth, blurRadius;
 	private DecelerateInterpolator interpolator = new DecelerateInterpolator();
 
 	public PathViewer(Context context) {
@@ -80,7 +80,7 @@ public class PathViewer extends RelativeLayout {
     	pathPaint.setStyle(Paint.Style.STROKE);
     	pathPaint.setStrokeJoin(Paint.Join.ROUND);
     	pathPaint.setStrokeCap(Paint.Cap.ROUND);
-    	pathPaint.setColor(Color.argb(240, 255, 255, 180));
+    	pathPaint.setColor(Color.argb(80, 255, 255, 180));
     	anim = new AlphaAnimation(0.6f, 0);
     	anim.setStartOffset(5000);
     	anim.setDuration(3000);
@@ -100,8 +100,12 @@ public class PathViewer extends RelativeLayout {
     	fond = new View(getContext()) {
     		@Override
     	    protected void onDraw(Canvas can) {
-    			if(solPath!=null)
-    				can.drawPath(solPath, pathPaint);
+    			if(solPath!=null) {
+					for(int i=0; i<3; i++) { // Pour faire un effet de flou plus rapide que BlurMaskFilter
+						pathPaint.setStrokeWidth(pathWidth + blurRadius*(1-i));
+						can.drawPath(solPath, pathPaint);
+					}
+				}
     			for(int[] pos : dynaPos) {
     				can.drawBitmap(explo, pos[0], pos[1], null);
     				can.drawBitmap(dyna_img, pos[0], pos[1], null);
@@ -148,8 +152,8 @@ public class PathViewer extends RelativeLayout {
 		STROKE_WIDTH_DELTA = (float) Math.ceil(0.05*Carte.cw);
 		BLUR_RADIUS_MIN = (float) Math.ceil(0.02*Carte.cw);
 		BLUR_RADIUS_DELTA = (float) Math.ceil(0.06*Carte.cw);
-		pathPaint.setStrokeWidth(STROKE_WIDTH_MIN);
-		pathPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS_MIN, BlurMaskFilter.Blur.NORMAL));
+		pathWidth = STROKE_WIDTH_MIN;
+		blurRadius = BLUR_RADIUS_MIN;
 		solPath = null;
 	}
 	
@@ -277,8 +281,8 @@ public class PathViewer extends RelativeLayout {
 			waitPos.clear();
 			xc = xd; yc = yd;
 			solPath.moveTo(xc + (float) (0.5*Carte.cw), yc + (float) (0.5*Carte.ch));
-			pathPaint.setStrokeWidth(STROKE_WIDTH_MIN + STROKE_WIDTH_DELTA);
-			pathPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS_MIN, BlurMaskFilter.Blur.NORMAL));
+			pathWidth = STROKE_WIDTH_MIN + STROKE_WIDTH_DELTA;
+			blurRadius = BLUR_RADIUS_MIN;
 			colibri.setLayoutParams(new RelativeLayout.LayoutParams((int) Carte.cw, (int) Carte.ch));
 			colibri.setVisibility(View.VISIBLE);
 			((AnimationDrawable) colibri.getBackground()).start();
@@ -287,8 +291,8 @@ public class PathViewer extends RelativeLayout {
 			return;
 		}
 		if(blurStep > 0)
-			pathPaint.setStrokeWidth(STROKE_WIDTH_MIN + interpolator.getInterpolation(blurProgress)*STROKE_WIDTH_DELTA);
-		pathPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS_MIN + interpolator.getInterpolation(1-blurProgress)*BLUR_RADIUS_DELTA, BlurMaskFilter.Blur.NORMAL));
+			pathWidth = STROKE_WIDTH_MIN + interpolator.getInterpolation(blurProgress)*STROKE_WIDTH_DELTA;
+		blurRadius = BLUR_RADIUS_MIN + interpolator.getInterpolation(blurProgress)*BLUR_RADIUS_DELTA;
 		fond.invalidate();
 		blurProgress += blurStep;
 		handler.step(RefreshHandler.BLUR_ANIM, DURATION_FRAME);
