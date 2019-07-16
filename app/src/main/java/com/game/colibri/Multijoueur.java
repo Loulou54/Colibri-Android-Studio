@@ -52,6 +52,7 @@ public class Multijoueur extends Activity {
 	private SparseArray<Joueur> joueurs;
 	private ArrayList<Defi> adversaires;
 	private PaperDialog boxNiv;
+	private AlertDialog.Builder messageDialog = null;
 	private ViewSwitcher loader;
 	public Defi defi;
 	public Joueur user;
@@ -139,6 +140,10 @@ public class Multijoueur extends Activity {
 				}
 			}
 			adapt.notifyDataSetChanged();
+		}
+		if(messageDialog!=null) {
+			messageDialog.show();
+			messageDialog = null;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -624,7 +629,7 @@ public class Multijoueur extends Activity {
 				base.taskSyncTotale(user.getId());
 			}
 			if(o.has("tasks"))
-				base.execJSONTasks(this, (JSONArray) o.get("tasks"), user.getId());
+				messageDialog = base.execJSONTasks(this, (JSONArray) o.get("tasks"), user.getId());
 			if(o.has("joueurs")) {
 				base.insertJSONJoueurs((JSONArray) o.get("joueurs"));
 				loadJoueurs();
@@ -641,6 +646,10 @@ public class Multijoueur extends Activity {
 				Toast.makeText(Multijoueur.this, R.string.maj_req, Toast.LENGTH_LONG).show();
 			else
 				Toast.makeText(Multijoueur.this, R.string.err500, Toast.LENGTH_LONG).show();
+		}
+		if(messageDialog!=null && Jeu.multijoueur==null) { // S'il y a un message à afficher et qu'on est pas en cours de jeu
+			messageDialog.show();
+			messageDialog = null;
 		}
 		if(res) {
 			MyApp.experience = user.getExp();

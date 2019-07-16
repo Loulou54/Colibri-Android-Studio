@@ -45,6 +45,7 @@ public class MoteurJeu {
 	// private LinkedList <int[]> mouvements; // Les mouvements effectués
 	private int[] lastMove=new int[] {0,0};
 	private int[][] trace_diff; // Contient le différentiel de position lors des ACTION_MOVE.
+	private int frameRemoveDyna, dynaRow, dynaCol;
 	
 	/**
 	 * Handler de rafraîchissement
@@ -68,16 +69,13 @@ public class MoteurJeu {
 			MoteurJeu mj = act.get();
 			if(mj==null)
 				return;
-			if(msg.what==mj.jeu.n_niv) // Fin de l'animation de l'explosion. (on utilise le handler pour contourner l'abscence de listener pour AnimationDrawable)
-				mj.finExplosion(msg.arg1,msg.arg2);
-			else
-				mj.move();
+			mj.move();
 		}
 		public void sleep(long delayMillis) {
 			this.removeMessages(0);
 			sendMessageDelayed(obtainMessage(0), delayMillis);
 		}
-	};
+	}
 	
 	/**
 	 * Constructeur 
@@ -104,6 +102,7 @@ public class MoteurJeu {
 		total_frames = replay ? total_frames+frame : 0;
 		frame=0;
 		wait=0;
+		frameRemoveDyna=-1;
 	}
 	
 	/**
@@ -224,6 +223,8 @@ public class MoteurJeu {
 			c.deplacer();
 			collisionChat(c);
 		}
+		if(frame==frameRemoveDyna)
+			finExplosion(dynaRow, dynaCol);
 		if(state==RUNNING) moveHandler.sleep(PERIODE);
 	}
 	
@@ -375,10 +376,9 @@ public class MoteurJeu {
 			carte.animBoom(l+ml,c+mc); // Gère l'animation de l'explosion.
 			jeu.bout_dyna.setText(Integer.toString(carte.n_dyna));
 			if(carte.n_dyna==0) jeu.hideDyna();
-			Message msg = moveHandler.obtainMessage(jeu.n_niv);
-			msg.arg1=l+ml;
-			msg.arg2=c+mc;
-			moveHandler.sendMessageDelayed(msg,800);
+			frameRemoveDyna = frame + 600/PERIODE_NORMALE;
+			dynaRow = l+ml;
+			dynaCol = c+mc;
 		}
 	}
 	

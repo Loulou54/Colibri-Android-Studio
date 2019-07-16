@@ -72,34 +72,51 @@ public class Defi {
 	public int computeScores(Participation[] classement, double[] scores) {
 		int partEffectives = 0;
 		double scoreTotal = 0;
-		double cotisations = 0;
-		// Comptage des participants (non joués exclus) et la somme de leurs scores
+		double scoreMax = 0;
+		// Comptage des participants (non joués exclus), de la somme de leurs scores et détection du score maximal
 		for(Participation p : classement) {
 			if(p.t_cours!=Participation.NOT_PLAYED) {
+				double s = p.joueur.getScore();
 				partEffectives++;
-				scoreTotal += Math.sqrt(p.joueur.getScore())+8;
+				scoreTotal += s;
+				if(s > scoreMax)
+					scoreMax = s;
 			}
 		}
-		if(scoreTotal==0) scoreTotal = 1;
 		// Cotisations
-		for(Participation p : classement) {
-			if(p.t_cours!=Participation.NOT_PLAYED) {
-				double cotis = 10 + 6*Math.sqrt(partEffectives)*(Math.sqrt(p.joueur.getScore())+8)/scoreTotal;
-				p.setCotisation(cotis);
-				cotisations += cotis;
+		double cotisations = partEffectives*(partEffectives-1);
+		if(scoreTotal==0) {
+			for(Participation p : classement) {
+				if(p.t_cours!=Participation.NOT_PLAYED) {
+					p.setCotisation(cotisations/partEffectives);
+				}
+			}
+		} else {
+			double a=0, b=cotisations;
+			double q = 0.5 + 0.5/(1. + Math.exp(scoreMax/(4.*(partEffectives-1)) - 5)); // q est réparti entre 1 et 0.5 selon la hauteur de scoreMax par rapport à l'enjeu 2*(partEffectives-1)
+			double maxCotisWeight = partEffectives*scoreMax/scoreTotal; // poids en nombre de participant couvert par la cotisation maximale
+			if(maxCotisWeight > 2-q) {// <=> cotis*scoreMax/scoreTotal > 3*maxGain/4
+				// Alors on résoud le système suivant permettant de répartir les cotisations avec une
+				// partie fixe (a) et une autre linéaire (b)
+				//   a+b*scoreMax/scoreTotal = (n-1)*(2-q)  et  n*a+b = n*(n-1)
+				//   Note : le déterminant est forcément non nul
+				a = (partEffectives - 1)*(2-q - maxCotisWeight)/(1 - maxCotisWeight);
+				b = partEffectives*(partEffectives - 1)*(1-q)/(maxCotisWeight - 1);
+			}
+			for(Participation p : classement) {
+				if(p.t_cours!=Participation.NOT_PLAYED) {
+					p.setCotisation(a + b*p.joueur.getScore()/scoreTotal);
+				}
 			}
 		}
 		// Redistribution
-		double C = 5.;
-		double A = cotisations/(Math.log(1+partEffectives/C)-partEffectives*Math.log(1+1./(partEffectives+C-1)));
-		double B = A*Math.log(1+1./(partEffectives+C-1));
 		int nEgal=1, t_pos=0; // permet de traiter les égalités dans le classement
 		for(int ligne=0; ligne < classement.length; ligne++) {
-			if(classement[ligne].t_cours == Participation.NOT_PLAYED) {
+			if(classement[ligne].t_cours == Participation.NOT_PLAYED) { // Garanti en queue de classement
 				scores[ligne] = 0;
 				continue;
 			}
-			scores[ligne] = A*Math.log(1+1./(ligne+C))-B;
+			scores[ligne] = 2*(partEffectives-1-ligne);
 			nEgal = classement[ligne].t_cours!=t_pos ? 1 : nEgal+1;
 			t_pos = classement[ligne].t_cours;
 			if(nEgal > 1) {

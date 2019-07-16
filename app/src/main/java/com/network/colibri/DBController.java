@@ -98,7 +98,6 @@ public class DBController  extends SQLiteOpenHelper {
 	/**
 	 * 
 	 * @param jsonArray [{id:2,nMatch:4, ...},{},...]
-	 * @return
 	 */
 	public void insertJSONDefis(JSONArray jsonArray) {
 		SQLiteDatabase database = this.getWritableDatabase();
@@ -188,7 +187,7 @@ public class DBController  extends SQLiteOpenHelper {
 	 * Retourne les tâches en attente à envoyer au serveur sous cette forme :
 	 * [{"task":"finMatch", "id_defi":_, "pseudo":_, "temps":_, "vainqueur":_, "exp_v":_, "exp_p":_},
 	 *  {"task":"solvedMatch", "id_defi":_, "pseudo":_, "temps":_}, {"task":"nouveauMatch", ...}]
-	 * @return
+	 * @return le string JSON des tâches
 	 */
 	public String getTasks() {
 		JSONArray tasks = new JSONArray();
@@ -206,6 +205,7 @@ public class DBController  extends SQLiteOpenHelper {
 				}
 	        } while(cursor.moveToNext());
 	    }
+	    cursor.close();
 	    database.close();
 		return tasks.toString();
 	}
@@ -222,7 +222,6 @@ public class DBController  extends SQLiteOpenHelper {
 	
 	/**
 	 * Remplit la SparseArray des joueurs impliqués dans les défis.
-	 * @return
 	 */
 	public void getJoueurs(SparseArray<Joueur> joueurs) {
 		joueurs.clear();
@@ -234,6 +233,7 @@ public class DBController  extends SQLiteOpenHelper {
 	        	joueurs.put(cursor.getInt(0), new Joueur(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8), cursor.getInt(9), cursor.getDouble(10), cursor.getLong(11), cursor.getInt(12), cursor.getLong(13)));
 	        } while(cursor.moveToNext());
 	    }
+	    cursor.close();
 	    database.close();
 	}
 	
@@ -256,25 +256,27 @@ public class DBController  extends SQLiteOpenHelper {
 	        do {
 	        	String selectQuery2 = "SELECT joueur,cumul_score,t_cours,t_fini,score,rank FROM `participations` WHERE defi="+cursor.getInt(0);
 	        	Cursor cursor2 = database.rawQuery(selectQuery2, null);
-	        	SparseArray<Participation> part = new SparseArray<Participation>(cursor2.getCount());
+	        	SparseArray<Participation> part = new SparseArray<>(cursor2.getCount());
 	        	if(cursor2.moveToFirst()) {
 		        	do {
 		        		Participation p = new Participation(joueurs.get(cursor2.getInt(0)),cursor2.getDouble(1),cursor2.getInt(2),cursor2.getInt(3),cursor2.getDouble(4),cursor2.getInt(5));
 		        		part.put(cursor2.getInt(0), p);
 		        	} while(cursor2.moveToNext());
 	        	}
+	        	cursor2.close();
 	        	if(cursor.getInt(7)>0 && cursor.getInt(9)%2==0) // Partie rapide non jouée (donc à lancer) (type>0 && etat=Lancer ou Relever)
 	        		pRapideIndice = l.size();
 	        	l.add(new Defi(cursor.getInt(0), cursor.getString(1), part, cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8)));
 	        } while (cursor.moveToNext());
 	    }
+	    cursor.close();
 	    database.close();
 	    return pRapideIndice;
 	}
 	
 	/**
 	 * Supprime les Joueurs qui n'ont aucune participation dans les défis de l'utilisateur.
-	 * @param database
+	 * @param database la bdd
 	 */
 	private void cleanJoueurs(SQLiteDatabase database, int user) {
 		//database.execSQL("DELETE FROM `joueurs` WHERE pseudo NOT IN (SELECT joueur FROM Participations) AND pseudo<>'"+user+"'");
@@ -283,7 +285,8 @@ public class DBController  extends SQLiteOpenHelper {
 	
 	/**
 	 * Supprimer un défi et retirer sa participation.
-	 * @param defi
+	 * @param defi le défi
+	 * @param user l'ID joueur de l'utilisateur
 	 */
 	public void removeDefi(Defi defi, int user) {
 		SQLiteDatabase database = this.getWritableDatabase();
@@ -306,7 +309,7 @@ public class DBController  extends SQLiteOpenHelper {
 
 	/**
 	 * Stocker le nouveau défi et envoyer maj pour seulement le défi.
-	 * @param defi
+	 * @param defi le défi
 	 */
 	public void updateDefi(Defi defi) {
 		Gson g = new Gson();
@@ -331,11 +334,13 @@ public class DBController  extends SQLiteOpenHelper {
 		}
 		database.close();
 	}
-	
+
 	/**
 	 * Stocker les modifications dans la BDD + envoyer une maj pour le defi, les participations
 	 * ET les joueurs.
-	 * @param defi
+	 * @param defi le défi
+	 * @param user l'id joueur de l'utilisateur
+	 * @param nMatch l'indice nMatch
 	 */
 	public void updateDefiTout(Defi defi, int user, int nMatch) {
 		Gson g = new Gson();
@@ -382,10 +387,12 @@ public class DBController  extends SQLiteOpenHelper {
 		}
 		database.close();
 	}
-	
+
 	/**
 	 * Stocker les modifications dans la BDD + envoyer une maj pour la participation SEULEMENT.
-	 * @param participation
+	 * @param p la participation
+	 * @param defi l'id du défi
+	 * @param nMatch l'indice nMatch
 	 */
 	public void updateParticipation(Participation p, int defi, int nMatch) {
 		SQLiteDatabase database = this.getWritableDatabase();
@@ -437,6 +444,7 @@ public class DBController  extends SQLiteOpenHelper {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		cursor.close();
 		database.close();
 	}
 	
@@ -512,9 +520,9 @@ public class DBController  extends SQLiteOpenHelper {
 	 * expProgCB += cumulExpColiBrains;
 	 * coliBrains = min(coliBrains-usedColiBrains+expProgCB/EXP_LEVEL_PER_COLI_BRAIN, maxCB);
 	 * expProgCB = coliBrains==maxCB ? 0 : expProgCB%EXP_LEVEL_PER_COLI_BRAIN;
-	 * @param expToSync
-	 * @param cumulExpColiBrains
-	 * @param usedColiBrains
+	 * @param expToSync l'expérience à ajouter
+	 * @param cumulExpColiBrains l'expérience accumulée comptant pour les coliBrains
+	 * @param usedColiBrains le nombre de coliBrains utilisés
 	 */
 	public void syncExpAndColiBrains(int expToSync, int cumulExpColiBrains, int usedColiBrains) {
 		SQLiteDatabase database = this.getWritableDatabase();
@@ -544,9 +552,9 @@ public class DBController  extends SQLiteOpenHelper {
 		database.close();
 	}
 
-	public void execJSONTasks(Context context, JSONArray jsonArray, int user) {
+	public AlertDialog.Builder execJSONTasks(Context context, JSONArray jsonArray, int user) {
 		SQLiteDatabase database = this.getWritableDatabase();
-		String liste = "";
+		StringBuilder liste = new StringBuilder();
 		for(int i=0; i<jsonArray.length(); i++) {
 			try {
 				JSONObject d = jsonArray.getJSONObject(i);
@@ -557,34 +565,35 @@ public class DBController  extends SQLiteOpenHelper {
 						database.delete("participations", "defi="+d.getInt("part_defi"), null);
 					} else {
 						database.delete("participations", "defi="+d.getInt("part_defi")+" AND joueur="+d.getInt("part_joueur"), null);
-						liste+=context.getResources().getString(R.string.deletedPart, d.getString("part_joueur_nom"), d.getString("part_defi_nom"))+"\n";
+						liste.append(context.getResources().getString(R.string.deletedPart, d.getString("part_joueur_nom"), d.getString("part_defi_nom"))).append('\n');
 					}
 					cleanJoueurs(database, user);
 				} else if(task.equalsIgnoreCase("delDefi")) {
 					database.delete("defis", "id="+d.getInt("defi"), null);
 					database.delete("participations", "defi="+d.getInt("defi"), null);
 					cleanJoueurs(database, user);
-					liste+=context.getResources().getString(R.string.deletedDef, d.getString("defi_nom"))+"\n";
+					liste.append(context.getResources().getString(R.string.deletedDef, d.getString("defi_nom"))).append('\n');
 				} else if(task.equalsIgnoreCase("newNiv")) {
-					liste+=context.getResources().getString(R.string.newNivDejaCree, d.getString("nomDefi"))+"\n";
+					liste.append(context.getResources().getString(R.string.newNivDejaCree, d.getString("nomDefi"))).append('\n');
 				} else if(task.equalsIgnoreCase("partObsolete")) {
-					liste+=context.getResources().getString(R.string.partObsolete, d.getString("nomDefi"))+"\n";
+					liste.append(context.getResources().getString(R.string.partObsolete, d.getString("nomDefi"))).append('\n');
 				} else if(task.equalsIgnoreCase("triche")) {
-					liste+=context.getResources().getString(R.string.triche, d.getString("nomDefi"))+"\n";
+					liste.append(context.getResources().getString(R.string.triche, d.getString("nomDefi"))).append('\n');
 				} else if(task.equalsIgnoreCase("message")) {
-					liste+=" "+d.getString("message")+"\n";
+					liste.append(' ').append(d.getString("message")).append('\n');
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 		database.close();
-		if(liste.length()>0) {
+		if(liste.length() > 0) {
 			AlertDialog.Builder box = new AlertDialog.Builder(context);
 			box.setTitle(R.string.notification);
 			box.setMessage(liste);
-			box.show();
+			return box;
 		}
+		return null;
 	}
 
 }
