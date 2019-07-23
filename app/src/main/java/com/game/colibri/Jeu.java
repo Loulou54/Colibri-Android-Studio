@@ -170,12 +170,6 @@ public class Jeu extends Activity {
 	}
 
 	@Override
-	protected void onDestroy() {
-		multijoueur = null;
-		super.onDestroy();
-	}
-
-	@Override
 	protected void onStart() {
 		MyApp.resumeActivity();
 		super.onStart();
@@ -216,6 +210,7 @@ public class Jeu extends Activity {
 			brandNew=false;
 		} else if(!hasFocus && play.state==MoteurJeu.RUNNING) {
 			play.pause(MoteurJeu.PAUSE_MENU);
+		} else if(hasFocus && play.state!=MoteurJeu.RUNNING && perdu.getVisibility()!=View.VISIBLE && gagne.getVisibility()!=View.VISIBLE) {
 			pause.setVisibility(View.VISIBLE);
 			setLevelInfo();
 		}

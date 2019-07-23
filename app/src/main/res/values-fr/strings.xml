@@ -92,6 +92,7 @@
 	<string name="creer">Créer !</string>
 	<string name="pick_avatar">\u0009Et choisissez votre avatar :</string>
 	<string name="defis_perdus">Défaites</string>
+	<string name="play_time">Temps de jeu</string>
 	<string name="not_played">Non joué !</string>
 	<string name="deletedPart">> %1$s s\'est retiré du défi %2$s.</string>
 	<string name="deletedDef">> Le défi %1$s a été annulé.</string>
@@ -159,6 +160,7 @@
 	<string name="maj_req">Vous devez mettre à jour Colibri à la dernière version !</string>
 	<string name="cancel_sol">Annulé !|</string>
 	<string name="no_solution">Aïe !|Pas de solution&#8230;</string>
+	<string name="out_of_memory">Aïe !|Mémoire vive insuffisante&#8230; Il se peut qu\'il n\'y ait pas de solution !</string>
 	<string name="sol_colibrain">Solution ColiBrain</string>
 	<string name="sol_generated">Solution générée</string>
 	<string name="score_titre">Score</string>
@@ -184,5 +186,6 @@
 	<string name="channel_results_desc">Lorsque les résultats d\'un défi sont disponibles.</string>
 	<string name="channel_message">Messages</string>
 	<string name="channel_message_desc">Information générale à propos du jeu : nouvelles ou événements.</string>
+	<string name="play_time_format">%1$d h %2$d min</string>
 	
 </resources>

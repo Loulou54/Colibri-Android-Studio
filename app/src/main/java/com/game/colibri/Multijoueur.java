@@ -72,6 +72,7 @@ public class Multijoueur extends Activity {
 		base = new DBController(this);
 		joueurs = new SparseArray<Joueur>();
 		adversaires = new ArrayList<Defi>();
+		Jeu.multijoueur = null; // Dans le cas où Multijoueur a été destroyed lorsque Jeu était par dessus
 		((TextView) findViewById(R.id.titreMulti)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Adventure.otf"));
 		((TextView) findViewById(R.id.nvDefi)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Sketch_Block.ttf"));
 		((TextView) findViewById(R.id.nvPRapide)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Sketch_Block.ttf"));
@@ -119,6 +120,7 @@ public class Multijoueur extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Jeu.multijoueur = null;
 		if(requestCode==1 && resultCode==RESULT_FIRST_USER) { // Afficher résultats de la partie qui a été terminée
 			Intent intent = new Intent(this, Resultats.class);
 			intent.putExtra("defi", new String[] {data.getStringExtra("defi")});
@@ -552,16 +554,18 @@ public class Multijoueur extends Activity {
 		((TextView) findViewById(R.id.nvDefi)).setEnabled(false);
 		((TextView) findViewById(R.id.nvPRapide)).setEnabled(false);
 		int coliBrainsLastSync = MyApp.getApp().pref.getInt("coliBrainsLastSync", 0);
-		if(MyApp.expToSync!=0 || MyApp.coliBrains!=coliBrainsLastSync) {
+		long playTimeLastSync = MyApp.getApp().pref.getLong("playTimeLastSync", 0);
+		if(playTimeLastSync!=MyApp.playTime || MyApp.expToSync!=0 || MyApp.coliBrains!=coliBrainsLastSync) {
 			int coliBrainsWon = MyApp.cumulExpCB/MyApp.EXP_LEVEL_PER_COLI_BRAIN;
 			if(MyApp.cumulExpCB % MyApp.EXP_LEVEL_PER_COLI_BRAIN > MyApp.expProgCB)
 				coliBrainsWon++;
 			// coliBrainsDiff = coliBrains-lastColiBrains = won - used <=> used = won + lastColiBrains - coliBrains
 			System.out.println(MyApp.expToSync+" "+MyApp.cumulExpCB+" "+coliBrainsWon+" "+coliBrainsLastSync+" "+MyApp.coliBrains);
-			base.syncExpAndColiBrains(MyApp.expToSync, MyApp.cumulExpCB, coliBrainsWon + coliBrainsLastSync - MyApp.coliBrains);
+			base.syncExpAndColiBrains(MyApp.playTime - playTimeLastSync, MyApp.expToSync, MyApp.cumulExpCB, coliBrainsWon + coliBrainsLastSync - MyApp.coliBrains);
 			MyApp.expToSync = 0;
 			MyApp.cumulExpCB = 0;
 			MyApp.getApp().editor
+				.putLong("playTimeLastSync", MyApp.playTime)
 				.putInt("coliBrainsLastSync", MyApp.coliBrains)
 				.putInt("expToSync", MyApp.expToSync)
 				.putInt("cumulExpCB", MyApp.cumulExpCB)
@@ -602,16 +606,6 @@ public class Multijoueur extends Activity {
 			}
 		});
 	}
-	
-	/*private String getJSONDefis() {
-		Gson g = new Gson();
-		return g.toJson(adversaires);
-	}*/
-	
-	/*private void setJSONDefis(String data) {
-		Gson g = new Gson();
-		adversaires = new ArrayList<Defi>(Arrays.asList(g.fromJson(data, Defi[].class)));
-	}*/
 	
 	/**
 	 * Insert ou met à jour les défis contenus dans def sous le format :
@@ -654,10 +648,12 @@ public class Multijoueur extends Activity {
 		if(res) {
 			MyApp.experience = user.getExp();
 			MyApp.avancement = user.getProgress();
+			MyApp.playTime = user.getPlayTime();
 			MyApp.last_update = last_up;
 			MyApp.coliBrains = user.getColiBrains();
 			MyApp.expProgCB = user.getExpProgCB();
 			MyApp.getApp().editor
+				.putLong("playTimeLastSync", MyApp.playTime)
 				.putInt("coliBrainsLastSync", MyApp.coliBrains)
 				.putFloat("score", (float) user.getScore()) // Pour l'affichage du score gagné après synchro
 				.putInt("nNewM", 0) // Pour les notifications

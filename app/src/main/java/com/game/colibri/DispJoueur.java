@@ -51,6 +51,8 @@ public class DispJoueur {
 		((TextView) box.findViewById(R.id.defisDetails)).setText(""+j.getDefis());
 		((TextView) box.findViewById(R.id.winsDetails)).setText(""+j.getWin());
 		((TextView) box.findViewById(R.id.looseDetails)).setText(""+j.getLoose());
+		long pT_mins = j.getPlayTime()/60000;
+		((TextView) box.findViewById(R.id.playTime)).setText(context.getString(R.string.play_time_format, pT_mins/60, pT_mins%60));
 		box.show();
 	}
 	

@@ -169,7 +169,7 @@ public class NewDefi {
 		client.post(SERVER_URL+"/get_joueur.php", params, new TextHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
-				prgDialog.hide();
+				prgDialog.dismiss();
 				Gson g = new Gson();
 				try {
 					Joueur j = g.fromJson(response, Joueur.class);
@@ -185,7 +185,7 @@ public class NewDefi {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-				prgDialog.hide();
+				prgDialog.dismiss();
 				Toast.makeText(context, R.string.err, Toast.LENGTH_LONG).show();
 			}
 		});

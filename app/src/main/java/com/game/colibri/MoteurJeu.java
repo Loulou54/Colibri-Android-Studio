@@ -33,12 +33,13 @@ public class MoteurJeu {
 	public static final int UP=1,RIGHT=2,LEFT=3,DOWN=4;
 	public static final int PAUSED=0, RUNNING=1, PAUSE_MENU=2, MORT=3, GAGNE=4, SOL_RESEARCH=5, SOL_READY=6;
 	
-	public int frame, total_frames;
+	public int frame = 0, total_frames;
+	private long timeSave = 0;
 	private Carte carte;
 	public Niveau niv;
 	private Jeu jeu;
 	public int state = PAUSED;
-	private int dejaPasse=0;
+	private int dejaPasse = 0;
 	private int wait = 0;
 	private int directionDyna = 0;
 	private LinkedList <int[]> buf; // la file d'attente des touches
@@ -84,13 +85,13 @@ public class MoteurJeu {
 	 */
 	public MoteurJeu(Jeu activ, Carte c) {
 		carte = c;
-		jeu=activ;
+		jeu = activ;
 		buf = new LinkedList<int[]>();
 		// mouvements = new LinkedList<int[]>();
 		trace_diff=new int[3][2];
 		SEUIL = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, activ.getResources().getDisplayMetrics());
 	}
-	
+
 	/**
 	 *  Initialise les variables du moteur de jeu (buffer, niv, ...) : appelé après chaque appel de carte.loadNiveau
 	 */
@@ -99,6 +100,8 @@ public class MoteurJeu {
 		niv=carte.niv; // pour avoir une référence locale vers le niveau en cours et un nom moins long
 		buf.clear();
 		// mouvements.clear();
+		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
+		timeSave = 0;
 		total_frames = replay ? total_frames+frame : 0;
 		frame=0;
 		wait=0;
@@ -124,6 +127,8 @@ public class MoteurJeu {
 	 * Met le jeu sur pause et dans l'état spécifié.
 	 */
 	public void pause(int etat) {
+		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
+		timeSave = frame*PERIODE_NORMALE;
 		state = etat;
 		moveHandler.removeMessages(0);
 		carte.colibri.stop();

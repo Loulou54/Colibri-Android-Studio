@@ -514,22 +514,24 @@ public class DBController  extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Crée une tâche serveur pour ajouter exp en expérience et mettre à jour les ColiBrains
-	 * et l'expérience associée.
+	 * Crée une tâche serveur pour ajouter du temps de jeu, expToSync en expérience et mettre
+	 * à jour les ColiBrains et l'expérience associée.
 	 * Côté serveur :
 	 * expProgCB += cumulExpColiBrains;
 	 * coliBrains = min(coliBrains-usedColiBrains+expProgCB/EXP_LEVEL_PER_COLI_BRAIN, maxCB);
 	 * expProgCB = coliBrains==maxCB ? 0 : expProgCB%EXP_LEVEL_PER_COLI_BRAIN;
+	 * @param playTimeToSync le temps de jeu à ajouter
 	 * @param expToSync l'expérience à ajouter
 	 * @param cumulExpColiBrains l'expérience accumulée comptant pour les coliBrains
 	 * @param usedColiBrains le nombre de coliBrains utilisés
 	 */
-	public void syncExpAndColiBrains(int expToSync, int cumulExpColiBrains, int usedColiBrains) {
+	public void syncExpAndColiBrains(long playTimeToSync, int expToSync, int cumulExpColiBrains, int usedColiBrains) {
 		SQLiteDatabase database = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		JSONObject o = new JSONObject();
 		try {
-			o.put("task", "addExpAndCB");
+			o.put("task", "addTimeExpAndCB");
+			o.put("playTime", playTimeToSync);
 			o.put("exp", expToSync);
 			o.put("cumulExpCB", cumulExpColiBrains);
 			o.put("usedCB", usedColiBrains);
@@ -573,6 +575,8 @@ public class DBController  extends SQLiteOpenHelper {
 					database.delete("participations", "defi="+d.getInt("defi"), null);
 					cleanJoueurs(database, user);
 					liste.append(context.getResources().getString(R.string.deletedDef, d.getString("defi_nom"))).append('\n');
+				} else if(task.equalsIgnoreCase("syncTotale")) {
+					this.taskSyncTotale(user);
 				} else if(task.equalsIgnoreCase("newNiv")) {
 					liste.append(context.getResources().getString(R.string.newNivDejaCree, d.getString("nomDefi"))).append('\n');
 				} else if(task.equalsIgnoreCase("partObsolete")) {

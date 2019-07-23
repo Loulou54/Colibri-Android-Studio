@@ -19,6 +19,7 @@ public class MyApp extends Application {
 	public static int appareil;
 	public static int avancement; // Progression du joueur dans les niveaux campagne.
 	public static int experience, expToSync; // L'expérience du joueur et l'expérience encore non synchronisée avec le serveur.
+	public static long playTime; // Le temps de jeu cumulé en ms
 	public static int coliBrains, maxCB, expProgCB, cumulExpCB; // Le nombre de bonus d'aide colibrains, le maximum cumulable et le progrès en expérience vers le prochain colibrain.
 	public static int versionCode; // Le code de version de la dernière version de Colibri exécutée.
 	public static long last_update; // Timestamp donné par le serveur de la dernière mise-à-jour.
@@ -51,6 +52,7 @@ public class MyApp extends Application {
 		avancement = pref.getInt("niveau", 1);
 		experience = pref.getInt("exp", 0);
 		expToSync = pref.getInt("expToSync", experience);
+		playTime = pref.getLong("playTime", 0);
 		coliBrains = pref.getInt("coliBrains", 0);
 		maxCB = pref.getInt("maxCB", DEFAULT_MAX_COLI_BRAINS);
 		expProgCB = pref.getInt("expProgCB", 0);
@@ -81,6 +83,11 @@ public class MyApp extends Application {
 			.putInt("id", i)
 			.putInt("appareil", a)
 			.commit();
+	}
+
+	public static void addPlayTime(long time) {
+		playTime += time;
+		getApp().editor.putLong("playTime", playTime).commit();
 	}
 	
 	public static void updateExpProgCB(int exp) {

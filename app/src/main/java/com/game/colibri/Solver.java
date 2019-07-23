@@ -107,7 +107,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		if(result.length>0) {
 			solverInterface.result(sol_r, sol_c, result);
 		} else {
-			Toast.makeText(MyApp.getApp(), R.string.no_solution, Toast.LENGTH_SHORT).show();
+			if(result.t_cumul==0)
+				Toast.makeText(MyApp.getApp(), R.string.no_solution, Toast.LENGTH_SHORT).show();
+			else
+				Toast.makeText(MyApp.getApp(), R.string.out_of_memory, Toast.LENGTH_LONG).show();
 			solverInterface.cancel();
 		}
 		instance = null;
@@ -155,10 +158,6 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		buildCollectibleIndexes();
 		heuristic.prepareRootState();
 		Path solution = findSolution(frame, r,c,nFleurs,nDynas);
-		if(solution==null) {
-			System.out.println("Pas de solution !");
-			solution = new Path(0);
-		}
 		if(DEBUG) {
 			System.out.println("direction, wait, travel, rf, cf");
 			System.out.println("Temps : "+(solution.t_cumul - frame)+" ; Moves : "+solution.length);
@@ -176,13 +175,14 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	 */
 	@SuppressWarnings("unchecked")
 	private Path findSolution(int frame, int rd, int cd, int nFleurs, int nDynas) {
-		HashSet<Hash> closedSet = new HashSet<Hash>(); // Contient les hash des états déjà visités.
+		final HashSet<Hash> closedSet = new HashSet<Hash>(); // Contient les hash des états déjà visités.
 		openSet = new PriorityQueue<State>(); // Contient les états à la frontière.
 		long startTime = System.currentTimeMillis();
 		int h_param_lim = niv.h_param!=-1 ? niv.h_param : (int)Math.ceil((60.-nFleurs)/6.);
 		
 		openSet.add(new State(frame, rd, cd, nFleurs, nDynas));
 		int n = 0;
+		final Runtime runtime = Runtime.getRuntime();
 		while(!openSet.isEmpty() && !isCancelled()) {
 			State current = openSet.poll();
 			if(n == 800) { // Paramétrization de l'heuristique: approxime davantage si la recherche devient trop longue.
@@ -209,8 +209,14 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 				if(n % 256==0) // Update the progress on the PathViewer
 					publishProgress(current.path.getMoves());
 			}
+			// Prevent possible Out Of Memory Error
+			double memoryOccupation = ((double)(runtime.totalMemory() - runtime.freeMemory()))/((double) runtime.maxMemory());
+			if(memoryOccupation > 0.975) {
+				System.out.println("OUT OF MEMORY!");
+				return new Path(-1);
+			}
 		}
-		return null;
+		return new Path(0);
 	}
 	
 	

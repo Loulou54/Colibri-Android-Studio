@@ -92,6 +92,7 @@
 	<string name="creer">Create!</string>
 	<string name="pick_avatar">\u0009And pick your avatar:</string>
 	<string name="defis_perdus">Defeats</string>
+	<string name="play_time">Play Time</string>
 	<string name="not_played">Not played!</string>
 	<string name="deletedPart">> %1$s has withdrawn from challenge %2$s.</string>
 	<string name="deletedDef">> Challenge %1$s has been cancelled.</string>
@@ -161,6 +162,7 @@
 	<string name="maj_req">You have to update Colibri to the latest version!</string>
 	<string name="cancel_sol">Cancelled!|</string>
 	<string name="no_solution">Ouch!|No solution&#8230;</string>
+	<string name="out_of_memory">Ouch!|Out of RAM&#8230; There might be no solution!</string>
 	<string name="sol_colibrain">ColiBrain solution</string>
 	<string name="sol_generated">Generated solution</string>
 	<string name="score_titre">Score</string>
@@ -186,5 +188,6 @@
 	<string name="channel_results_desc">When the results of a challenge are available.</string>
 	<string name="channel_message">Messages</string>
 	<string name="channel_message_desc">General information sent by the game: it could be news or events.</string>
+	<string name="play_time_format">%1$d h %2$d min</string>
 	
 </resources>

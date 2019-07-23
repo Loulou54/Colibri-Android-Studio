@@ -153,7 +153,7 @@ public class Joueur {
 	
 	/**
 	 * Ajoute les points p (positif ou négatif) au score de ce joueur.
-	 * @param p points gagnés ou perdus
+	 * @param points points gagnés ou perdus
 	 */
 	public void addScore(double points) {
 		score += points;
