@@ -346,59 +346,6 @@ public class Niveau {
 			System.out.println("Mauvaise syntaxe du niveau : " + e.toString());
 		} 
 	}
-
-	/**
-	 * Écrit la matrice du niveau dans un fichier 
-	 * 		@param filename le nom du fichier dans lequel on va ecrire la matrice 
-	 * 		@param matrice  la matrice à écrir 
-	 * 		@throws IOException
-	 */
-	public void ecrirNiveau(String filename) throws IOException {
-		try {
-			PrintWriter ecri = new PrintWriter(new FileWriter(filename));
-			for(int i=0;i<12;i++){
-				for(int j=0;j<20;j++){
-					ecri.print(carteOrigin[i][j]);
-					if(j<19){
-						ecri.print(",");
-					}
-				}
-				ecri.print("\n");
-			}
-			ecri.print(db_l + "," + db_c);
-			ecri.print("\n");
-			for (int i=0; i< vaches.size(); i++) {
-				ecri.print("vache=");
-				int[][] vachette = vaches.get(i);
-				for (int k = 0; k < vachette.length-1; k++) {
-					ecri.print(vachette[k][0]+","+vachette[k][1]+",");
-				}
-				ecri.print(vachette[(vachette.length)-1][0]+","+vachette[(vachette.length)-1][1]);
-			}
-			for (int i=0; i< chats.size(); i++) {
-				ecri.print("chat=");
-				int[][] chat = chats.get(i);
-				for (int k = 0; k < chat.length-1; k++) {
-					ecri.print(chat[k][0]+","+chat[k][1]+",");
-				}
-				ecri.print(chat[(chat.length)-1][0]+","+chat[(chat.length)-1][1]);
-			}
-			if (solution != null) {
-				ecri.print("solution=");
-				for (int k = 0; k < solution.length-1; k++) {
-					ecri.print(solution[k][0]+","+solution[k][1]+","+solution[k][2]);
-				}
-				ecri.print(solution[(solution.length)-1][0]+","+solution[(solution.length)-1][1]);
-			}
-			ecri.flush();
-			ecri.close();
-			System.out.println("Fichier créé");
-		} catch (IOException ioe) {
-			System.err.println("Erreur levée de type IOException au niveau de la méthode ecrirNiveau() : ");
-			ioe.printStackTrace();
-		}
-	}
-	
 	
 	public int[][] getCarte() {
 		return carteOrigin;

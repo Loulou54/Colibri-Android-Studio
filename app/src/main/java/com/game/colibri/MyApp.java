@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class MyApp extends Application {
 	
@@ -45,7 +44,7 @@ public class MyApp extends Application {
 	/**
 	 * On récupère les préférences et l'avancement de l'utilisateur.
 	 */
-	private void loadData() {
+	public void loadData() {
 		id = pref.getInt("id", 0);
 		pseudo = pref.getString("pseudo", null);
 		appareil = pref.getInt("appareil", 0);
@@ -60,8 +59,6 @@ public class MyApp extends Application {
 		versionCode = pref.getInt("versionCode", 0);
 		last_update = pref.getLong("last_update", 0);
 		ParamAleat.loadParams(pref);
-		Log.i("Avancement :","Niv "+avancement);
-		Log.i("Experience :","Score :"+experience);
 		int versionActuelle=0;
 		try {
 			versionActuelle = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -85,13 +82,12 @@ public class MyApp extends Application {
 			.commit();
 	}
 
-	public static void addPlayTime(long time) {
-		playTime += time;
+	public static void addPlayTime(long time_ms) {
+		playTime += time_ms;
 		getApp().editor.putLong("playTime", playTime).commit();
 	}
 	
 	public static void updateExpProgCB(int exp) {
-		System.out.println("Progress ColiBrain : "+exp);
 		expProgCB += exp;
 		int n = expProgCB/EXP_LEVEL_PER_COLI_BRAIN;
 		expProgCB = expProgCB % EXP_LEVEL_PER_COLI_BRAIN;
@@ -109,6 +105,7 @@ public class MyApp extends Application {
 	 */
 	public void saveData() {
 		editor.putInt("niveau", avancement)
+			.putLong("playTime", playTime)
 			.putInt("exp", experience)
 			.putInt("expToSync", expToSync)
 			.putInt("coliBrains", coliBrains)

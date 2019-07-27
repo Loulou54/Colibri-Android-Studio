@@ -19,8 +19,8 @@
 	<string name="instru">Instructions</string>
 	<string name="nouveau_defi">New Challenge</string>
 	<string name="score">Score :</string>	
-	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nOriginal concept and maintenance: Louis DURAND\nlouis.dur54@gmail.com\n</string>
-	<string name="info_text2">\u0009Application launched during the development project in Telecom Bretagne by the following students:\nDurand Louis, Guyard Valentin, Jacquemod Laura et Thiam Mariam\n\n\u0009We wanted to thank our tutor, Gwenaël Brunet, information and network technician at the department Image and Information Analysis.</string>
+	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nCreated and maintained by Louis DURAND\n<a href="mailto:louis.dur54@gmail.com">louis.dur54@gmail.com\n</a></string>
+	<string name="info_text2">\u0009This application was originally launched during a development project in the engineering school Telecom Bretagne (now IMT Atlantique). Since then, it became an important project of mine that I slowly developed for about 5 years in my free time. Your feedback and comments are welcome on the Play Store or by email as well!\n\n\tI hope you will enjoy the game!</string>
 	<string name="instru_text">\u0009You are a hummingbird in a field full of menhirs in Brittany and you have to taste all the flowers covering the meadow.\n\nYou can only fly straight and change direction when you are in front of an obstacle (menhir, cow or edge).</string>
 	<string name="instru_text2">\u0009It\'s up to you to discover the different elements of the game along your progression, like the magical flowers, the dynamites, the cows, the cats and the rainbows! (You unlock them in the Campaign.)</string>
 	<string name="instru_text3">\u0009Start with some Campaign levels, then you could try the Multiplayer Challenges to confront your friends or other players from around the world!\n\nHave fun!!</string>
@@ -69,7 +69,7 @@
 	<string name="err404">Error 404: resource not found.</string>
 	<string name="err500">Error 500: something went wrong at server end.</string>
 	<string name="err">Unknown error. Are you connected to Internet?</string>
-	<string name="errServ">Oops, error on the servor side!</string>
+	<string name="errServ">Oops, error on the server side!</string>
 	<string name="deja_pris">This username is already taken.\nTry something else!</string>
 	<string name="enregistre">Welcome!|You\'ve been successfully registered!</string>
 	<string name="hors_connexion">You\'re currently offline.</string>

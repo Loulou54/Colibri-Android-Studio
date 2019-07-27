@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -217,7 +216,6 @@ public class Carte extends RelativeLayout {
 		super.onSizeChanged(w, h, oldw, oldh);
 		ww=super.getWidth();
 		wh=super.getHeight();
-		Log.i("Dimensions écran :",ww+"*"+wh);
 		cwi=((double)ww)/COL;
 		chi=((double)wh)/LIG;
 		menhir = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.menhir)).getBitmap(), (int)(5*cwi/4), (int)(5*chi/4), true);

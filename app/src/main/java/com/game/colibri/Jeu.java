@@ -187,7 +187,7 @@ public class Jeu extends Activity {
 		outState.putBoolean("forfait", forfait);
 		outState.putBoolean("solved", solved);
 		outState.putBoolean("finipartous", finipartous);
-		outState.putInt("total_frames", play.total_frames+play.frame);
+		outState.putInt("total_frames", play.state==MoteurJeu.GAGNE ? 0 : play.total_frames+play.frame);
 		outState.putLong("seed", niv.seed);
 		super.onSaveInstanceState(outState);
 	}
@@ -390,8 +390,6 @@ public class Jeu extends Activity {
 		}
 		gagne.setVisibility(View.VISIBLE);
 		play.pause(MoteurJeu.GAGNE);
-		play.frame = 0;
-		play.total_frames = 0;
 		if(carte.n_dyna>0) hideDyna();
 		menuLateral(0,null);
 		// Détermination de l'expérience

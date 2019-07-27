@@ -62,14 +62,14 @@ public class ResultatsAdapter extends ArrayAdapter<Participation> {
 		if(p.t_fini==Participation.NOT_PLAYED)
 			h.score.setText("");
 		else if(etape>=2)
-			h.score.setText((p.score < 0 ? "" : "+")+String.format("%,.2f", p.score));
+			h.score.setText((p.score <= 0 ? "" : "+")+String.format("%,.2f", p.score));
 		if(etape==3)
 			h.cumul_score.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.aleat_opt_anim));
 		if(etape>=4) {
-			if(p.rank==1)
-				h.nom.setTextColor(getContext().getResources().getColor(R.color.vert_fonce));
-			else if(p.t_fini==Participation.NOT_PLAYED)
+			if(p.t_fini==Participation.NOT_PLAYED)
 				h.nom.setTextColor(getContext().getResources().getColor(R.color.theme_gris));
+			else if(p.score>0)
+				h.nom.setTextColor(getContext().getResources().getColor(R.color.vert_fonce));
 			else
 				h.nom.setTextColor(getContext().getResources().getColor(R.color.red));
 			if(p.t_fini!=Participation.NOT_PLAYED) {

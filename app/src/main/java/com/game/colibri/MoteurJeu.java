@@ -46,7 +46,7 @@ public class MoteurJeu {
 	// private LinkedList <int[]> mouvements; // Les mouvements effectués
 	private int[] lastMove=new int[] {0,0};
 	private int[][] trace_diff; // Contient le différentiel de position lors des ACTION_MOVE.
-	private int frameRemoveDyna, dynaRow, dynaCol;
+	private LinkedList <int[]> dynaExploQueue; // où chaque élément correspond à {frameRemoveDyna, dynaRow, dynaCol}
 	
 	/**
 	 * Handler de rafraîchissement
@@ -86,7 +86,8 @@ public class MoteurJeu {
 	public MoteurJeu(Jeu activ, Carte c) {
 		carte = c;
 		jeu = activ;
-		buf = new LinkedList<int[]>();
+		buf = new LinkedList<>();
+		dynaExploQueue = new LinkedList<>();
 		// mouvements = new LinkedList<int[]>();
 		trace_diff=new int[3][2];
 		SEUIL = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, activ.getResources().getDisplayMetrics());
@@ -105,7 +106,6 @@ public class MoteurJeu {
 		total_frames = replay ? total_frames+frame : 0;
 		frame=0;
 		wait=0;
-		frameRemoveDyna=-1;
 	}
 	
 	/**
@@ -228,8 +228,10 @@ public class MoteurJeu {
 			c.deplacer();
 			collisionChat(c);
 		}
-		if(frame==frameRemoveDyna)
-			finExplosion(dynaRow, dynaCol);
+		if(!dynaExploQueue.isEmpty() && dynaExploQueue.peek()[0]==frame) {
+			int[] dynaExplo = dynaExploQueue.pollFirst();
+			finExplosion(dynaExplo[1], dynaExplo[2]);
+		}
 		if(state==RUNNING) moveHandler.sleep(PERIODE);
 	}
 	
@@ -345,7 +347,10 @@ public class MoteurJeu {
 			dejaPasse=niv.carte[l][c];
 		} else
 			dejaPasse=0;
-		if(carte.n_fleur==0) jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
+		if(carte.n_fleur==0) {
+			jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
+			total_frames = 0;
+		}
 	}
 	
 	/**
@@ -381,9 +386,7 @@ public class MoteurJeu {
 			carte.animBoom(l+ml,c+mc); // Gère l'animation de l'explosion.
 			jeu.bout_dyna.setText(Integer.toString(carte.n_dyna));
 			if(carte.n_dyna==0) jeu.hideDyna();
-			frameRemoveDyna = frame + 600/PERIODE_NORMALE;
-			dynaRow = l+ml;
-			dynaCol = c+mc;
+			dynaExploQueue.addLast(new int[] {frame + DYNA_DELAY - 2, l+ml, c+mc});
 		}
 	}
 	

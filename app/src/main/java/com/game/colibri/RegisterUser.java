@@ -62,9 +62,9 @@ public class RegisterUser {
 		final PaperDialog boxRegister = new PaperDialog(context, R.layout.register_layout);
 		boxRegister.setTitle(R.string.multi);
 		final LinearLayout lay = (LinearLayout) boxRegister.getContentView();
-		if(callback.getExp()!=0) {
+		if(MyApp.expToSync!=0) {
 			TextView expTV = (TextView) lay.findViewById(R.id.expToSyncMsg);
-			expTV.setText(context.getString(R.string.expToSyncMsg, String.format("%,d", callback.getExp())));
+			expTV.setText(context.getString(R.string.expToSyncMsg, String.format("%,d", MyApp.expToSync)));
 			expTV.setVisibility(View.VISIBLE);
 		}
 		final View reg = lay.findViewById(R.id.sw_reg), con = lay.findViewById(R.id.sw_con);
@@ -195,10 +195,6 @@ public class RegisterUser {
 	}
 	
 	public interface callBackInterface {
-		int getExp();
-		int getProgress();
-		int getColiBrains();
-		int getExpProgCB();
 		boolean registered(String JSONresponse, String name, boolean sync);
 		void cancelled();
 	}
@@ -211,10 +207,6 @@ public class RegisterUser {
 		params.put("password", mdp);
 		params.put("mail", mail);
 		params.put("avatar", ""+avatar);
-		params.put("exp", ""+callback.getExp());
-		params.put("progress", ""+callback.getProgress());
-		params.put("coliBrains", ""+callback.getColiBrains());
-		params.put("expProgCB", ""+callback.getExpProgCB());
 		params.put("regId", firebaseId);
 		params.put("pays", Resources.getSystem().getConfiguration().locale.getCountry());
 		prgDialog.show();

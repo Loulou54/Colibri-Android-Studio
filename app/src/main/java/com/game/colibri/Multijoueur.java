@@ -142,6 +142,7 @@ public class Multijoueur extends Activity {
 				}
 			}
 			adapt.notifyDataSetChanged();
+			syncData();
 		}
 		if(messageDialog!=null) {
 			messageDialog.show();
@@ -190,10 +191,6 @@ public class Multijoueur extends Activity {
 		int userId = MyApp.id;
 		base.getJoueurs(joueurs);
 		System.out.println("Nombre de Joueurs : "+joueurs.size());
-		for(int i=0, length=joueurs.size(); i<length; i++) {
-			Joueur j = joueurs.valueAt(i);
-			System.out.println(j.getId()+" : "+j.getPseudo());
-		}
 		user = joueurs.get(userId);
 		if(user==null) {
 			if(!connect.isConnectedToInternet()) {
@@ -380,22 +377,18 @@ public class Multijoueur extends Activity {
 		params.put("joueur", ""+MyApp.id);
 		params.put("appareil", ""+MyApp.appareil);
 		params.put("tasks", base.getTasks());
-		System.out.println(base.getTasks());
-		params.put("expToSync", ""+MyApp.expToSync);
+		//System.out.println("Tasks sent: "+base.getTasks());
 		params.put("progress", ""+MyApp.avancement);
 		client.post(SERVER_URL+"/disconnect.php", params, new TextHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				prgDialog.dismiss();
-				if(response.equalsIgnoreCase("OK")) {
-					base.clearDB();
-					MyApp.id = 0;
-					MyApp.getApp().editor.remove("id");
-					MyApp.getApp().editor.commit();
-					registerUser();
-				} else {
-					System.out.println(response);
-				}
+				base.clearDB();
+				boolean musique = MyApp.getApp().pref.getBoolean("musique", true);
+				MyApp.getApp().editor.clear().commit();
+				MyApp.getApp().editor.putBoolean("musique", musique);
+				MyApp.getApp().loadData();
+				registerUser();
 			}
 
 			@Override
@@ -490,22 +483,6 @@ public class Multijoueur extends Activity {
 	private void registerUser() {
 		(new RegisterUser(this, client, new RegisterUser.callBackInterface() {
 			@Override
-			public int getExp() {
-				return MyApp.expToSync;
-			}
-			@Override
-			public int getProgress() {
-				return MyApp.expToSync==MyApp.experience ? MyApp.avancement : 1;
-			}
-			@Override
-			public int getColiBrains() {
-				return MyApp.expToSync==MyApp.experience ? MyApp.coliBrains : Math.max(MyApp.coliBrains - MyApp.getApp().pref.getInt("coliBrainsLastSync", MyApp.DEFAULT_MAX_COLI_BRAINS), 0);
-			}
-			@Override
-			public int getExpProgCB() {
-				return MyApp.expToSync==MyApp.experience ? MyApp.expProgCB : 0;
-			}
-			@Override
 			public boolean registered(String JSONresponse, String name, boolean sync) {
 				try {
 					JSONArray j = new JSONArray(JSONresponse);
@@ -515,22 +492,7 @@ public class Multijoueur extends Activity {
 					base.getDefis(user.getId(),joueurs,adversaires);
 					adapt = new DefiExpandableAdapter(Multijoueur.this, user.getId(), adversaires);
 					lv.setAdapter(adapt);
-					MyApp.experience = user.getExp();
-					MyApp.avancement = user.getProgress();
-					MyApp.last_update = 0;
-					if(sync)
-						syncData();
-					else {
-						MyApp.expToSync = 0;
-						MyApp.cumulExpCB = 0;
-						MyApp.getApp().editor
-							.putInt("coliBrainsLastSync", MyApp.coliBrains)
-							.putInt("expToSync", MyApp.expToSync)
-							.putInt("cumulExpCB", MyApp.cumulExpCB)
-							.commit();
-					}
-					MyApp.getApp().saveData();
-					dispUser();
+					syncData();
 					return true;
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -560,7 +522,6 @@ public class Multijoueur extends Activity {
 			if(MyApp.cumulExpCB % MyApp.EXP_LEVEL_PER_COLI_BRAIN > MyApp.expProgCB)
 				coliBrainsWon++;
 			// coliBrainsDiff = coliBrains-lastColiBrains = won - used <=> used = won + lastColiBrains - coliBrains
-			System.out.println(MyApp.expToSync+" "+MyApp.cumulExpCB+" "+coliBrainsWon+" "+coliBrainsLastSync+" "+MyApp.coliBrains);
 			base.syncExpAndColiBrains(MyApp.playTime - playTimeLastSync, MyApp.expToSync, MyApp.cumulExpCB, coliBrainsWon + coliBrainsLastSync - MyApp.coliBrains);
 			MyApp.expToSync = 0;
 			MyApp.cumulExpCB = 0;
@@ -577,7 +538,7 @@ public class Multijoueur extends Activity {
 		params.put("joueur", ""+MyApp.id);
 		params.put("appareil", ""+MyApp.appareil);
 		params.put("tasks", base.getTasks());
-		System.out.println(base.getTasks());
+		//System.out.println("Tasks sent: "+base.getTasks());
 		params.put("last_update", ""+MyApp.last_update);
 		params.put("progress", ""+MyApp.avancement);
 		client.post(SERVER_URL+"/sync_data.php", params, new TextHttpResponseHandler() {
@@ -614,7 +575,7 @@ public class Multijoueur extends Activity {
 	 */
 	private boolean insertJSONData(String def) {
 		boolean res;
-		System.out.println(def);
+		//System.out.println("Sync Data Received: "+def);
 		long last_up = 0;
 		try {
 			JSONObject o = new JSONObject(def);

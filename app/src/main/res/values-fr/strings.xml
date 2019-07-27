@@ -19,8 +19,8 @@
 	<string name="instru">Instructions</string>
 	<string name="nouveau_defi">Nouveau Défi</string>
 	<string name="score">Score :</string>
-	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nConcept original et maintenance : Louis DURAND\nlouis.dur54@gmail.com\n</string>
-	<string name="info_text2">\u0009Application lancée au sein du projet développement à Télécom Bretagne par les élèves suivants :\nDurand Louis, Guyard Valentin, Jacquemod Laura et Thiam Mariam\n\n\u0009Nous tenons à remercier notre tuteur, Gwenaël Brunet, technicien informatique et réseau au département Image et Traitement de l\'Information.</string>
+	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nCréé et maintenu par Louis DURAND\nlouis.dur54@gmail.com\n</string>
+	<string name="info_text2">\u0009Cette application a été lancée lors d\'un projet de développement à Télécom Bretagne (maintenant IMT Atlantique). Depuis, elle est devenue un projet important à mes yeux que j\'ai lentement développé pendant environs 5 ans, dans mon temps libre. Vos retours et vos commentaires sont les bienvenus sur le Play Store ou par courriel également !\n\n\tJ\'espère que vous apprécierez ce jeu !</string>
 	<string name="instru_text">\u0009Vous êtes un colibri dans un champ de menhirs en Bretagne et vous devez goûter à chacune des fleurs qui jonchent la prairie.\n\n\u0009Vous ne pouvez voler qu\'en ligne droite et changer de direction seulement lorsque vous faites face à un obstacle (menhir, vache ou bord).</string>
 	<string name="instru_text2">\u0009À vous de découvrir les différents éléments de jeu tout au long de votre progression, comme les fleurs magiques, les dynamites, les vaches, les chats et les arcs-en-ciel ! (À débloquer dans Campagne.)</string>
 	<string name="instru_text3">\u0009Commencez par quelques niveaux Campagne, puis vous pourrez tenter les Défis Multijoueur pour affronter des amis ou d\'autres joueurs du monde entier !\n\nAmusez-vous bien !!</string>

@@ -38,6 +38,8 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="8dp"
 		        android:gravity="center"
+				android:autoLink="all"
+				android:textColorLink="@color/bleu_moyen"
 		        android:text="@string/info_text"
 		        android:textColor="@color/theme_gris"
 		        android:textSize="18sp" />
@@ -61,7 +63,7 @@
         </LinearLayout>
         
     </ScrollView>
-     
+
     <Button
         android:id="@+id/quitInfos"
         style="@style/pencil_button"

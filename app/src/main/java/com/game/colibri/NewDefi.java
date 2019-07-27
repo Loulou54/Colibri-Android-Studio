@@ -177,7 +177,6 @@ public class NewDefi {
 					jAdapter.updateTextView();
 					jAdapter.notifyDataSetChanged();
 				} catch (JsonSyntaxException e) {
-					System.out.println(response);
 					Toast.makeText(context, R.string.nojoueurfound, Toast.LENGTH_LONG).show();
 					return;
 				}
