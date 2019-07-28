@@ -52,14 +52,18 @@ public class MenuPrinc extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu_princ);
-		root=(RelativeLayout) findViewById(R.id.root);
+		root = (RelativeLayout) findViewById(R.id.root);
 		n_niv = MyApp.avancement;
 		PushNotificationService.createNorificationsChannels(this);
 		// Lancé depuis une notification ?
-		if(getIntent().getExtras()!=null && getIntent().getExtras().getString("com.game.colibri.notification")!=null) {
-			((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+		if (getIntent().getExtras() != null && getIntent().getExtras().getString("com.game.colibri.notification") != null) {
+			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 			multijoueur(null);
 		}
+		// ATTENTION: This was auto-generated to handle app links.
+		/*Intent appLinkIntent = getIntent();
+		String appLinkAction = appLinkIntent.getAction();
+		Uri appLinkData = appLinkIntent.getData();*/
 	}
 	
 	@Override

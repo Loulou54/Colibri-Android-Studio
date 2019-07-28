@@ -596,6 +596,7 @@ public class Multijoueur extends Activity {
 			res = true;
 		} catch (JSONException e) {
 			e.printStackTrace();
+			System.out.println(def);
 			res = false;
 			if(def.equalsIgnoreCase("upgrade"))
 				Toast.makeText(Multijoueur.this, R.string.maj_req, Toast.LENGTH_LONG).show();
