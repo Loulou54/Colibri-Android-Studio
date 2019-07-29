@@ -39,6 +39,7 @@ public class ClassementAdapter extends ArrayAdapter<Joueur> {
 	private String search;
 	private boolean endOfList, isLoading;
 	private Typeface font;
+	private long failTimeStamp = 0; // Pour éviter les rafales de requête en cas d'erreurs répétées
 	
 	public ClassementAdapter(Classements c, int t, boolean f, String s) {
 		super(c, R.layout.element_classement, new ArrayList<Joueur>());
@@ -125,7 +126,7 @@ public class ClassementAdapter extends ArrayAdapter<Joueur> {
 	}
 	
 	public RequestHandle loadNext() {
-		if(isLoading || endOfList)
+		if(isLoading || endOfList || System.currentTimeMillis()-failTimeStamp < 5000)
 			return null;
 		RequestParams params = new RequestParams();
 		params.setHttpEntityIsRepeatable(true);
@@ -167,6 +168,7 @@ public class ClassementAdapter extends ArrayAdapter<Joueur> {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+				failTimeStamp = System.currentTimeMillis();
 				isLoading = false;
 				remove(null);
 				if (statusCode == 404) {

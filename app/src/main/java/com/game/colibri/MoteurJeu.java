@@ -348,8 +348,10 @@ public class MoteurJeu {
 		} else
 			dejaPasse=0;
 		if(carte.n_fleur==0) {
+			MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 			jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
 			total_frames = 0;
+			frame = 0;
 		}
 	}
 	

@@ -187,5 +187,6 @@
 	<string name="channel_message">Messages</string>
 	<string name="channel_message_desc">Information générale à propos du jeu : nouvelles ou événements.</string>
 	<string name="play_time_format">%1$d h %2$d min</string>
+	<string name="first_time">Premier temps</string>
 	
 </resources>

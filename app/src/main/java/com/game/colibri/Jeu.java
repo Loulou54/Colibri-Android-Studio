@@ -54,7 +54,8 @@ public class Jeu extends Activity {
 	public View perdu; 
 	public View gagne; 
 	public Button bout_dyna;
-	private boolean multi, brandNew=true, solUsed=false, forfait=false, solved=false, finipartous=false;
+	private boolean multi, brandNew=true, forfait=false, solved=false, finipartous=false;
+	private int first_time = 0; // Le temps de première résolution du niveau
 	public int n_niv;
 	private Bundle opt, savedInstanceState;
 	private Defi defi=null;
@@ -183,11 +184,11 @@ public class Jeu extends Activity {
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("solUsed", solUsed);
 		outState.putBoolean("forfait", forfait);
 		outState.putBoolean("solved", solved);
 		outState.putBoolean("finipartous", finipartous);
 		outState.putInt("total_frames", play.state==MoteurJeu.GAGNE ? 0 : play.total_frames+play.frame);
+		outState.putInt("first_time", first_time);
 		outState.putLong("seed", niv.seed);
 		super.onSaveInstanceState(outState);
 	}
@@ -200,11 +201,11 @@ public class Jeu extends Activity {
 		if (brandNew) { // événement appelé lorsque le RelativeLayout "lay" est prêt ! C'est ici que l'on peut charger le niveau et ajouter les View "Animal".
 			launch_niv(false);
 			if(savedInstanceState!=null) { // Si Jeu a été détruite mais restaurée
-				solUsed = savedInstanceState.getBoolean("solUsed", false);
 				forfait = savedInstanceState.getBoolean("forfait", false);
 				solved = savedInstanceState.getBoolean("solved", false);
 				finipartous = savedInstanceState.getBoolean("finipartous", false);
 				play.total_frames = savedInstanceState.getInt("total_frames", 0);
+				first_time = savedInstanceState.getInt("first_time", 0);
 				savedInstanceState = null;
 			}
 			brandNew=false;
@@ -404,6 +405,7 @@ public class Jeu extends Activity {
 		}
 		// A la première résolution, ajouter le progrès au profil
 		if(!solved && !forfait) {
+			first_time = temps_total_ms;
 			if(opt.getInt("mode",0)==0 && n_niv==MyApp.avancement) { // Niveau suivant débloqué !
 				MyApp.avancement++;
 				unlockedElementPopup(n_niv);
@@ -421,11 +423,11 @@ public class Jeu extends Activity {
 			s2 = new SpannableString("");
 		} else {
 			s1 = getString(R.string.temps)+" :\n"
-					+getString(R.string.exp)+" :\n"
-					+getString(R.string.aide)+" :";
-			String s = getFormattedTime(temps_total_ms)+"\n + "
-					+(forfait ? "0 ("+exp+")" : exp)+"\n"
-					+(solUsed ? getString(R.string.oui) : getString(R.string.non));
+					+ (!solved ? "" : getString(R.string.first_time)+" :\n")
+					+ getString(R.string.exp)+" :";
+			String s = getFormattedTime(temps_total_ms)+"\n"
+					+ (!solved ? "" : first_time==0 ? getString(R.string.forfait)+" !\n" : getFormattedTime(first_time)+"\n")
+					+ "+ "+(forfait ? "0 ("+exp+")" : exp);
 			s2 = new SpannableString(s);
 			int virgule = s.indexOf(".");
 			while(virgule >= 0) {
@@ -445,9 +447,6 @@ public class Jeu extends Activity {
 					finipartous = multijoueur.defi.finMatch(null, MyApp.id, temps_total_ms);
 					multijoueur.syncData();
 				}
-			} else {
-				Participation p = defi.participants.get(MyApp.id);
-				temps_total_ms = finipartous ? p.t_fini : p.t_cours;
 			}
 			phrase.setText(!finipartous ? getString(R.string.joueur_suivant) : getString(R.string.resultats));
 			phrase.setVisibility(View.VISIBLE);
@@ -552,7 +551,7 @@ public class Jeu extends Activity {
 		} else {
 			forfait = false;
 			solved = false;
-			solUsed = false;
+			first_time = 0;
 			if(opt.getInt("mode", 0)>0) {
 				if(multi) { // Mode multijoueur
 					niv = new Niveau(opt.getInt("mode"), opt.getLong("seed"), opt.getIntArray("param"), opt.getInt("avancement"));
@@ -669,7 +668,6 @@ public class Jeu extends Activity {
 			return;
 		}
 		recommencer(v);
-		solUsed=true;
     	play.solution(niv.solution);
 	}
 	
@@ -680,7 +678,6 @@ public class Jeu extends Activity {
 		}
 		recommencer(v);
 		play.pause(MoteurJeu.SOL_RESEARCH);
-		solUsed=true;
 		final PathViewer pv = (PathViewer) findViewById(R.id.path_viewer);
 		(new Solver(niv, new Solver.SolverInterface() {
 			@Override
