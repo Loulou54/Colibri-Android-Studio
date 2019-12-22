@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 
 public class MyApp extends Application {
@@ -26,12 +28,18 @@ public class MyApp extends Application {
 	
 	public SharedPreferences pref;
 	public SharedPreferences.Editor editor;
-	public MediaPlayer intro=null,boucle=null;
+	private MediaPlayer[] drumTracks = null;
+	private MediaPlayer[] backgroundTracks = null;
+	private MediaPlayer[] leadTracks = null;
+	private int playingDrumIndex = -1;
+	private int playingBackgroundIndex = -1;
+	private int playingLeadIndex = -1;
+	private MusicHandler musicHandler;
 	
 	public static MyApp getApp(){
 		return singleton;
 	}
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -127,44 +135,92 @@ public class MyApp extends Application {
 		if(nActiveActivities==0 && singleton!=null)
 			singleton.stopMusic();
 	}
+
+	public void newMixAndStartNextBar() {
+		playingDrumIndex = (int)(Math.random()*(drumTracks.length));
+		playingBackgroundIndex = (int)(Math.random()*(backgroundTracks.length-0.5));
+		// Le saz apparaît en bg et en lead donc pour le rendre équiprobable, sa plage de probabilité et de 0.5 en bg et en lead.
+		do {
+			playingLeadIndex = (int)(Math.random()*(leadTracks.length+0.5)) - 1; // Si -1, pas de lead!
+		} while(playingLeadIndex!=-1 && backgroundTracks[playingBackgroundIndex]==leadTracks[playingLeadIndex]);
+		startNextBar();
+	}
+
+	private void loadMusic() {
+		MediaPlayer percus_1 = MediaPlayer.create(MyApp.getApp(), R.raw.percus_1);
+		drumTracks = new MediaPlayer[] {
+				percus_1,
+				percus_1,
+				MediaPlayer.create(MyApp.getApp(), R.raw.percus_2)
+		};
+		backgroundTracks = new MediaPlayer[] {
+				MediaPlayer.create(MyApp.getApp(), R.raw.guitare_1),
+				MediaPlayer.create(MyApp.getApp(), R.raw.guitare_2),
+				MediaPlayer.create(MyApp.getApp(), R.raw.saz)
+		};
+		leadTracks = new MediaPlayer[] {
+				MediaPlayer.create(MyApp.getApp(), R.raw.guitare_3),
+				MediaPlayer.create(MyApp.getApp(), R.raw.vibraphone),
+				backgroundTracks[2]
+		};
+		playingBackgroundIndex = 0;
+		musicHandler = new MusicHandler();
+	}
+
+	private void startNextBar() {
+		if(playingBackgroundIndex!=-1)
+			backgroundTracks[playingBackgroundIndex].seekTo(0);
+		if(playingLeadIndex!=-1)
+			leadTracks[playingLeadIndex].seekTo(0);
+		if(playingDrumIndex!=-1)
+			drumTracks[playingDrumIndex].seekTo(0);
+		startMusic();
+	}
 	
 	public void startMusic() {
-		if(intro==null && boucle==null) {
-			intro = MediaPlayer.create(this, R.raw.intro);
-			intro.setLooping(false);
-			boucle = MediaPlayer.create(this, R.raw.boucle);
-			boucle.setLooping(true);
-			intro.start();
-			intro.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-				@Override
-				public void onCompletion(MediaPlayer mp) {
-					intro.release();
-				    intro = null;
-					boucle.start();
-				}
-			});
-		} else if(intro==null)
-			boucle.start();
-		else
-			intro.start();
+		if(backgroundTracks==null)
+			loadMusic();
+		MediaPlayer bgMusic = backgroundTracks[playingBackgroundIndex];
+		if(playingBackgroundIndex!=-1)
+			bgMusic.start();
+		if(playingLeadIndex!=-1)
+			leadTracks[playingLeadIndex].start();
+		if(playingDrumIndex!=-1)
+			drumTracks[playingDrumIndex].start();
+		musicHandler.removeMessages(0);
+		musicHandler.sendEmptyMessageDelayed(0, bgMusic.getDuration() - bgMusic.getCurrentPosition());
 	}
 	
 	public void stopMusic() {
-		if(intro==null && boucle!=null)
-			boucle.pause();
-		else if(intro!=null)
-			intro.pause();
+		if(playingBackgroundIndex!=-1)
+			backgroundTracks[playingBackgroundIndex].pause();
+		if(playingLeadIndex!=-1)
+			leadTracks[playingLeadIndex].pause();
+		if(playingDrumIndex!=-1)
+			drumTracks[playingDrumIndex].pause();
+		musicHandler.removeMessages(0);
 	}
 	
 	public void releaseMusic() {
-		if (intro!=null) {
-		    intro.release();
-		    intro = null;
-		}
-		if (boucle!=null) {
-		    boucle.release();
-		    boucle = null;
+		playingBackgroundIndex = -1;
+		playingLeadIndex = -1;
+		playingDrumIndex = -1;
+		for(MediaPlayer mp : backgroundTracks)
+			mp.release();
+		for(MediaPlayer mp : leadTracks)
+			mp.release();
+		for(MediaPlayer mp : drumTracks)
+			mp.release();
+		backgroundTracks = null;
+		leadTracks = null;
+		drumTracks = null;
+		musicHandler.removeMessages(0);
+	}
+
+	private static class MusicHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			MyApp.getApp().newMixAndStartNextBar();
 		}
 	}
-	
 }
