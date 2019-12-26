@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.AnimationDrawable;
@@ -48,8 +49,9 @@ public class PathViewer extends RelativeLayout {
 	public AlphaAnimation anim;
 	private View fond; // Le fond de la view avec le dessin de solPath
 	private View colibri; // Le colibri fantôme pour la solution
-	private Bitmap explo, dyna_img, vache_img, warning;
+	private Bitmap explo, dyna_img, vache_img, warning, fleche_poussee;
 	private LinkedList<int[]> dynaPos, vachePos, waitPos; // Position (x,y) des images de dynamites et vaches
+	private LinkedList<Matrix> poussVachePosEtDir;// Position et direction des poussées de vache
 	private float STROKE_WIDTH_MIN, STROKE_WIDTH_DELTA, BLUR_RADIUS_MIN, BLUR_RADIUS_DELTA;
 	private int moveTime, stepsCount;
 	private float blurStep;
@@ -116,6 +118,9 @@ public class PathViewer extends RelativeLayout {
     			for(int[] pos : waitPos) {
     				can.drawBitmap(warning, pos[0], pos[1], null);
     			}
+				for(Matrix mat : poussVachePosEtDir) {
+					can.drawBitmap(fleche_poussee, mat, null);
+				}
     		}
     	};
     	fond.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -127,6 +132,7 @@ public class PathViewer extends RelativeLayout {
     	dynaPos = new LinkedList<int[]>();
     	vachePos = new LinkedList<int[]>();
     	waitPos = new LinkedList<int[]>();
+    	poussVachePosEtDir = new LinkedList<Matrix>();
     }
     
 	public void clear() {
@@ -135,14 +141,17 @@ public class PathViewer extends RelativeLayout {
 			dyna_img = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.dynamite_allumee)).getBitmap(), (int)(3*Carte.cw/2), (int)(3*Carte.ch/2), true);
 	    	vache_img = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.vache_ghost)).getBitmap(), (int)(Carte.cw*1.25), (int)(Carte.ch*1.25), true);
 	    	warning = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.warning)).getBitmap(), (int)(Carte.cw*0.6), (int)(Carte.ch*0.6), true);
+			fleche_poussee = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.fleche_poussee)).getBitmap(), (int)(Carte.cw*0.5), (int)(Carte.ch*0.5), true);
 	    	explo.setDensity(0);
 	    	dyna_img.setDensity(0);
 	    	vache_img.setDensity(0);
 	    	warning.setDensity(0);
+			fleche_poussee.setDensity(0);
 		}
 		dynaPos.clear();
 		vachePos.clear();
 		waitPos.clear();
+		poussVachePosEtDir.clear();
 		handler.removeMessages(RefreshHandler.ANIM_COLIB);
 		colibri.setAnimation(null);
 		colibri.setVisibility(View.GONE);
@@ -168,6 +177,7 @@ public class PathViewer extends RelativeLayout {
 		dynaPos.clear();
 		vachePos.clear();
 		waitPos.clear();
+		poussVachePosEtDir.clear();
 		xc = (float) (cd*Carte.cw);
 		yc = (float) (rd*Carte.ch);
 		solPath.moveTo(xc + (float) (0.5*Carte.cw), yc + (float) (0.5*Carte.ch));
@@ -237,6 +247,7 @@ public class PathViewer extends RelativeLayout {
 		dynaPos.clear();
 		vachePos.clear();
 		waitPos.clear();
+		poussVachePosEtDir.clear();
 		xc = xd; yc = yd;
 		solPath.moveTo(xc + (float) (0.5*Carte.cw), yc + (float) (0.5*Carte.ch));
 		animStepFast();
@@ -279,6 +290,7 @@ public class PathViewer extends RelativeLayout {
 			dynaPos.clear();
 			vachePos.clear();
 			waitPos.clear();
+			poussVachePosEtDir.clear();
 			xc = xd; yc = yd;
 			solPath.moveTo(xc + (float) (0.5*Carte.cw), yc + (float) (0.5*Carte.ch));
 			pathWidth = STROKE_WIDTH_MIN + STROKE_WIDTH_DELTA;
@@ -338,8 +350,9 @@ public class PathViewer extends RelativeLayout {
 	 * @param m mouvement
 	 */
 	private void curveTo(Solver.Move m) {
-		float dxf = (m.direction%3==1 ? 0.5f : (m.direction==Solver.Move.RIGHT ? 0f : 1f));
-		float dyf = (m.direction%3!=1 ? 0.5f : (m.direction==Solver.Move.DOWN ? 0f : 1f));
+		int dir = Math.abs(m.direction);
+		float dxf = (dir%3==1 ? 0.5f : (dir==Solver.Move.RIGHT ? 0f : 1f));
+		float dyf = (dir%3!=1 ? 0.5f : (dir==Solver.Move.DOWN ? 0f : 1f));
 		float xf = (float) (m.posFinale.c*Carte.cw);
 		float yf = (float) (m.posFinale.r*Carte.ch);
 		if(m.wait==-1) { // Téléportation arc-en-ciel
@@ -352,7 +365,25 @@ public class PathViewer extends RelativeLayout {
 			yc = yc + ((float) ((0.3 + 0.4*Math.random())*Carte.ch));
 			solPath.cubicTo(xc, yc, xc, yc, xf + dxf*((float) Carte.cw), yf + dyf*((float) Carte.ch));
 		}
-		if(m.step==-1) { // Arrêt contre Vache
+		if(m.direction < 0) { // Poussée de Vache
+			Solver.Position p_vache = m.posFinale.prev(dir);
+			Matrix mat = new Matrix();
+			int deg_rot = 0;
+			switch(dir) {
+				case Solver.Move.UP:
+					deg_rot = 270;
+					break;
+				case Solver.Move.LEFT:
+					deg_rot = 180;
+					break;
+				case Solver.Move.DOWN:
+					deg_rot = 90;
+			}
+			mat.setRotate(deg_rot, (float)(Carte.cw*0.5/2), (float)(Carte.ch*0.5/2));
+			mat.postTranslate((float)((p_vache.c - 0.3f + 1.1f*(1f-dxf))*Carte.cw), (float)((p_vache.r - 0.3f + 1.1f*(1f-dyf))*Carte.ch));
+			poussVachePosEtDir.add(mat);
+			vachePos.add(new int[] {(int) ((p_vache.c-0.125)*Carte.cw), (int) ((p_vache.r-0.125)*Carte.ch)});
+		} else if(m.step==-1) { // Arrêt contre Vache
 			Solver.Position p_vache = m.posFinale.next(m.direction);
 			vachePos.add(new int[] {(int) ((p_vache.c-0.125)*Carte.cw), (int) ((p_vache.r-0.125)*Carte.ch)});
 		}

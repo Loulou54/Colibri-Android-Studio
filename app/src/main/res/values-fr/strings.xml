@@ -23,7 +23,12 @@
 	<string name="info_text2">\u0009Cette application a été lancée lors d\'un projet de développement à Télécom Bretagne (maintenant IMT Atlantique). Depuis, elle est devenue un projet important à mes yeux que j\'ai lentement développé pendant environs 5 ans, dans mon temps libre. Vos retours et vos commentaires sont les bienvenus sur le Play Store ou par courriel également !\n\n\tJ\'espère que vous apprécierez ce jeu !</string>
 	<string name="instru_text">\u0009Vous êtes un colibri dans un champ de menhirs en Bretagne et vous devez goûter à chacune des fleurs qui jonchent la prairie.\n\n\u0009Vous ne pouvez voler qu\'en ligne droite et changer de direction seulement lorsque vous faites face à un obstacle (menhir, vache ou bord).</string>
 	<string name="instru_text2">\u0009À vous de découvrir les différents éléments de jeu tout au long de votre progression, comme les fleurs magiques, les dynamites, les vaches, les chats et les arcs-en-ciel ! (À débloquer dans Campagne.)</string>
-	<string name="instru_text3">\u0009Commencez par quelques niveaux Campagne, puis vous pourrez tenter les Défis Multijoueur pour affronter des amis ou d\'autres joueurs du monde entier !\n\nAmusez-vous bien !!</string>
+	<string name="instru_text3">\u0009Commencez par quelques niveaux Campagne, puis vous pourrez tenter les Défis Multijoueur pour affronter des amis ou d\'autres joueurs du monde entier !\n\n
+		\u0009\u0009\u0009\u0009Le mode Multijoueur:\n\n
+		\u0009C\'est un mode de jeu compétitif en réseau. Pour chaque défi joué, en fonction de votre position dans le classement, vous remportez (ou perdez !) un score grossièrement égal au \"nombre de joueurs vaincus\" moins le \"nombre de personnes qui vous ont vaincu\". Cette valeur est cependant modulée selon le score général des participants de manière à valoriser les participants de niveau plus faible ou nouvellement arrivés.\n\n
+		\u0009Le \"Score\" est donc à distinguer de l\'\"Expérience\", qui est seulement cumulative et qui représente les niveaux que vous avez résolus depuis que vous jouez à Colibri ! La page \"Classement\" vous permet de comparer vos performances avec d\'autres participants.\n\n
+		Amusez-vous bien !!
+	</string>
 	<string name="accept">OK</string>
 	<string name="annuler">Annuler</string>
 	<string name="name">Nom</string>
@@ -173,8 +178,8 @@
 	<string name="colibrains_info2">\u0009Les ColiBrains sont accessibles en cours de jeu par le menu latéral dépliable avec un simple clic sur l\'écran.</string>
 	<string name="colibrains_info3">\u21AA Pour les Cartes Aléatoires ou les niveaux déjà résolus, les ColiBrains sont illimités et vous pouvez les utiliser librement pour vous exercer.</string>
 	<string name="colibrains_info4">\u21AA Pour les Défis Multijoueurs ou pour les niveaux non résolus du mode Campagne, les ColiBrains sont limités ! Le nombre de ColiBrains restants est indiqué sur l\'icone.</string>
-	<string name="colibrains_info5">\u0009Il vous suffit de résoudre des niveaux pour gagner progressivement de nouveaux ColiBrains ! Cependant, vous ne pourrez pas en cumuler plus que la limite indiquée dans le menu principal.</string>
-	<string name="colibrains_info6">\u0009En plus de pouvoir vous débloquer, les ColiBrains peuvent être utilisés de façon stratégique en mode Multijoueur pour accélérer la résolution d\'un niveau où l\'enjeu est fort ! (adversaires nombreux ou haut classés)</string>
+	<string name="colibrains_info5">\u0009Il vous suffit de résoudre des niveaux pour gagner progressivement de nouveaux ColiBrains ! Cependant, vous ne pourrez pas en cumuler plus que 6.</string>
+	<string name="colibrains_info6">\u0009Par exemple, il est toujours utile d\'utiliser un ColiBrain lorsque vous pensez être bloqué avant de recommencer un niveau car il y a des chances de découvrir une solution que vous n\'aviez pas vue ! En Multijoueur, ils permettent aussi de se donner un avantage pour un match important.</string>
 	<string name="colibrains_info7">\u21AA Enfin, l\'algorithme de résolution de niveau « ColiBrain » est aussi accessible en fin de niveau pour visualiser la solution la plus rapide trouvée par l\'algorithme !</string>
 	<string name="unlocked_title">Nouvel élément disponible !</string>
 	<string name="unlocked_msg">\u2605 Félicitations !! \u2605\nVous avez débloqué un nouvel élément :</string>
@@ -187,6 +192,6 @@
 	<string name="channel_message">Messages</string>
 	<string name="channel_message_desc">Information générale à propos du jeu : nouvelles ou événements.</string>
 	<string name="play_time_format">%1$d h %2$d min</string>
-	<string name="first_time">Premier temps</string>
+	<string name="first_time">Premier essai</string>
 	
 </resources>

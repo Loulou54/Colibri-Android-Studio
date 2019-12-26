@@ -104,8 +104,8 @@ public class MoteurJeu {
 		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 		timeSave = 0;
 		total_frames = replay ? total_frames+frame : 0;
-		frame=0;
-		wait=0;
+		frame = 0;
+		wait = 0;
 	}
 	
 	/**
@@ -137,6 +137,10 @@ public class MoteurJeu {
 		}
 		for(Chat c : carte.chats) {
 			c.stop();
+		}
+		if(etat==GAGNE) {
+			total_frames = 0;
+			frame = 0;
 		}
 	}
 	
@@ -350,8 +354,6 @@ public class MoteurJeu {
 		if(carte.n_fleur==0) {
 			MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 			jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
-			total_frames = 0;
-			frame = 0;
 		}
 	}
 	

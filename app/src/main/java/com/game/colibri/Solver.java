@@ -384,19 +384,25 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 				addMovePushedByVache(pMoves, dir, occs, null);
 			}
 			// Déplacements
+			int nFleurs = grid.nFleurs; // Permet d'arrêter un déplacement si on a ramassé toutes les fleurs
+			boolean looped = false;
 			cell = grid.addCatsObstacles(tempPos, cell); // Pour ajouter les chats comme obstacles au déplacement
-			tempPos.simul(cell, niv, grid);
+			if(tempPos.simul(cell, niv, grid))
+				nFleurs--;
 			cell = grid.obstacle(tempPos.step(dir));
 			int steps = 0; // Pour détecter une boucle infinie entre deux arcs-en-ciel.
-			while(cell!=null && steps < 2*Position.COL) {
+			while(cell!=null && nFleurs > 0 && steps < 2*Position.COL) {
+				if(tempPos.equals(pos))
+					looped = true;
 				if(!cell.isEmpty() && cell.getFirst().mod!=Integer.MAX_VALUE) // Arrêt contre une vache (et non une dynamite qui va exploser)
 					addMoveToVache(pMoves, tempPos.prev(dir), dir, cell, null);
 				cell = grid.addCatsObstacles(tempPos, cell);
-				tempPos.simul(cell, niv, grid);
-				cell = grid.obstacle(tempPos.step(dir));
+				if(tempPos.simul(cell, niv, grid) && !looped)
+					nFleurs--;
+				cell = grid.obstacle(tempPos.step(dir), looped);
 				steps++;
 			}
-			if(cell==null) // Arrêt contre menhir
+			if(cell==null || nFleurs==0) // Arrêt contre menhir ou dernière fleur
 				addMoveToMenhir(pMoves, tempPos.prev(dir), dir, null);
 			return pMoves;
 		}
@@ -643,7 +649,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 			imb.addOccurrences(occs, pos.t_cumul+shift, delta, false);
 			return imb.getHandler();
 		}
-		
+
 		/**
 		 * Retourne l'obstacle présent à la position pos : null pour un obstacle
 		 * fixe (menhir ou bord) ; la liste des occurrences des vaches sinon.
@@ -651,8 +657,19 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * @return liste d'occurrences ou null
 		 */
 		public LinkedList<Niveau.Occurrence> obstacle(SimplePos pos) {
+			return obstacle(pos, false);
+		}
+		
+		/**
+		 * Retourne l'obstacle présent à la position pos : null pour un obstacle
+		 * fixe (menhir ou bord) ; la liste des occurrences des vaches sinon.
+		 * @param pos la position dans la grille
+		 * @param looped considère une fleur magique comme un menhir (dans une boucle d'arc-en-ciel)
+		 * @return liste d'occurrences ou null
+		 */
+		public LinkedList<Niveau.Occurrence> obstacle(SimplePos pos, boolean looped) {
 			int cell = getCell(pos);
-			if(pos.isOut() || cell==1 || cell==5) { // Obstacle fixe : bord ou menhir ou menhir rouge
+			if(pos.isOut() || cell==1 || cell==5 || looped && cell==3) { // Obstacle fixe : bord ou menhir ou menhir rouge
 				return null;
 			} else if(cell < 0) { // Dynamite posée à t = -cell
 				LinkedList<Niveau.Occurrence> dyna_ex = new LinkedList<Niveau.Occurrence>();
@@ -735,33 +752,43 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		public boolean isEmpty() {
 			return move==null;
 		}
-		
+
 		/**
 		 * Retourne la liste de Moves.
 		 * @return liste de Moves de ce Path dans l'ordre chronologique
 		 */
 		public LinkedList<Move> getMoves() {
+			return getMoves(true);
+		}
+
+		/**
+		 * Retourne la liste de Moves.
+		 * @param firstCall true si cet appel à getMoves est le premier de la suite récursive.
+		 * @return liste de Moves de ce Path dans l'ordre chronologique
+		 */
+		public LinkedList<Move> getMoves(boolean firstCall) {
 			if(move==null)
 				return new LinkedList<Move>();
-			LinkedList<Move> moves = prevPath.getMoves();
-			addMoveAndDecomposeRainbows(moves, move);
+			LinkedList<Move> moves = prevPath.getMoves(false);
+			addMoveAndDecomposeRainbows(moves, move, firstCall);
 			return moves;
 		}
-		
+
 		/**
 		 * Ajoute le move m à la liste en le décomposant en plusieurs moves s'il
 		 * passe à travers des arcs-en-ciel. (Uniquement pour la visualisation
 		 * de la solution dans PathViewer)
 		 * @param moves liste des mouvements à laquelle ajouter m
 		 * @param m le mouvement à ajouter et potentiellement décomposer
+		 * @param lastMove true s'il s'agit du dernier mouvement
 		 */
-		private void addMoveAndDecomposeRainbows(LinkedList<Move> moves, Move m) {
+		private void addMoveAndDecomposeRainbows(LinkedList<Move> moves, Move m, boolean lastMove) {
 			if(m.direction>=10) {
 				moves.add(m);
 				return;
 			}
 			SimplePos stopPos = m.posFinale.nextSimplePos(m.direction);
-			if(!stopPos.isOut() && Solver.instance.niv.carte[stopPos.r][stopPos.c]%2!=1) // Arrêt contre vache : on copie m pour mettre s à -1 pour signaler PathViewer
+			if(!stopPos.isOut() && Solver.instance.niv.carte[stopPos.r][stopPos.c]%2!=1 && !lastMove) // Arrêt contre vache : on copie m pour mettre s à -1 pour signaler PathViewer
 				m = new Move(m.direction, m.wait, m.travel, -1, m.posFinale);
 			SimplePos lastP = moves.isEmpty() ? new SimplePos(Solver.instance.sol_r, Solver.instance.sol_c) : moves.getLast().posFinale;
 			boolean onRow = m.direction==Move.LEFT || m.direction==Move.RIGHT;
@@ -979,8 +1006,9 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * @param occs les occurrences de la prochaine case à ajouter dans departsPossibles
 		 * @param niv référence vers le niveau en cours pour avoir les correspondances d'arc-en-ciel
 		 * @param grid la DynaGrid pour obtenir la cellule courante
+		 * @return true si une fleur a été ramassée
 		 */
-		public void simul(LinkedList<Niveau.Occurrence> occs, Niveau niv, DynaGrid grid) {
+		public boolean simul(LinkedList<Niveau.Occurrence> occs, Niveau niv, DynaGrid grid) {
 			// Effectue le pas
 			int [] t_travel = {0, 0};
 			for(int i=0; i<2; i++) {
@@ -1020,6 +1048,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 			}
 			this.t_travel[0] += t_travel[0];
 			this.t_travel[1] += t_travel[1];
+			return cell==2 || cell==3;
 		}
 		
 		/**

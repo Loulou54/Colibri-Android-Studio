@@ -23,7 +23,12 @@
 	<string name="info_text2">\u0009This application was originally launched during a development project in the engineering school Telecom Bretagne (now IMT Atlantique). Since then, it became an important project of mine that I slowly developed for about 5 years in my free time. Your feedback and comments are welcome on the Play Store or by email as well!\n\n\tI hope you will enjoy the game!</string>
 	<string name="instru_text">\u0009You are a hummingbird in a field full of menhirs in Brittany and you have to taste all the flowers covering the meadow.\n\nYou can only fly straight and change direction when you are in front of an obstacle (menhir, cow or edge).</string>
 	<string name="instru_text2">\u0009It\'s up to you to discover the different elements of the game along your progression, like the magical flowers, the dynamites, the cows, the cats and the rainbows! (You unlock them in the Campaign.)</string>
-	<string name="instru_text3">\u0009Start with some Campaign levels, then you could try the Multiplayer Challenges to confront your friends or other players from around the world!\n\nHave fun!!</string>
+	<string name="instru_text3">\u0009Start with some Campaign levels, then you could try the Multiplayer Challenges to confront your friends or other players from around the world!\n\n
+		\u0009\u0009\u0009\u0009The Multiplayer mode:\n\n
+		\u0009It is a competitive mode through the network. For each challenge played, depending on your position in the ranking, you earn (or loose!) a score roughly equivalent to the \"number of defeated players\" minus the \"number of players who defeated you\". In addition, this value is modulated by the general score of the participants in order to valorize weaker participants or newcomers.\n\n
+		\u0009The \"Score\" should therefore be distinguished from the \"Experience\", which is only cumulative and represents the levels you have solved since you play Colibri! The \"Rankings\" page enables you to compare your stats with other participants.\n\n
+		Have fun!!
+	</string>
 	<string name="accept">OK</string>
 	<string name="annuler">Cancel</string>
 	<string name="name">Name</string>
@@ -175,8 +180,8 @@
 	<string name="colibrains_info2">\u0009The ColiBrains are accessible during the game using the side menu by a simple clic on the screen.</string>
 	<string name="colibrains_info3">\u21AA For Random Maps or levels you already solved, ColiBrains are unlimited and you can use them freely to exercise.</string>
 	<string name="colibrains_info4">\u21AA For Multiplayer Challenges or for unsolved Campaign levels, ColiBrains are limited ! The number of remaining ColiBrains is indicated over the icon.</string>
-	<string name="colibrains_info5">\u0009You simply have to solve levels to earn new ColiBrains progressively! However, you won\'t be able to accumulate more than the limit indicated on the main menu.</string>
-	<string name="colibrains_info6">\u0009In addition to help unblock you, ColiBrains can be used strategically in Multiplayer Mode to accelerate the resolution of levels of important stake! (with numerous or high-ranked opponents)</string>
+	<string name="colibrains_info5">\u0009You simply have to solve levels to earn new ColiBrains progressively! However, you won\'t be able to accumulate more than 6 ColiBrains.</string>
+	<string name="colibrains_info6">\u0009For example, it is always helpful to use a ColiBrain when you feel blocked before starting over a level since it might reveal a solution you didn\'t see! In Multiplayer mode, ColiBrains can also give an advantage during an important match.</string>
 	<string name="colibrains_info7">\u21AA Finally, the « ColiBrain » algorithm is also accessible at the end of each levels to let you visualize the fastest solution found by the algorithm!</string>
 	<string name="unlocked_title">New element available!</string>
 	<string name="unlocked_msg">\u2605 Congratulations!! \u2605\nYou just unlocked a new game element:</string>

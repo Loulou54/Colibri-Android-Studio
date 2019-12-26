@@ -35,7 +35,7 @@
         android:textColor="@color/theme_gris" />
 
     <LinearLayout
-        android:layout_width="440dp"
+        android:layout_width="454dp"
         android:layout_height="230dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -66,7 +66,7 @@
 	            <TextView
 			        android:layout_width="wrap_content"
 			        android:layout_height="match_parent"
-			        android:layout_marginLeft="10dp"
+			        android:layout_marginLeft="2dp"
 			        android:gravity="center_vertical|right"
 			        android:textSize="20sp"
 			        android:textColor="@color/theme_gris"
@@ -78,7 +78,6 @@
 	            android:layout_width="65dp"
 	            android:layout_height="65dp"
 	            android:layout_marginLeft="6dp"
-	            android:layout_marginRight="6dp"
 	            android:background="@drawable/bouton_restart"
 	            android:onClick="recommencer" />
 	        
@@ -87,7 +86,6 @@
 	            android:layout_width="65dp"
 	            android:layout_height="65dp"
 	            android:layout_marginLeft="6dp"
-	            android:layout_marginRight="6dp"
 	            android:background="@drawable/bouton_continuer"
 	            android:onClick="suivant" />
 	        
