@@ -85,7 +85,7 @@ public class Classements extends Activity {
 		});
 		((TextView) findViewById(R.id.nomAdv)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Passing Notes.ttf"));
 		userRanks = new Joueur[vf.getChildCount()];
-		dispClassement(0);
+		dispClassement(1);
 	}
 	
 	@Override

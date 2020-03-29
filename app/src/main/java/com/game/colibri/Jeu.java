@@ -565,6 +565,7 @@ public class Jeu extends Activity {
 							multijoueur.adapt.notifyDataSetChanged();
 						}
 						(new DBController(this)).updateDefi(defi);
+						if(multijoueur!=null) multijoueur.syncData(); // Envoi du nouveau défi créé
 					}
 				} else // Mode Carte Aléatoire
 					niv = new Niveau(opt.getInt("mode"), savedInstanceState==null ? (new Random()).nextLong() : savedInstanceState.getLong("seed"), ParamAleat.param, MyApp.avancement);

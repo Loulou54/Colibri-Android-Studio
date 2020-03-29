@@ -71,7 +71,7 @@ public class DefiExpandableAdapter extends BaseExpandableListAdapter {
 			h = (ChildViewHolder) convertView.getTag();
 		}
 		h.avatar.setImageResource(p.joueur.getAvatar());
-		h.nom.setText(p.joueur.getPseudo());
+		h.nom.setText(p.joueur.getPseudo() + String.format(" (%,.2f)", p.joueur.getScore()));
 		h.score.setText(String.format("%,.2f", p.cumul_score));
 		h.etat.setImageResource((p.t_cours==0) ? R.drawable.horloge : R.drawable.check);
 		h.exp.setText(String.format("%,d", p.joueur.getExp()));

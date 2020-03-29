@@ -48,7 +48,7 @@ public class Participation {
 		rank = classement;
 		joueur.win(participants-classement);
 		joueur.loose(classement-1);
-		score = Math.max(scoreWon - cotisation, -joueur.getScore());
+		score = scoreWon - cotisation;
 		cumul_score += score;
 		joueur.addScore(score);
 		if(participants > 1)

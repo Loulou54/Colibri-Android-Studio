@@ -2,6 +2,7 @@ package com.game.colibri;
 
 import java.io.IOException;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -137,6 +138,7 @@ public class MenuPrinc extends Activity {
 				((TextView) inflated.findViewById(R.id.titreInfos)).setTypeface(font);
 				((TextView) inflated.findViewById(R.id.infos1)).setTypeface(font);
 				((TextView) inflated.findViewById(R.id.infos2)).setTypeface(font);
+				((TextView) inflated.findViewById(R.id.infos3)).setTypeface(font);
 				((TextView) inflated.findViewById(R.id.quitInfos)).setTypeface(font);
 				infos = inflated;
 			}
@@ -435,6 +437,7 @@ public class MenuPrinc extends Activity {
 			    img.setLayoutParams(params);
 			    img.setId(ecran*points.length+i+1);
 			    img.setOnClickListener(new OnClickListener() {
+					@SuppressLint("ResourceType") // cf: v.getId() => J'utilise l'Id des Views pour y attacher l'indice du niveau en question !
 					@Override
 					public void onClick(View v) {
 						if(v.getId()<=MyApp.avancement) setApercu(v.getId());
@@ -457,7 +460,7 @@ public class MenuPrinc extends Activity {
 	
 	/**
 	 * Charge le niveau d'index n_niv dans l'aperçu et déplace le colibri sur le point.
-	 * @param n_niv l'index du niveau à afficher
+	 * @param n l'index du niveau à afficher
 	 */
 	private void setApercu(int n) {
 		if(n!=n_niv || carte.getVisibility()==View.INVISIBLE) deplaceColibri(points[(n-1)%points.length],false);

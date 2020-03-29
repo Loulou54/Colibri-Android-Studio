@@ -100,6 +100,7 @@ public class MoteurJeu {
 		moveHandler.removeMessages(jeu.n_niv);
 		niv=carte.niv; // pour avoir une référence locale vers le niveau en cours et un nom moins long
 		buf.clear();
+		dynaExploQueue.clear();
 		// mouvements.clear();
 		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 		timeSave = 0;
@@ -141,6 +142,7 @@ public class MoteurJeu {
 		if(etat==GAGNE) {
 			total_frames = 0;
 			frame = 0;
+			timeSave = 0;
 		}
 	}
 	
@@ -351,8 +353,7 @@ public class MoteurJeu {
 			dejaPasse=niv.carte[l][c];
 		} else
 			dejaPasse=0;
-		if(carte.n_fleur==0) {
-			MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
+		if(carte.n_fleur==0 && state==RUNNING) {
 			jeu.gagne((total_frames+frame)*PERIODE_NORMALE);
 		}
 	}

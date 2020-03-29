@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Colibri</string>
-    <string name="jouer">Continuer</string>
-    <string name="campagne">Campagne</string>
-    <string name="aleat">Carte Aléatoire</string>
-    <string name="multi">Défi Multijoueur</string>
-    <string name="classements">Classements</string>
-    <string name="fac">Débutant</string>
-    <string name="moy">Intermédiaire</string>
-    <string name="dif">Expert</string>
-    <string name="pause">-= Pause =-</string>
-    <string name="reprendre">Reprendre</string>
-    <string name="recommencer">Recommencer</string>
-    <string name="sortir">Quitter</string>
-    <string name="solution">Solution</string>
-    <string name="info">À propos</string>
+	<string name="app_name">Colibri</string>
+	<string name="jouer">Continuer</string>
+	<string name="campagne">Campagne</string>
+	<string name="aleat">Carte Aléatoire</string>
+	<string name="multi">Défi Multijoueur</string>
+	<string name="classements">Classements</string>
+	<string name="fac">Débutant</string>
+	<string name="moy">Intermédiaire</string>
+	<string name="dif">Expert</string>
+	<string name="pause">-= Pause =-</string>
+	<string name="reprendre">Reprendre</string>
+	<string name="recommencer">Recommencer</string>
+	<string name="sortir">Quitter</string>
+	<string name="solution">Solution</string>
+	<string name="info">À propos</string>
 	<string name="instru">Instructions</string>
 	<string name="nouveau_defi">Nouveau Défi</string>
 	<string name="score">Score :</string>
-	<string name="info_text">C o l i b r i © 2014&#8211;2019\n\nCréé et maintenu par Louis DURAND\nlouis.dur54@gmail.com\n</string>
-	<string name="info_text2">\u0009Cette application a été lancée lors d\'un projet de développement à Télécom Bretagne (maintenant IMT Atlantique). Depuis, elle est devenue un projet important à mes yeux que j\'ai lentement développé pendant environs 5 ans, dans mon temps libre. Vos retours et vos commentaires sont les bienvenus sur le Play Store ou par courriel également !\n\n\tJ\'espère que vous apprécierez ce jeu !</string>
-	<string name="instru_text">\u0009Vous êtes un colibri dans un champ de menhirs en Bretagne et vous devez goûter à chacune des fleurs qui jonchent la prairie.\n\n\u0009Vous ne pouvez voler qu\'en ligne droite et changer de direction seulement lorsque vous faites face à un obstacle (menhir, vache ou bord).</string>
+	<string name="info_text">C o l i b r i © 2014&#8211;2020\n\nCréé et maintenu par Louis DURAND\n<a href="mailto:louis.dur54@gmail.com">louis.dur54@gmail.com</a></string>
+	<string name="info_text2">\u0009Cette application a été lancée lors d\'un projet de développement à Télécom Bretagne (maintenant IMT Atlantique). Depuis, elle est devenue un projet important à mes yeux que j\'ai lentement développé pendant environs 6 ans, dans mon temps libre. Vos retours et vos commentaires sont les bienvenus sur le Play Store ou par courriel !\n\n\tJ\'espère que vous apprécierez ce jeu !</string>
+	<string name="instru_text">\u0009Vous êtes un colibri dans un champ de menhirs en Bretagne et vous devez goûter à chacune des fleurs qui jonchent la prairie.\n\n\u0009En glissant votre doigt dans la direction désirée, vous pouvez voler en ligne droite jusqu\'au prochain obstacle (menhir, vache ou bord). Une fois arrêté, vous pourrez voler dans une autre direction.</string>
 	<string name="instru_text2">\u0009À vous de découvrir les différents éléments de jeu tout au long de votre progression, comme les fleurs magiques, les dynamites, les vaches, les chats et les arcs-en-ciel ! (À débloquer dans Campagne.)</string>
 	<string name="instru_text3">\u0009Commencez par quelques niveaux Campagne, puis vous pourrez tenter les Défis Multijoueur pour affronter des amis ou d\'autres joueurs du monde entier !\n\n
 		\u0009\u0009\u0009\u0009Le mode Multijoueur:\n\n
-		\u0009C\'est un mode de jeu compétitif en réseau. Pour chaque défi joué, en fonction de votre position dans le classement, vous remportez (ou perdez !) un score grossièrement égal au \"nombre de joueurs vaincus\" moins le \"nombre de personnes qui vous ont vaincu\". Cette valeur est cependant modulée selon le score général des participants de manière à valoriser les participants de niveau plus faible ou nouvellement arrivés.\n\n
+		\u0009C\'est un mode de jeu compétitif en ligne ! Pour chaque défi joué, en fonction de votre position dans le classement, vous remportez (ou perdez !) un score grossièrement égal au \"nombre de joueurs vaincus\" moins le \"nombre de joueurs qui vous ont vaincu\". Cette valeur est cependant modulée selon le score général des participants de manière à valoriser les participants de niveau plus faible ou nouvellement arrivés.\n\n
 		\u0009Le \"Score\" est donc à distinguer de l\'\"Expérience\", qui est seulement cumulative et qui représente les niveaux que vous avez résolus depuis que vous jouez à Colibri ! La page \"Classement\" vous permet de comparer vos performances avec d\'autres participants.\n\n
 		Amusez-vous bien !!
 	</string>
@@ -48,7 +47,7 @@
 	<string name="progression">Progression campagne : %1$d/%2$d</string>
 	<string name="longueur">Longueur :</string>
 	<string name="base_niveau">Base en menhirs</string>
-	<string name="param_descript">\u0009La longueur ainsi que le nombre d\'éléments additionnels augmentent la difficulté mais aussi l\'expérience à gagner !</string>
+	<string name="param_descript">\u0009La longueur et le nombre d\'éléments additionnels augmentent la difficulté mais aussi l\'expérience à gagner !</string>
 	<string name="did_he_dieded">Oups !</string>
 	<string name="oui">Oui</string>
 	<string name="non">Non</string>
@@ -61,16 +60,16 @@
 	<string name="forfait_msg">Voulez-vous abandonner par forfait ?</string>
 	<string name="c_est_parti">C\'est parti</string>
 	<string name="joueur">Joueur</string>
-	<string name="the_results">Les Résultats&#8230;</string>
+	<string name="the_results">Les Résultats…</string>
 	<string name="penalite_aide">Pénalité aide</string>
 	<string name="victoire">Victoire !!</string>
 	<string name="resultats">\u0009\u21D2 Continuez pour les Résultats !</string>
 	<string name="the_end">FIN</string>
 	<string name="toast_fin">Félicitations !|Vous avez fini le mode Campagne !!</string>
-	<string name="toast_fin2">Et maintenant&#8230;|Avez-vous déjà essayé les Niveaux Aléatoires et les Défis Multijoueurs ? ;)</string>
+	<string name="toast_fin2">Et maintenant…|Avez-vous déjà essayé les Niveaux Aléatoires et les Défis Multijoueurs ? ;)</string>
 	<string name="enter_pseudo">Entrez votre pseudonyme et mot de passe :</string>
 	<string name="register">S\'inscrire</string>
-	<string name="progress">Transfert&#8230;</string>
+	<string name="progress">Transfert…</string>
 	<string name="err404">Erreur 404: ressource non trouvée.</string>
 	<string name="err500">Erreur 500: quelque chose cloche sur notre serveur !</string>
 	<string name="err">Erreur inconnue. Êtes-vous bien connectés à Internet ?</string>
@@ -78,8 +77,6 @@
 	<string name="deja_pris">Ce pseudo est déjà pris.\nEssayez un autre !</string>
 	<string name="enregistre">Bienvenue !|Vous vous êtes inscrits avec succès !</string>
 	<string name="hors_connexion">Vous êtes actuellement hors connexion.</string>
-	<string name="gcm_register">Enregistrement au service Google Cloud Messaging&#8230;</string>
-	<string name="gcm_success">Fait !</string>
 	<string name="sync_fail">La synchronisation avec la base de données distante a échoué !</string>
 	<string name="nom_invalide">Nom invalide (3 à 20 caractères)</string>
 	<string name="nom_invalide_defi">Nom invalide (pas plus de 30 caractères)</string>
@@ -89,7 +86,7 @@
 	<string name="etat_lancer">Nouveau</string>
 	<string name="etat_obsolete">Obsolète</string>
 	<string name="tiret"> - </string>
-	<string name="chercher_adv">Rechercher un joueur&#8230;</string>
+	<string name="chercher_adv">Rechercher un joueur…</string>
 	<string name="adversaires">Adversaires :</string>
 	<string name="nojoueur">Aucun adversaire.</string>
 	<string name="nojoueurfound">Aucun adversaire supplémentaire trouvé !</string>
@@ -107,7 +104,7 @@
 	<string name="obsolete_txt">La date limite a été dépassée.\nConnectez vous au réseau et rafraîchissez !</string>
 	<string name="newNivDejaCree">Un autre participant au défi %1$s a déjà soumi un nouveau niveau. Le vôtre a donc été abandonné.</string>
 	<string name="partObsolete">Votre dernière participation au défi %1$s a été soumise après la limite temporelle !</string>
-	<string name="triche">TRICHEUR repéré ! Il semblerait que vous avez utilisé deux appareils pour résoudre un niveau du défi "%1$s"&#8230; Vous obtenez une pénalité d\'expérience de 10000 ! Ne recommencez pas ;)</string>
+	<string name="triche">TRICHEUR repéré ! Il semblerait que vous avez utilisé deux appareils pour résoudre un niveau du défi "%1$s"… Vous obtenez une pénalité d\'expérience de 10000 ! Ne recommencez pas ;)</string>
 	<string name="connexion_register">Vous devez être connecté pour vous inscrire au mode multijoueur !</string>
 	<string name="nodefis">Aucun défi !\n\nCréez un nouveau défi à l\'aide\ndu bouton à gauche.</string>
 	<string name="notif_newdefi">%1$s a lancé un nouveau défi !</string>
@@ -115,16 +112,16 @@
 	<string name="notif_results_exp">Le défi a expiré. Regardez les résultats !</string>
 	<string name="time_limit">Limite temporelle par match :</string>
 	<string-array name="time_limits">
-	    <item>Aucune</item>
-	    <item>1 jour</item>
-	    <item>2 jours</item>
-	    <item>3 jours</item>
-	    <item>5 jours</item>
-	    <item>7 jours</item>
-	    <item>10 jours</item>
-	    <item>2 semaines</item>
-	    <item>3 semaines</item>
-	    <item>4 semaines</item>
+		<item>Aucune</item>
+		<item>1 jour</item>
+		<item>2 jours</item>
+		<item>3 jours</item>
+		<item>5 jours</item>
+		<item>7 jours</item>
+		<item>10 jours</item>
+		<item>2 semaines</item>
+		<item>3 semaines</item>
+		<item>4 semaines</item>
 	</string-array>
 	<string name="supprDefi">Supprimer un défi</string>
 	<string name="supprDefiConf">Voulez-vous réellement annuler votre participation au défi \"%1$s\" et le supprimer de votre liste ?</string>
@@ -136,9 +133,12 @@
 	<string name="amis">Adversaires</string>
 	<string name="connexion_ranking">Vous devez être connectés pour voir les classements !</string>
 	<string name="commencer">Commencer</string>
-	<string name="minutesAgo">Il y a %1$d minute%2$s</string>
-	<string name="hoursAgo">Il y a %1$d heure%2$s</string>
-	<string name="daysAgo">Il y a %1$d jour%2$s</string>
+	<string name="minuteAgo">Il y a %1$d minute</string>
+	<string name="hourAgo">Il y a %1$d heure</string>
+	<string name="dayAgo">Il y a %1$d jour</string>
+	<string name="minutesAgo">Il y a %1$d minutes</string>
+	<string name="hoursAgo">Il y a %1$d heures</string>
+	<string name="daysAgo">Il y a %1$d jours</string>
 	<string name="partie_rapide">Partie rapide</string>
 	<string name="disconnect_title">Déconnexion</string>
 	<string name="disconnect">\u0009Voulez-vous vous déconnecter ?\nVous ne perdrez aucune donnée et pourrez vous reconnecter plus tard avec votre nom et mot de passe.</string>
@@ -150,6 +150,8 @@
 	<string name="wrong_password">Mauvais mot de passe !</string>
 	<string name="connected">Connecté !|Vous vous êtes connecté avec succès !</string>
 	<string name="force_quit_msg">Vous avez forcé l\'arrêt de l\'application pendant un défi : vous faites Forfait.</string>
+	<string name="left_arrow">&#9664;</string>
+	<string name="right_arrow">&#9654;</string>
 	<string name="expToSyncMsg">%1$s d\'expérience gagnée hors ligne sera synchronisée avec ce compte !</string>
 	<string name="mail">Adresse mail *</string>
 	<string name="mail_exp">\u0009* En cas d\'oubli de mot de passe. Aucune utilisation commerciale.</string>
@@ -164,8 +166,8 @@
 	<string name="notif_n_results">Les résultats de %1$d défis sont disponibles !</string>
 	<string name="maj_req">Vous devez mettre à jour Colibri à la dernière version !</string>
 	<string name="cancel_sol">Annulé !|</string>
-	<string name="no_solution">Aïe !|Pas de solution&#8230;</string>
-	<string name="out_of_memory">Aïe !|Mémoire vive insuffisante&#8230; Il se peut qu\'il n\'y ait pas de solution !</string>
+	<string name="no_solution">Aïe !|Pas de solution…</string>
+	<string name="out_of_memory">Aïe !|Mémoire vive insuffisante… Il se peut qu\'il n\'y ait pas de solution !</string>
 	<string name="sol_colibrain">Solution ColiBrain</string>
 	<string name="sol_generated">Solution générée</string>
 	<string name="score_titre">Score</string>
@@ -193,5 +195,5 @@
 	<string name="channel_message_desc">Information générale à propos du jeu : nouvelles ou événements.</string>
 	<string name="play_time_format">%1$d h %2$d min</string>
 	<string name="first_time">Premier essai</string>
-	
+	<string name="translator_name"> </string>
 </resources>

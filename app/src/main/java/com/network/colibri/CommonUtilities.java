@@ -5,6 +5,7 @@ import android.content.Intent;
 public final class CommonUtilities {
 
 	// previous address: https://ssl17.ovh.net/~louisworix/
+    // then: https://cluster017.hosting.ovh.net/~louisworix/
     public static final String SERVER_URL = "https://cluster017.hosting.ovh.net/~louisworix/colibri";
     
     // Communication token

@@ -60,6 +60,7 @@ public class Multijoueur extends Activity {
 	public AsyncHttpClient client;
 	public DBController base;
 	private long lastPress = 0; // timestamp du dernier appui sur un bouton défi pour éviter les doubles clics
+	private boolean partieRapideRequested = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +298,7 @@ public class Multijoueur extends Activity {
 		}
 		if(!base.getTasks().contains("\"task\":\"partieRapide\""))
 			base.partieRapide();
+		partieRapideRequested = true;
 		syncData();
 	}
 	
@@ -563,7 +565,11 @@ public class Multijoueur extends Activity {
 				((TextView) findViewById(R.id.nvPRapide)).setEnabled(true);
 				adapt.setLaunchEnabled(true);
 				adapt.notifyDataSetChanged();
-				Toast.makeText(Multijoueur.this, R.string.sync_fail, Toast.LENGTH_SHORT).show();
+				if(statusCode==500) {
+					Toast.makeText(Multijoueur.this, R.string.err500, Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(Multijoueur.this, R.string.sync_fail, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
@@ -625,7 +631,8 @@ public class Multijoueur extends Activity {
 		}
 		int pRapide = base.getDefis(user.getId(),joueurs,adversaires);
 		adapt.notifyDataSetChanged();
-		if(pRapide!=-1) {
+		if(pRapide!=-1 && partieRapideRequested) {
+			partieRapideRequested = false;
 			View v = new View(this);
 			v.setTag(pRapide);
 			actionDefi(v);

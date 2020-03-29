@@ -51,7 +51,7 @@ public class ResultatsAdapter extends ArrayAdapter<Participation> {
 			h = (ViewHolder) convertView.getTag();
 		}
 		h.avatar.setImageResource(p.joueur.getAvatar());
-		h.nom.setText(p.joueur.getPseudo());
+		h.nom.setText(p.joueur.getPseudo() + String.format(" ( %,.2f )", p.joueur.getScore()));
 		h.cumul_score.setText(String.format("%,.2f", partEffectives>1 && etape<3 ? p.cumul_score-p.score : p.cumul_score));
 		if(p.t_fini<Participation.FORFAIT) {
 			h.temps.setText(Jeu.getFormattedTime(etape<2 ? Math.min(p.t_fini, (int) (t_max*prog*prog)) : p.t_fini));
@@ -68,7 +68,7 @@ public class ResultatsAdapter extends ArrayAdapter<Participation> {
 		if(etape>=4) {
 			if(p.t_fini==Participation.NOT_PLAYED)
 				h.nom.setTextColor(getContext().getResources().getColor(R.color.theme_gris));
-			else if(p.score>0)
+			else if(p.score>=0)
 				h.nom.setTextColor(getContext().getResources().getColor(R.color.vert_fonce));
 			else
 				h.nom.setTextColor(getContext().getResources().getColor(R.color.red));

@@ -108,11 +108,11 @@ public class Joueur {
 	public String getLastVisit(Context c) {
 		long t = System.currentTimeMillis()/1000-time;
 		if(t<3600)
-			return c.getResources().getString(R.string.minutesAgo, t/60, t/60>1 ? "s" : "");
+			return c.getResources().getString(t/60>1 ? R.string.minutesAgo : R.string.minuteAgo, t/60);
 		else if(t<3600*24)
-			return c.getResources().getString(R.string.hoursAgo, t/3600, t/3600>1 ? "s" : "");
+			return c.getResources().getString(t/3600>1 ? R.string.hoursAgo : R.string.hourAgo, t/3600);
 		else
-			return c.getResources().getString(R.string.daysAgo, t/(3600*24), t/(3600*24)>1 ? "s" : "");
+			return c.getResources().getString(t/(3600*24)>1 ? R.string.daysAgo : R.string.dayAgo, t/(3600*24));
 	}
 	
 	/**
@@ -157,6 +157,7 @@ public class Joueur {
 	 */
 	public void addScore(double points) {
 		score += points;
+		if(score < 0) score = 0;
 	}
 	
 	/**

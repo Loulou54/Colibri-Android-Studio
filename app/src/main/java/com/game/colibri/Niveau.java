@@ -101,11 +101,10 @@ public class Niveau {
 	
 	public LinkedList<int[]> h_fleurs; // Valeurs heuristiques de certaines fleurs pour augmenter l'efficacité du solveur.
 	public int h_param = -1; // Paramètre h_param pour le solveur, si besoin pour optimiser.
-	
+
 	/**
 	 * Consructeur de niveau de campagne
-	 * 		@param niveau 
-	 * 			nombre du niveau à charger
+	 * @param file le fichier source du niveau
 	 */
 	public Niveau(InputStream file) {
 		isRandom=false;
@@ -175,16 +174,7 @@ public class Niveau {
 			carte[i]=carteOrigin[i].clone();
 		}
 	}
-	
-	/**
-	 * Permet de modifier les différents éléments du niveau gràce au
-	 * fichier texte dans lequel il y a les différentes informations
-	 * (position de départ du colibri, carte, déplacements des vaches
-	 * et des chats, solution du niveau)
-	 * 
-	 * @param niveau
-	 * 			numéro du niveau qui doit être chargé selon le ficher .txt
-	 */
+
 	public void lireNiveau(InputStream ips){
 		String [][]matrice =null;
 		passVaches = new Passages(20);
@@ -486,9 +476,9 @@ public class Niveau {
 		}
 		
 		/**
-		 * Supprime la dernière occurence à la case (rd,cd) s'il y a lieu.
-		 * @param rd ligne
-		 * @param cd colonne
+		 * Supprime la dernière occurence à la case (r,c) s'il y a lieu.
+		 * @param r ligne
+		 * @param c colonne
 		 */
 		public void removeLast(int r, int c) {
 			LinkedList <Occurrence> occurences = passages.get(r*col+c);
@@ -803,7 +793,6 @@ public class Niveau {
 	}
 
 	/**
-	 * @param carte la carte 
 	 * @param rd la ligne de depart 
 	 * @param cd la colonne de depart 
 	 * @param rf ligne de fin 
@@ -855,7 +844,6 @@ public class Niveau {
 	}
 
 	/**
-	 * @param carte la carte 
 	 * @param rd  la ligne de depart 
 	 * @param cd la colonne de depart 
 	 * @param rf ligne de fin 

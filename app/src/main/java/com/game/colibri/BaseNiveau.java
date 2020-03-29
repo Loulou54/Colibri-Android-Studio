@@ -215,10 +215,10 @@ public class BaseNiveau {
 	
 	/**
 	 * Trace un rectangle de menhir défini par les deux coins (rd,cd) et (rf,cf) selon le style défini par mode.
-	 * @param rd
-	 * @param cd
-	 * @param rf
-	 * @param cf
+	 * @param rd ligne 1
+	 * @param cd colonne 1
+	 * @param rf ligne 2
+	 * @param cf colonne 2
 	 * @param mode 1:plein ; 2:effacer ; 3:un sur deux ; 4:pose aléatoire.
 	 */
 	private void rectangle(int rd, int cd, int rf, int cf, int mode) {
@@ -229,11 +229,11 @@ public class BaseNiveau {
 	}
 	
 	/**
-	 * Trace un cercle de centre (r,c) et de rayon ray selon le style défini par mode.
-	 * @param r ligne
-	 * @param c colonne
-	 * @param b demi-axe lignes (y)
-	 * @param a demi-axe colonnes (x)
+	 * Trace une ellipse de menhir définie par les deux coins (rd,cd) et (rf,cf) selon le style défini par mode.
+	 * @param rd ligne 1
+	 * @param cd colonne 1
+	 * @param rf ligne 2
+	 * @param cf colonne 2
 	 * @param mode 1:plein ; 2:effacer ; 3:un sur deux ; 4:pose aléatoire.
 	 */
 	private void ellipse(int rd, int cd, int rf, int cf, int mode) {
@@ -264,8 +264,8 @@ public class BaseNiveau {
 	
 	/**
 	 * Pose un menhir en (r,c) selon le mode voulu.
-	 * @param r
-	 * @param c
+	 * @param r ligne
+	 * @param c colonne
 	 * @param mode 1:plein ; 2:effacer ; 3:indice%2 ; 4:pose aléatoire
 	 * @param indice utilisé dans le cas mode==3
 	 */

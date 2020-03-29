@@ -198,23 +198,28 @@ public class MyApp extends Application {
 			leadTracks[playingLeadIndex].pause();
 		if(playingDrumIndex!=-1)
 			drumTracks[playingDrumIndex].pause();
-		musicHandler.removeMessages(0);
+		if(musicHandler!=null)
+			musicHandler.removeMessages(0);
 	}
 	
 	public void releaseMusic() {
 		playingBackgroundIndex = -1;
 		playingLeadIndex = -1;
 		playingDrumIndex = -1;
-		for(MediaPlayer mp : backgroundTracks)
-			mp.release();
-		for(MediaPlayer mp : leadTracks)
-			mp.release();
-		for(MediaPlayer mp : drumTracks)
-			mp.release();
+		if(backgroundTracks!=null)
+			for(MediaPlayer mp : backgroundTracks)
+				mp.release();
+		if(leadTracks!=null)
+			for(MediaPlayer mp : leadTracks)
+				mp.release();
+		if(drumTracks!=null)
+			for(MediaPlayer mp : drumTracks)
+				mp.release();
 		backgroundTracks = null;
 		leadTracks = null;
 		drumTracks = null;
-		musicHandler.removeMessages(0);
+		if(musicHandler!=null)
+			musicHandler.removeMessages(0);
 	}
 
 	private static class MusicHandler extends Handler {
