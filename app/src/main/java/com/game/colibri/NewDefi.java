@@ -115,12 +115,11 @@ public class NewDefi {
 			}
 		});
 		ListView jlv = (ListView) defiBox.findViewById(R.id.listAdv);
-		jAdapter.setTextView((TextView) defiBox.findViewById(R.id.advTextView));
+		jAdapter.setDialogBox(defiBox);
 		jlv.setAdapter(jAdapter);
 		jAdapter.updateTextView();
 		jlv.setEmptyView((TextView) defiBox.findViewById(R.id.defaultView));
-		
-		defiBox.setTitle(R.string.nouveau_defi);
+
 		defiBox.setCancelable(false);
 		defiBox.setPositiveButton(new View.OnClickListener() {
 			@Override

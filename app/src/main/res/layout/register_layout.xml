@@ -7,6 +7,7 @@
     tools:context=".RegisterUser" >
     
     <LinearLayout
+		android:id="@+id/sw_reg_con_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -36,11 +37,12 @@
     </LinearLayout>
 
     <TextView
+		android:id="@+id/enter_pseudo_instru"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="0dp"
-        android:text="@string/enter_pseudo" />
+        android:text="@string/enter_pseudo_mdp" />
 
     <EditText
         android:id="@+id/pseudo"
@@ -144,6 +146,7 @@
 	    </HorizontalScrollView>
 	    
 	    <TextView
+			android:id="@+id/mail_expl"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/mail_exp"

@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 public class JoueursAdapter extends ArrayAdapter<Joueur> {
 	
-	private TextView adv;
+	private PaperDialog box;
 	private Typeface font;
 	
 	public JoueursAdapter(Context context, int resource, List<Joueur> objects) {
@@ -26,12 +26,12 @@ public class JoueursAdapter extends ArrayAdapter<Joueur> {
 		font = Typeface.createFromAsset(context.getAssets(),"fonts/Passing Notes.ttf");
 	}
 	
-	public void setTextView(TextView tv) {
-		adv=tv;
+	public void setDialogBox(PaperDialog box) {
+		this.box = box;
 	}
 	
 	public void updateTextView() {
-		adv.setText(getContext().getText(R.string.adversaires)+" "+getCount());
+		box.setTitle(getContext().getText(R.string.adversaires)+" "+getCount());
 	}
 	
 	@Override

@@ -62,7 +62,8 @@
 	<string name="the_end">ENDE</string>
 	<string name="toast_fin">Herzlichen Glückwunsch! | Sie haben den Abenteuermodus geschafft !!</string>
 	<string name="toast_fin2">Und jetzt… | Haben Sie schon die Zufallslevel und die Multiplayer-Spiele ausprobiert? ;)</string>
-	<string name="enter_pseudo">Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein:</string>
+	<string name="enter_pseudo">Bitte geben Sie Ihren Benutzernamen:</string>
+	<string name="enter_pseudo_mdp">Bitte geben Sie Ihren Benutzernamen und Ihr Passwort ein:</string>
 	<string name="register">Registrieren</string>
 	<string name="progress">Transfer…</string>
 	<string name="err404">Fehler 404: Ressource nicht gefunden.</string>
@@ -191,4 +192,7 @@
 	<string name="play_time_format">%1$d h %2$d min</string>
 	<string name="first_time">Erster Versuch</string>
 	<string name="translator_name">Deutsche Übersetzungen von Heike Durand.</string>
+	<string name="google_sign_in">Anmeldung mit Google</string>
+	<string name="standard_sign_in">Connexion Standard</string>
+	<string name="google_sign_in_error">Fehler…|Google-Anmeldung war nicht erfolgreich.%1$s</string>
 </resources>

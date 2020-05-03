@@ -61,16 +61,6 @@
             android:background="@drawable/pencil_button" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/advTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textSize="20sp"
-        android:textColor="@color/bleu_nuit"
-        android:text="@string/adversaires" />
     
     <ListView
         android:id="@+id/listAdv"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".RegisterUser" >
+
+	<Button
+		style="@style/bouton_papier"
+		android:id="@+id/google_sign_in_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="6dp"
+		android:layout_marginLeft="16dp"
+		android:layout_marginRight="16dp"
+		android:paddingLeft="12dp"
+		android:layout_gravity="center_horizontal"
+		android:background="@drawable/bouton_toast"
+		android:drawableLeft="@drawable/google"
+		android:text="@string/google_sign_in"
+		android:textSize="14sp" />
+
+	<Button
+		style="@style/bouton_papier"
+		android:id="@+id/standard_connection_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="32dp"
+		android:layout_marginRight="32dp"
+		android:layout_gravity="center_horizontal"
+		android:background="@drawable/bouton_toast"
+		android:text="@string/standard_sign_in"
+		android:textSize="14sp" />
+
+</LinearLayout>

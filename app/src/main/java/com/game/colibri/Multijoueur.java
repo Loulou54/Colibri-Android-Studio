@@ -13,6 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -46,11 +49,13 @@ import cz.msebera.android.httpclient.Header;
 public class Multijoueur extends Activity {
 	
 	public static boolean active = false;
+	private static int GOOGLE_SIGN_IN = 10;
 	
 	private ExpandableListView lv;
 	public DefiExpandableAdapter adapt;
 	private SparseArray<Joueur> joueurs;
 	private ArrayList<Defi> adversaires;
+	private RegisterUser registerUser = null;
 	private PaperDialog boxNiv;
 	private AlertDialog.Builder messageDialog = null;
 	private ViewSwitcher loader;
@@ -59,6 +64,7 @@ public class Multijoueur extends Activity {
 	public ConnectionDetector connect;
 	public AsyncHttpClient client;
 	public DBController base;
+	private GoogleSignInClient googleSignInClient;
 	private long lastPress = 0; // timestamp du dernier appui sur un bouton défi pour éviter les doubles clics
 	private boolean partieRapideRequested = false;
 	
@@ -73,6 +79,12 @@ public class Multijoueur extends Activity {
 		base = new DBController(this);
 		joueurs = new SparseArray<Joueur>();
 		adversaires = new ArrayList<Defi>();
+		// Google Sign In
+		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				.requestIdToken("533995009920-892u4uefoji66vfqq969neqq0rrs5nq5.apps.googleusercontent.com")
+				.requestEmail()
+				.build();
+		googleSignInClient = GoogleSignIn.getClient(this, gso);
 		Jeu.multijoueur = null; // Dans le cas où Multijoueur a été destroyed lorsque Jeu était par dessus
 		((TextView) findViewById(R.id.titreMulti)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Adventure.otf"));
 		((TextView) findViewById(R.id.nvDefi)).setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Sketch_Block.ttf"));
@@ -144,6 +156,8 @@ public class Multijoueur extends Activity {
 			}
 			adapt.notifyDataSetChanged();
 			syncData();
+		} else if(requestCode==GOOGLE_SIGN_IN) {
+			registerUser.googleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data));
 		}
 		if(messageDialog!=null) {
 			messageDialog.show();
@@ -390,6 +404,7 @@ public class Multijoueur extends Activity {
 				MyApp.getApp().editor.clear().commit();
 				MyApp.getApp().editor.putBoolean("musique", musique);
 				MyApp.getApp().loadData();
+				googleSignInClient.signOut();
 				registerUser();
 			}
 
@@ -483,13 +498,15 @@ public class Multijoueur extends Activity {
 	};
 	
 	private void registerUser() {
-		(new RegisterUser(this, client, new RegisterUser.callBackInterface() {
+		registerUser = new RegisterUser(this, client, new RegisterUser.callBackInterface() {
 			@Override
-			public boolean registered(String JSONresponse, String name, boolean sync) {
+			public boolean registered(String JSONresponse) {
+				registerUser = null;
 				try {
-					JSONArray j = new JSONArray(JSONresponse);
-					base.insertJSONJoueurs(j);
-					MyApp.getApp().connectUser(j.getJSONObject(0).getInt("id"), name, j.getJSONObject(0).getInt("appareil"));
+					JSONArray jArray = new JSONArray(JSONresponse);
+					JSONObject j = jArray.getJSONObject(0);
+					base.insertJSONJoueurs(jArray);
+					MyApp.getApp().connectUser(j.getInt("id"), j.getString("pseudo"), j.getInt("appareil"));
 					loadJoueurs();
 					base.getDefis(user.getId(),joueurs,adversaires);
 					adapt = new DefiExpandableAdapter(Multijoueur.this, user.getId(), adversaires);
@@ -503,9 +520,20 @@ public class Multijoueur extends Activity {
 			}
 			@Override
 			public void cancelled() {
+				registerUser = null;
 				finish();
 			}
-		})).show();
+			@Override
+			public void callGoogleSignIn() {
+				Intent signInIntent = googleSignInClient.getSignInIntent();
+				startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+			}
+			@Override
+			public void callGoogleSignOut() {
+				googleSignInClient.signOut();
+			}
+		});
+		registerUser.start();
 	}
 	
 	public void syncData() {

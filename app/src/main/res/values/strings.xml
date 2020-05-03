@@ -67,7 +67,8 @@
 	<string name="the_end">THE END</string>
 	<string name="toast_fin">Congratulations!|You beat the Campaign mode!!</string>
 	<string name="toast_fin2">And now…|Have you tried the Random Levels and the Multiplayer Challenges yet? ;)</string>
-	<string name="enter_pseudo">Please enter your nickname and your password:</string>
+	<string name="enter_pseudo">Please enter your nickname:</string>
+	<string name="enter_pseudo_mdp">Please enter your nickname and your password:</string>
 	<string name="register">Register</string> <!-- Sign up -->
 	<string name="progress">Transfer…</string>
 	<string name="err404">Error 404: resource not found.</string>
@@ -157,7 +158,7 @@
 	<string name="mail_exp">\u0009* In case of lost password. No commercial use.</string>
 	<string name="mail_invalide">Invalid e-mail address.</string>
 	<string name="lost_mdp_chk">I forgot my password!</string>
-	<string name="lost_mdp_expl">\u0009(i) You will receive an e-mail at the address you specified when creating the account. Please follow the instructions in it then.</string>
+	<string name="lost_mdp_expl">\u0009(i) You will receive an e-mail at the address you specified when creating the account. Please follow the instructions in it.</string>
 	<string name="lost_mdp_already_sent">Already sent less than a day ago!\n Check your mails! ;) (Possibly in SPAM)</string>
 	<string name="lost_mdp_pb">Sending problem! Did you provide a valid address??</string>
 	<string name="lost_mdp_ok">Password recovery|Done! Check your e-mails! :)</string>
@@ -196,4 +197,7 @@
 	<string name="play_time_format">%1$d h %2$d min</string>
 	<string name="first_time">First time</string>
 	<string name="translator_name"> </string>
+	<string name="google_sign_in">Sign In with Google</string>
+	<string name="standard_sign_in">Standard Sign In</string>
+	<string name="google_sign_in_error">Error…|Google Sign In was unsuccessful.%1$s</string>
 </resources>

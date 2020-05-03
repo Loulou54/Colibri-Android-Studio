@@ -1,5 +1,8 @@
 package com.game.colibri;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -13,7 +16,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -39,6 +41,7 @@ public class RegisterUser {
 	private int avatar = -1;
 	private boolean register;
 	private String firebaseId;
+	private PaperDialog boxConnectionChoice = null;
 	
 	@SuppressLint("InlinedApi")
 	public RegisterUser(Context context, AsyncHttpClient client, callBackInterface callback) {
@@ -54,11 +57,94 @@ public class RegisterUser {
 		prgDialog.setCancelable(false);
 		register = true;
 	}
+
+	/**
+	 * Commence la procédure d'inscription ou connexion.
+	 */
+	public void start() {
+		prgDialog.show();
+		// Récupère l'id firebase avant d'ouvrir la boîte de dialogue
+		FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+			@Override
+			public void onComplete( Task<InstanceIdResult> task) {
+				prgDialog.dismiss();
+				if(!task.isSuccessful()) {
+					if(task.getException().getMessage()=="MISSING_INSTANCEID_SERVICE") { // Firebase isn't available
+						firebaseId = "";
+					} else {
+						Toast.makeText(context, R.string.connexion_register, Toast.LENGTH_LONG).show();
+						System.out.println("getInstanceId failed: "+task.getException().getMessage());
+						callback.cancelled();
+						return;
+					}
+				} else {
+					firebaseId = task.getResult().getToken();
+				}
+				showConnectionChoice();
+			}
+		});
+	}
+
+	/**
+	 * Affiche le choix de connexion par Google ou standard
+	 */
+	private void showConnectionChoice() {
+		boxConnectionChoice = new PaperDialog(context, R.layout.multi_connection_choice);
+		boxConnectionChoice.setTitle(R.string.multi);
+		final LinearLayout lay = (LinearLayout) boxConnectionChoice.getContentView();
+		final TextView signInButton = lay.findViewById(R.id.google_sign_in_button);
+		final TextView standardConnectionButton = lay.findViewById(R.id.standard_connection_button);
+		signInButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				callback.callGoogleSignIn();
+			}
+		});
+		standardConnectionButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				boxConnectionChoice.dismiss();
+				boxConnectionChoice = null;
+				showForm(null);
+			}
+		});
+		signInButton.setTypeface(boxConnectionChoice.getFont());
+		standardConnectionButton.setTypeface(boxConnectionChoice.getFont());
+		boxConnectionChoice.setCancelable(false);
+		boxConnectionChoice.setNegativeButton(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				boxConnectionChoice.dismiss();
+				boxConnectionChoice = null;
+				callback.cancelled();
+			}
+		}, null);
+		boxConnectionChoice.show();
+	}
+
+	/**
+	 * L'utilisateur s'est connecté à un compte Google (ou une erreur s'est produite)
+	 * @param task La tâche est forcément complétée
+	 */
+	public void googleSignInResult(Task<GoogleSignInAccount> task) {
+		try {
+			GoogleSignInAccount account = task.getResult(ApiException.class);
+			connectUser("", "", boxConnectionChoice, account);
+		} catch(ApiException e) {
+			Toast.makeText(context,
+					context.getString(R.string.google_sign_in_error, "\n"+GoogleSignInStatusCodes.getStatusCodeString(e.getStatusCode())),
+					Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
+			Toast.makeText(context,
+					context.getString(R.string.google_sign_in_error, ""),
+					Toast.LENGTH_LONG).show();
+		}
+	}
 	
 	/**
 	 * Affiche la boîte de dialogue d'inscription / connexion.
 	 */
-	public void show() {
+	private void showForm(final GoogleSignInAccount account) {
 		final PaperDialog boxRegister = new PaperDialog(context, R.layout.register_layout);
 		boxRegister.setTitle(R.string.multi);
 		final LinearLayout lay = (LinearLayout) boxRegister.getContentView();
@@ -139,6 +225,14 @@ public class RegisterUser {
 			iv.setOnClickListener(click);
 			imagePicker.addView(iv);
 		}
+		if(account!=null) { // Google Sign In
+			((TextView) lay.findViewById(R.id.enter_pseudo_instru)).setText(R.string.enter_pseudo);
+			((EditText) lay.findViewById(R.id.pseudo)).setText(account.getDisplayName());
+			lay.findViewById(R.id.sw_reg_con_layout).setVisibility(View.GONE);
+			lay.findViewById(R.id.mdp).setVisibility(View.GONE);
+			lay.findViewById(R.id.mail).setVisibility(View.GONE);
+			lay.findViewById(R.id.mail_expl).setVisibility(View.GONE);
+		}
 		boxRegister.setCancelable(false);
 		boxRegister.setPositiveButton(new View.OnClickListener() {
 			@Override
@@ -151,61 +245,50 @@ public class RegisterUser {
 					Toast.makeText(context, R.string.nom_invalide, Toast.LENGTH_LONG).show();
 				} else if(!register && lostMdp) {
 					lostMdp(name, boxRegister);
-				} else if(mdp.length()<6) {
+				} else if(mdp.length()<6 && account==null) {
 					Toast.makeText(context, R.string.mdp_invalide, Toast.LENGTH_LONG).show();
-				} else if(register && !android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+				} else if(register && !android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches() && account==null) {
 					Toast.makeText(context, R.string.mail_invalide, Toast.LENGTH_LONG).show();
 				} else if(register && avatar < 0) {
 					Toast.makeText(context, R.string.pick_avatar, Toast.LENGTH_LONG).show();
 				} else if(register) {
-					registerUser(name, mdp, mail, boxRegister);
+					registerUser(name, mdp, mail, boxRegister, account);
 				} else {
-					connectUser(name, mdp, boxRegister);
+					connectUser(name, mdp, boxRegister, account);
 				}
 			}
 		}, null);
 		boxRegister.setNegativeButton(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(account!=null) {
+					callback.callGoogleSignOut();
+				}
 				boxRegister.dismiss();
-				callback.cancelled();
+				showConnectionChoice();
 			}
 		}, null);
-		prgDialog.show();
-		// Récupère l'id firebase avant d'ouvrir la box
-		FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-			@Override
-			public void onComplete(@NonNull Task<InstanceIdResult> task) {
-				prgDialog.dismiss();
-				if(!task.isSuccessful()) {
-					if(task.getException().getMessage()=="MISSING_INSTANCEID_SERVICE") { // Firebase isn't available
-						firebaseId = "";
-					} else {
-						Toast.makeText(context, R.string.connexion_register, Toast.LENGTH_LONG).show();
-						System.out.println("getInstanceId failed: "+task.getException().getMessage());
-						callback.cancelled();
-						return;
-					}
-				} else {
-					firebaseId = task.getResult().getToken();
-				}
-				boxRegister.show();
-			}
-		});
+		boxRegister.show();
 	}
 	
 	public interface callBackInterface {
-		boolean registered(String JSONresponse, String name, boolean sync);
+		boolean registered(String JSONresponse);
 		void cancelled();
+		void callGoogleSignIn();
+		void callGoogleSignOut();
 	}
 	
-	private void registerUser(final String name, String mdp, String mail, final PaperDialog box) {
+	private void registerUser(String name, String mdp, String mail, final PaperDialog box, GoogleSignInAccount account) {
 		RequestParams params = new RequestParams();
 		params.setHttpEntityIsRepeatable(true);
 		params.put("token", APP_TOKEN);
 		params.put("pseudo", name);
-		params.put("password", mdp);
-		params.put("mail", mail);
+		if(account!=null) {
+			params.put("tokenId", account.getIdToken());
+		} else {
+			params.put("password", mdp);
+			params.put("mail", mail);
+		}
 		params.put("avatar", ""+avatar);
 		params.put("regId", firebaseId);
 		params.put("pays", Resources.getSystem().getConfiguration().locale.getCountry());
@@ -216,10 +299,12 @@ public class RegisterUser {
 				prgDialog.dismiss();
 				if(response.equalsIgnoreCase("pris")) { // Nom déjà pris
 					Toast.makeText(context, R.string.deja_pris, Toast.LENGTH_LONG).show();
-				} else if(response.equalsIgnoreCase("error")) { // Erreur
-					Toast.makeText(context, R.string.errServ, Toast.LENGTH_LONG).show();
+				} else if(response.equalsIgnoreCase("google authentication failed")) { // Erreur d'authentification par le tokenId
+					Toast.makeText(context,
+							context.getString(R.string.google_sign_in_error, "TokenId error"),
+							Toast.LENGTH_LONG).show();
 				} else { // Succès
-					if(callback.registered(response, name, false)) {
+					if(callback.registered(response)) {
 						box.dismiss();
 						Toast.makeText(context, R.string.enregistre, Toast.LENGTH_LONG).show();
 					} else {
@@ -241,13 +326,17 @@ public class RegisterUser {
 			}
 		});
 	}
-	
-	private void connectUser(final String pseudoOrMail, String mdp, final PaperDialog box) {
+
+	private void connectUser(String pseudoOrMail, String mdp, final PaperDialog box, final GoogleSignInAccount account) {
 		RequestParams params = new RequestParams();
 		params.setHttpEntityIsRepeatable(true);
 		params.put("token", APP_TOKEN);
-		params.put("pseudoOrMail", pseudoOrMail);
-		params.put("password", mdp);
+		if(account!=null) {
+			params.put("tokenId", account.getIdToken());
+		} else {
+			params.put("pseudoOrMail", pseudoOrMail);
+			params.put("password", mdp);
+		}
 		params.put("regId", firebaseId);
 		prgDialog.show();
 		client.post(SERVER_URL+"/connect.php", params, new TextHttpResponseHandler() {
@@ -258,8 +347,15 @@ public class RegisterUser {
 					Toast.makeText(context, R.string.not_registered, Toast.LENGTH_LONG).show();
 				} else if(response.equalsIgnoreCase("wrong password")) { // Mauvais mot de passe
 					Toast.makeText(context, R.string.wrong_password, Toast.LENGTH_LONG).show();
+				} else if(response.equalsIgnoreCase("google not registered")) { // Non inscrit avec google ou gmail
+					box.dismiss();
+					showForm(account);
+				} else if(response.equalsIgnoreCase("google authentication failed")) { // Erreur d'authentification par le tokenId
+					Toast.makeText(context,
+							context.getString(R.string.google_sign_in_error, "TokenId error"),
+							Toast.LENGTH_LONG).show();
 				} else { // Succès
-					if(callback.registered(response, pseudoOrMail, true)) {
+					if(callback.registered(response)) {
 						box.dismiss();
 						Toast.makeText(context, R.string.connected, Toast.LENGTH_LONG).show();
 					} else {

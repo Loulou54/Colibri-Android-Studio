@@ -54,6 +54,10 @@ public class PaperDialog extends Dialog {
 		normalPadding = window.getPaddingTop();
 		window.setPadding(normalPadding, normalPadding, normalPadding, normalPadding);
 	}
+
+	public Typeface getFont() {
+		return font;
+	}
 	
 	public View getContentView() {
 		return contentView;

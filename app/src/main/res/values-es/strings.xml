@@ -62,7 +62,8 @@
 	<string name="the_end">FIN</string>
 	<string name="toast_fin">¡Felicidades! ¡Has vencido en modo Campaña!</string>
 	<string name="toast_fin2">Y ahora… ¿has probado los niveles aleatorios y los desafíos multijugador? ;)</string>
-	<string name="enter_pseudo">Por favor, ingrese su apodo y su contraseña:</string>
+	<string name="enter_pseudo">Por favor, ingrese su apodo:</string>
+	<string name="enter_pseudo_mdp">Por favor, ingrese su apodo y su contraseña:</string>
 	<string name="register">Registrarse</string>
 	<string name="progress">Transferir…</string>
 	<string name="err404">Error 404: recurso no encontrado.</string>
@@ -191,4 +192,7 @@
 	<string name="play_time_format">%1$d h %2$d min</string>
 	<string name="first_time">Primera vez</string>
 	<string name="translator_name">Traducciones al español de Joaquín Sánchez-Valiente.</string>
+	<string name="google_sign_in">Conexión con Google</string>
+	<string name="standard_sign_in">Conexión estándar</string>
+	<string name="google_sign_in_error">Error…|La conexión de Google no se realizó correctamente.%1$s</string>
 </resources>

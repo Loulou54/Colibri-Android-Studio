@@ -12,33 +12,33 @@
 	<string name="pause">-= Duraklat=-</string>
 	<string name="reprendre">Devam et</string>
 	<string name="recommencer">Baştan başla</string>
-	<string name="sortir">çıkış</string>
+	<string name="sortir">Çıkış</string>
 	<string name="solution">Çözüm</string>
 	<string name="info">Hakkında</string>
 	<string name="instru">Talimatlar</string>
 	<string name="nouveau_defi">Yeni Oyun</string>
 	<string name="score">Puan:</string>
 	<string name="info_text">C o l i b r i © 2014–2020\n\n Louis DURAND tarafından oluşturuldu ve geliştirildi\n<a href="mailto:louis.dur54@gmail.com">louis.dur54@gmail.com</a></string>
-	<string name="info_text2">\u0009 Bu uygulama aslında mühendislik okulu olan Telekom Bretagne\'da (şimdi IMT Atlantique) bir geliştirme projesi olarak başlatıldı.O zamandan beri yaklaşık 6 yıldır boş zamanlarımda üzerinde çalışmaktayım. Geri bildirimlerinizi ve yorumlarınızı play Store\'da paylaşabilir veya e-posta yoluyla iletebilirsiniz. \n\n\t İyi oyunlar dilerim !</string>
-	<string name="instru_text">\u0009 Fransa\'nın Breton bölgesinde bulunan Menhir tarlasında bir kuşsunuz ve ovadaki tüm çiçekleri toplamalısınız.\n\n\u0009 Parmağınızı farklı yönlerde kaydırarak, bir sonraki engele (menhir, inek veya kenar)erişinceye kadar uçabilirsiniz. Ancak bir engel aracılığıyla durduktan sonra bir başka yöne doğru uçabilirsiniz.</string>
-	<string name="instru_text2">\u0009 farklı macera bölümlerinde ilerledikçe, büyülü çiçekler, dinamitler, inekler, kediler ve gökkuşağı gibi oyunun farklı unsurlarının kilidini açacak ve keşfedeceksiniz!</string>
+	<string name="info_text2">\u0009 Bu uygulama aslında mühendislik okulu olan Telekom Bretagne\'da (şimdi IMT Atlantique) bir geliştirme projesi olarak başlatıldı. O zamandan beri yaklaşık 6 yıldır boş zamanlarımda üzerinde çalışmaktayım. Geri bildirimlerinizi ve yorumlarınızı play Store\'da paylaşabilir veya e-posta yoluyla iletebilirsiniz. \n\n\t İyi oyunlar dilerim!</string>
+	<string name="instru_text">\u0009 Fransa\'nın Breton bölgesinde bulunan Menhir tarlasında bir kuşsunuz ve ovadaki tüm çiçekleri toplamalısınız.\n\n\u0009 Parmağınızı farklı yönlerde kaydırarak, bir sonraki engele (menhir, inek veya kenar) erişinceye kadar uçabilirsiniz. Ancak bir engel aracılığıyla durduktan sonra bir başka yöne doğru uçabilirsiniz.</string>
+	<string name="instru_text2">\u0009 Farklı macera bölümlerinde ilerledikçe, büyülü çiçekler, dinamitler, inekler, kediler ve gökkuşağı gibi oyunun farklı unsurlarının kilidini açacak ve keşfedeceksiniz!</string>
 	<string name="instru_text3">\u0009 Bazı macera bölümleriyle başlayabilir, ardından arkadaşlarınızla veya dünyanın dört bir yanından katılan diğer oyuncularla yüzleşerek Çoklu Oyuncu Mücadelelerini keşfedebilirsiniz!\n\n\u0009\u0009\u0009\u0009 Çoklu Oyuncu modu:\n\n\u0009 Çevrimiçi rekabetçi bir moddur! Oynanan her meydan okuma için, sıralamadaki pozisyonunuza bağlı olarak, kabaca \"mağlup oyuncu sayısı\" eksi \"sizi mağlup eden oyuncu sayısına\" eşit bir puan kazanırsınız (veya kaybedersiniz!). Ayrıca, bu değer, zayıf katılımcıların veya yeni gelenlerin lehinde oyuncuların genel puanına göre ayarlanır.\n\n\u0009 \"Skor\" bu nedenle sadece kümülatif olan ve Colibri oynadığınızdan beri çözdüğünüz seviyeleri temsil eden \"Deneyim\" den ayırt edilmelidir! \"Sıralama\" sayfası istatistiklerinizi diğer katılımcılarla karşılaştırmanıza olanak tanır.\n\n İyi eğlenceler!!</string>
-	<string name="accept">tamam</string>
+	<string name="accept">Tamam</string>
 	<string name="annuler">İptal et</string>
-	<string name="name">ad</string>
+	<string name="name">Ad</string>
 	<string name="bravo">Tebrikler!</string>
 	<string name="temps">Zaman</string>
 	<string name="exp">Deneyim</string>
-	<string name="defis_joues">Karşılaşmalar</string>
-	<string name="defis_gagnés">Kazanılanlar</string>
+	<string name="defis_joues">Karşılaşma</string>
+	<string name="defis_gagnés">Kazanılan</string>
 	<string name="etat">Oyna</string>
 	<string name="perso">Kişiselleştir</string>
 	<string name="paramAleat">Rastgele Harita - Parametreler</string>
 	<string name="defaut">Varsayılan</string>
-	<string name="vaches">İnekler</string>
-	<string name="dynamites">Dinamitler</string>
-	<string name="chats">Kediler</string>
-	<string name="arcs">Gökkuşakları</string>
+	<string name="vaches">İnek</string>
+	<string name="dynamites">Dinamit</string>
+	<string name="chats">Kedil</string>
+	<string name="arcs">Gökkuşağı</string>
 	<string name="progression">Macera ilerlemesi: %1$d / %2$d</string>
 	<string name="longueur">Uzunluk:</string>
 	<string name="base_niveau">Menhirs deseni</string>
@@ -62,7 +62,8 @@
 	<string name="the_end">SON</string>
 	<string name="toast_fin">Tebrikler! | Macera modunu tamamladınız !!</string>
 	<string name="toast_fin2">Ve şimdi… | Rastgele oyunları ve Çok Oyunculu Görevleri deneyin! ;)</string>
-	<string name="enter_pseudo">Lütfen kullanıcı adınızı ve şifrenizi girin:</string>
+	<string name="enter_pseudo">Lütfen kullanıcı adınızı girin:</string>
+	<string name="enter_pseudo_mdp">Lütfen kullanıcı adınızı ve şifrenizi girin:</string>
 	<string name="register">Kayıt ol</string>
 	<string name="progress">Aktar…</string>
 	<string name="err404">Hata 404: kaynak bulunamadı.</string>
@@ -103,7 +104,7 @@
 	<string name="connexion_register">Çok oyunculu mod için bir ağa bağlı olmalısınız!</string>
 	<string name="nodefis">Henüz yeni bir meydan okuma yok!\n\n Soldaki düğme ile yeni\n bir meydan okuma oluşturun.</string>
 	<string name="notif_newdefi">%1$s yeni bir meydan okuma başlattı!</string>
-	<string name="notif_results">%1$s Oyunu tamamladı. Sonuçları kontrol edin!</string>
+	<string name="notif_results">%1$s oyunu tamamladı. Sonuçları kontrol edin!</string>
 	<string name="notif_results_exp">Oyunun süresi doldu. Sonuçları kontrol edin!</string>
 	<string name="time_limit">Maç başına süre sınırı:</string>
 	<string-array name="time_limits">
@@ -120,7 +121,7 @@
 	</string-array>
 	<string name="supprDefi">Oyunu sil</string>
 	<string name="supprDefiConf">\"%1$s\" Oyuna katılımınızı iptal etmek ve listenizden gerçekten kaldırmak istiyor musunuz?</string>
-	<string name="winlost">Kazanılanlar-Kaybedilenler</string>
+	<string name="winlost">Kazanılan-Kaybedilen</string>
 	<string name="rank">Sıralama</string>
 	<string name="avatar">Profil</string>
 	<string name="pays">Ülke</string>
@@ -161,7 +162,7 @@
 	<string name="notif_n_results">%1$d oyununun sonuçları mevcut!</string>
 	<string name="maj_req">Colibri\'yi güncellemelisiniz!</string>
 	<string name="cancel_sol">İptal edildi! |</string>
-	<string name="no_solution">Çözüm yok…</string>
+	<string name="no_solution">Ayyyyy! Çözüm yok…</string>
 	<string name="out_of_memory">Hata! RAM yetersiz… Çözüm olmayabilir!</string>
 	<string name="sol_colibrain">ColiBrain çözümü</string>
 	<string name="sol_generated">Oluşturulan çözüm</string>
@@ -191,4 +192,7 @@
 	<string name="play_time_format">%1$d sa %2$d dk</string>
 	<string name="first_time">İlk kez</string>
 	<string name="translator_name">Türkçe çeviriler Hazal Durand.</string>
+	<string name="google_sign_in">Gmail\'le devam et</string>
+	<string name="standard_sign_in">Standard Giriş</string>
+	<string name="google_sign_in_error">Hata…|Gmail ile bağlantı başarısız.%1$s</string>
 </resources>

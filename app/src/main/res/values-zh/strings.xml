@@ -62,7 +62,8 @@
 	<string name="the_end">结束</string>
 	<string name="toast_fin">恭喜！|您完成了战斗模式！</string>
 	<string name="toast_fin2">现在… |您是否尝试过“随机关卡”和“多人挑战”？ ;）</string>
-	<string name="enter_pseudo">请输入您的昵称和密码：</string>
+	<string name="enter_pseudo">请输入您的昵称：</string>
+	<string name="enter_pseudo_mdp">请输入您的昵称和密码：</string>
 	<string name="register">注册</string>
 	<string name="progress">传递…</string>
 	<string name="err404">错误404：找不到资源。</string>
@@ -191,4 +192,7 @@
 	<string name="play_time_format">%1$d小时%2$d分钟</string>
 	<string name="first_time">首测</string>
 	<string name="translator_name">何米娜的中文翻译。</string>
+	<string name="google_sign_in">使用Google登录</string>
+	<string name="standard_sign_in">标准登录</string>
+	<string name="google_sign_in_error">错误…| Google登录失败。%1$s</string>
 </resources>
