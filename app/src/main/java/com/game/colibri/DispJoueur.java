@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,14 +17,9 @@ public class DispJoueur {
 	
 	private Context context;
 	private Joueur j;
-	
-	@SuppressLint("InlinedApi")
+
 	public DispJoueur(Context context, Joueur joueur) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
-		} else {
-			this.context = context;
-		}
+		this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
 		j = joueur;
 	}
 	

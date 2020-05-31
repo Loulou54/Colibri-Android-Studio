@@ -1,5 +1,6 @@
 package com.game.colibri;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -67,6 +68,23 @@ public class Defi {
 	
 	public String toJSON() {
 		return (new Gson()).toJson(this, Defi.class);
+	}
+
+	/**
+	 * La liste des participants au défi avec userFirst en premier.
+	 * @param userFirst l'id du joueur à placer en premier
+	 * @return la liste des joueurs
+	 */
+	public ArrayList<Joueur> getJoueurs(int userFirst) {
+		ArrayList<Joueur> joueurs = new ArrayList<>();
+		for(int i=0; i < participants.size(); i++) {
+			Joueur j = participants.valueAt(i).joueur;
+			if(j.getId() == userFirst)
+				joueurs.add(0, j);
+			else
+				joueurs.add(j);
+		}
+		return joueurs;
 	}
 	
 	public int computeScores(Participation[] classement, double[] scores) {

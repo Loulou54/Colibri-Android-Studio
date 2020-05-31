@@ -4,13 +4,11 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.Random;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -45,14 +43,12 @@ public class Artifices extends RelativeLayout {
 		init();
 	}
 	
-	@SuppressLint({ "InlinedApi", "NewApi" })
 	private void init() {
 		expl = new LinkedList<Explosion>();
 		ran = new Random();
 		handler = new RefreshHandler(this);
 		p = new Paint();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 	
 	public void start() {

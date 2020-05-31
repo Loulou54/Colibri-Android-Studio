@@ -50,7 +50,7 @@
         android:focusable="false"
         android:layout_gravity="right"
         android:contentDescription="@string/app_name"
-        android:background="@android:drawable/ic_menu_close_clear_cancel"
-        android:onClick="supprDefi" />
+        android:background="@android:drawable/ic_menu_preferences"
+        android:onClick="modifDefi" />
 
 </LinearLayout>

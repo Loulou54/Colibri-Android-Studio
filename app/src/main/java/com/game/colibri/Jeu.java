@@ -11,11 +11,9 @@ import org.json.JSONException;
 import com.game.colibri.Solver.Move;
 import com.network.colibri.DBController;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
@@ -76,7 +74,7 @@ public class Jeu extends Activity {
 				finish();
 			}
 		}
-		if(multi && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) { // Interdire Screenshots
+		if(multi) { // Interdire Screenshots
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 		}
 		setContentView(R.layout.activity_jeu);
@@ -354,10 +352,7 @@ public class Jeu extends Activity {
 			default:
 				return;
 		}
-		final PaperDialog unlocked = new PaperDialog(
-				Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-						new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog)
-						: this, R.layout.unlocked_element_info);
+		final PaperDialog unlocked = new PaperDialog(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog), R.layout.unlocked_element_info);
 		unlocked.setTitle(R.string.unlocked_title);
 		((ImageView) unlocked.findViewById(R.id.unlocked_img)).setImageResource(unlocked_img);
 		((TextView) unlocked.findViewById(R.id.unlocked_name)).setText(unlocked_name);
@@ -701,8 +696,7 @@ public class Jeu extends Activity {
 			}
 		})).execute(play.frame, carte.colibri.getRow(), carte.colibri.getCol(), carte.n_fleur, carte.n_dyna, 1);
 	}
-	
-	@SuppressLint("InlinedApi")
+
 	public void passer(View v) {
 		if(solved) {
 			gagne(-1); // Pour réafficher les résultats
@@ -714,10 +708,7 @@ public class Jeu extends Activity {
 				gagne(Participation.FORFAIT);
 			return;
 		}
-		final PaperDialog forfait = new PaperDialog(
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-				new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog)
-				: this, 0);
+		final PaperDialog forfait = new PaperDialog(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog), 0);
 		forfait.setTitle(R.string.forfait);
 		forfait.setMessage(R.string.forfait_msg);
 		forfait.setPositiveButton(new View.OnClickListener() {

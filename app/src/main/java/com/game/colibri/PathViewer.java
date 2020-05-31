@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -73,11 +71,9 @@ public class PathViewer extends RelativeLayout {
         super(context, attrs, defStyle);
         init();
     }
-	
-    @SuppressLint({ "NewApi", "InlinedApi" })
+
 	private void init() {
-    	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    	setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     	pathPaint = new Paint();
     	pathPaint.setStyle(Paint.Style.STROKE);
     	pathPaint.setStrokeJoin(Paint.Join.ROUND);

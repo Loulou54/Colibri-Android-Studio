@@ -74,8 +74,7 @@ public class MyApp extends Application {
 			e.printStackTrace();
 		}
 		if(versionActuelle!=versionCode) {
-			editor.putString("adversaires", null)
-				.putInt("versionCode", versionActuelle)
+			editor.putInt("versionCode", versionActuelle)
 				.commit();
 		}
 	}

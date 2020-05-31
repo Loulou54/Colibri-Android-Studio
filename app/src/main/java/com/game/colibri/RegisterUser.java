@@ -11,11 +11,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -42,14 +40,9 @@ public class RegisterUser {
 	private boolean register;
 	private String firebaseId;
 	private PaperDialog boxConnectionChoice = null;
-	
-	@SuppressLint("InlinedApi")
+
 	public RegisterUser(Context context, AsyncHttpClient client, callBackInterface callback) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
-		} else {
-			this.context = context;
-		}
+		this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
 		this.client = client;
 		this.callback= callback;
 		prgDialog = new ProgressDialog(this.context);

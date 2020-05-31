@@ -3,7 +3,6 @@ package com.game.colibri;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,14 +45,9 @@ public class ParamAleat {
 		}
 		editor.commit();
 	}
-	
-	@SuppressLint("InlinedApi")
+
 	public ParamAleat(callBackInterface callback, Context context, int avancement) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
-		} else {
-			this.context = context;
-		}
+		this.context = new ContextThemeWrapper(context, android.R.style.Theme_Holo_Light_Dialog);
 		this.callback = callback;
 		this.avancement = avancement-1;
 	}

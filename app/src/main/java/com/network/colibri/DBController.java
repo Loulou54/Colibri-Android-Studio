@@ -284,11 +284,11 @@ public class DBController  extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Supprimer un défi et retirer sa participation.
+	 * Après avoir vu les résultats d'une partie rapide, supprimer le défi de la liste.
 	 * @param defi le défi
 	 * @param user l'ID joueur de l'utilisateur
 	 */
-	public void removeDefi(Defi defi, int user) {
+	public void finPartieRapide(Defi defi, int user) {
 		SQLiteDatabase database = this.getWritableDatabase();
 		database.delete("defis", "id="+defi.id, null);
 		database.delete("participations", "defi="+defi.id, null);
@@ -297,7 +297,7 @@ public class DBController  extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		JSONObject o = new JSONObject();
 		try {
-			o.put("task","removeParticip");
+			o.put("task","finPartieRapide");
 			o.put("defi",defi.id);
 			values.put("task", o.toString());
 			database.insert("tasks", null, values);
@@ -495,6 +495,34 @@ public class DBController  extends SQLiteOpenHelper {
 		}
 		database.close();
 	}
+
+	public void modifDefi(Defi defi, ArrayList<Integer> removedJoueurs, ArrayList<Integer> addedJoueurs, int user) {
+		boolean removeDefi = defi.participants.size() + addedJoueurs.size() - removedJoueurs.size() <= 1;
+		SQLiteDatabase database = this.getWritableDatabase();
+		if(removeDefi || removedJoueurs.contains(user)) {
+			database.delete("defis", "id="+defi.id, null);
+			database.delete("participations", "defi="+defi.id, null);
+		} else if(!removedJoueurs.isEmpty()) {
+			String removedIdList = removedJoueurs.toString().replace('[', '(').replace(']', ')');
+			database.delete("participations", "defi="+defi.id+" AND joueur IN "+removedIdList, null);
+		}
+		cleanJoueurs(database, user);
+		// Requête serveur
+		ContentValues values = new ContentValues();
+		JSONObject o = new JSONObject();
+		try {
+			o.put("task","modifDefi");
+			o.put("defi",defi.id);
+			o.put("removedJoueurs", new JSONArray(removedJoueurs));
+			o.put("addedJoueurs", new JSONArray(addedJoueurs));
+			o.put("removeDefi", removeDefi);
+			values.put("task", o.toString());
+			database.insert("tasks", null, values);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		database.close();
+	}
 	
 	/**
 	 * Crée une tâche serveur pour une nouvelle partie rapide.
@@ -561,20 +589,34 @@ public class DBController  extends SQLiteOpenHelper {
 			try {
 				JSONObject d = jsonArray.getJSONObject(i);
 				String task = d.getString("task");
-				if(task.equalsIgnoreCase("delPart")) {
-					if(d.getInt("part_joueur")==user) { // Cas où la suppression vient du même joueur sur un autre appareil.
-						database.delete("defis", "id="+d.getInt("part_defi"), null);
-						database.delete("participations", "defi="+d.getInt("part_defi"), null);
-					} else {
-						database.delete("participations", "defi="+d.getInt("part_defi")+" AND joueur="+d.getInt("part_joueur"), null);
-						liste.append(context.getResources().getString(R.string.deletedPart, d.getString("part_joueur_nom"), d.getString("part_defi_nom"))).append('\n');
-					}
+				if(task.equalsIgnoreCase("modifDefi")) {
+					String removedIdList = d.getJSONArray("removedIdList").toString().replace('[', '(').replace(']', ')');
+					database.delete("participations", "defi="+d.getInt("defi")+" AND joueur IN "+removedIdList, null);
 					cleanJoueurs(database, user);
-				} else if(task.equalsIgnoreCase("delDefi")) {
+					if(d.getInt("authorId")!=user) { // Si la modification vient du même joueur sur un autre appareil, ne pas afficher le message.
+						System.out.println("Nom défi :");
+						System.out.println(d.getString("defiNom"));
+						liste.append(context.getResources().getString(R.string.modifDefiMsg, d.getString("authorPseudo"), d.getString("defiNom"))).append('\n');
+						String removedPseudos = d.getString("removedPseudos");
+						String addedPseudos = d.getString("addedPseudos");
+						if(removedPseudos.length() > 0) {
+							liste.append(context.getResources().getString(R.string.modifDefiRemovedMsg, removedPseudos)).append('\n');
+						}
+						if(addedPseudos.length() > 0) {
+							liste.append(context.getResources().getString(R.string.modifDefiAddedMsg, addedPseudos)).append('\n');
+						}
+					}
+				} else if(task.equalsIgnoreCase("removeDefi") || task.equalsIgnoreCase("removePart")) {
 					database.delete("defis", "id="+d.getInt("defi"), null);
 					database.delete("participations", "defi="+d.getInt("defi"), null);
 					cleanJoueurs(database, user);
-					liste.append(context.getResources().getString(R.string.deletedDef, d.getString("defi_nom"))).append('\n');
+					if(d.getInt("authorId")!=user) { // Si la modification vient du même joueur sur un autre appareil, ne pas afficher le message.
+						if(task.equalsIgnoreCase("removePart")) {
+							liste.append(context.getResources().getString(R.string.removePartMsg, d.getString("authorPseudo"), d.getString("defiNom"))).append('\n');
+						} else {
+							liste.append(context.getResources().getString(R.string.removeDefiMsg, d.getString("authorPseudo"), d.getString("defiNom"))).append('\n');
+						}
+					}
 				} else if(task.equalsIgnoreCase("syncTotale")) {
 					this.taskSyncTotale(user);
 				} else if(task.equalsIgnoreCase("newNiv")) {

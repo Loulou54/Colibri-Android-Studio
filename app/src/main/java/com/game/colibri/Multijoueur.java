@@ -54,7 +54,7 @@ public class Multijoueur extends Activity {
 	private ExpandableListView lv;
 	public DefiExpandableAdapter adapt;
 	private SparseArray<Joueur> joueurs;
-	private ArrayList<Defi> adversaires;
+	private ArrayList<Defi> defiList;
 	private RegisterUser registerUser = null;
 	private PaperDialog boxNiv;
 	private AlertDialog.Builder messageDialog = null;
@@ -78,7 +78,7 @@ public class Multijoueur extends Activity {
 		client.setMaxRetriesAndTimeout(5, 500);
 		base = new DBController(this);
 		joueurs = new SparseArray<Joueur>();
-		adversaires = new ArrayList<Defi>();
+		defiList = new ArrayList<Defi>();
 		// Google Sign In
 		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 				.requestIdToken("533995009920-892u4uefoji66vfqq969neqq0rrs5nq5.apps.googleusercontent.com")
@@ -141,11 +141,11 @@ public class Multijoueur extends Activity {
 		} else if(requestCode==2 && resultCode==RESULT_FIRST_USER) { // Résultats vus.
 			int[] resVus = data.getIntArrayExtra("resVus");
 			for(int r=0; resVus[r]!=0; r++) {
-				for(int i=0; i<adversaires.size(); i++) {
-					if(adversaires.get(i).id==resVus[r]) {
-						defi = adversaires.get(i);
+				for(int i = 0; i< defiList.size(); i++) {
+					if(defiList.get(i).id==resVus[r]) {
+						defi = defiList.get(i);
 						if(defi.type>0) { // Partie rapide
-							base.removeDefi(adversaires.remove(i), MyApp.id);
+							base.finPartieRapide(defiList.remove(i), MyApp.id);
 						} else {
 							defi.resVus = defi.nMatch;
 							base.setResultatsVus(defi.id,defi.nMatch);
@@ -190,8 +190,8 @@ public class Multijoueur extends Activity {
 			}
 			registerUser();
 		} else {
-			base.getDefis(userId,joueurs,adversaires);
-			adapt = new DefiExpandableAdapter(this, userId, adversaires);
+			base.getDefis(userId,joueurs, defiList);
+			adapt = new DefiExpandableAdapter(this, userId, defiList);
 			lv.setAdapter(adapt);
 			dispUser();
 			if(!connect.isConnectedToInternet()) {
@@ -316,21 +316,25 @@ public class Multijoueur extends Activity {
 		syncData();
 	}
 	
-	public void supprDefi(View v) {
+	public void modifDefi(View v) {
+		if(!connect.isConnectedToInternet() || user==null) {
+			Toast.makeText(this, R.string.hors_connexion, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if(base.getTasks().contains("\"task\":\"modifDefi\"")) {
+			syncData();
+			return;
+		}
 		final int groupPosition = (Integer) v.getTag();
-		new AlertDialog.Builder(this)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(R.string.supprDefi)
-			.setMessage(this.getString(R.string.supprDefiConf, adversaires.get(groupPosition).nom))
-			.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					base.removeDefi(adversaires.remove(groupPosition), user.getId());
+		(new ModifDefi(this, client, user.getId(), defiList.get(groupPosition), new ModifDefi.callBackInterface() {
+			@Override
+			public void setNewParticipants(Defi defi, ArrayList<Integer> removedJoueurs, ArrayList<Integer> addedJoueurs) {
+				if(removedJoueurs.size() + addedJoueurs.size() > 0) {
+					base.modifDefi(defi, removedJoueurs, addedJoueurs, user.getId());
 					syncData();
 				}
-			})
-			.setNegativeButton(R.string.annuler, null)
-			.show();
+			}
+		})).showParticipants();
 	}
 	
 	public void actionDefi(View v) {
@@ -338,16 +342,16 @@ public class Multijoueur extends Activity {
 			return;
 		lastPress = System.currentTimeMillis();
 		final int groupPosition = (Integer) v.getTag();
-		defi = adversaires.get(groupPosition);
+		defi = defiList.get(groupPosition);
 		switch(defi.getEtat(user.getId())) {
 		case Defi.ATTENTE: // Patience !
 			Toast.makeText(this, R.string.patience, Toast.LENGTH_LONG).show();
 			break;
 		case Defi.RESULTATS: // Afficher les résultats
 			ArrayList<String> defRes = new ArrayList<String>();
-			int nDef = adversaires.size();
+			int nDef = defiList.size();
 			for(int i=0; i<nDef; i++) {
-				Defi d = adversaires.get((groupPosition + i)%nDef);
+				Defi d = defiList.get((groupPosition + i)%nDef);
 				if(d.getEtat(user.getId())==Defi.RESULTATS)
 					defRes.add(d.toJSON());
 			}
@@ -370,7 +374,7 @@ public class Multijoueur extends Activity {
 	 * Supprime le defi courant de la liste.
 	 */
 	public void removeDefi() {
-		adversaires.remove(defi);
+		defiList.remove(defi);
 	}
 	
 	public void syncTotale(View v) {
@@ -508,8 +512,8 @@ public class Multijoueur extends Activity {
 					base.insertJSONJoueurs(jArray);
 					MyApp.getApp().connectUser(j.getInt("id"), j.getString("pseudo"), j.getInt("appareil"));
 					loadJoueurs();
-					base.getDefis(user.getId(),joueurs,adversaires);
-					adapt = new DefiExpandableAdapter(Multijoueur.this, user.getId(), adversaires);
+					base.getDefis(user.getId(),joueurs, defiList);
+					adapt = new DefiExpandableAdapter(Multijoueur.this, user.getId(), defiList);
 					lv.setAdapter(adapt);
 					syncData();
 					return true;
@@ -580,6 +584,8 @@ public class Multijoueur extends Activity {
 				((TextView) findViewById(R.id.nvPRapide)).setEnabled(true);
 				adapt.setLaunchEnabled(true);
 				MyApp.getApp().editor.putLong("lastNotif", System.currentTimeMillis()).commit();
+				System.out.println("JSON data:");
+				System.out.println(response);
 				if(insertJSONData(response)) {
 					base.clearTasks();
 				}
@@ -657,7 +663,7 @@ public class Multijoueur extends Activity {
 			MyApp.getApp().saveData();
 			dispUser();
 		}
-		int pRapide = base.getDefis(user.getId(),joueurs,adversaires);
+		int pRapide = base.getDefis(user.getId(),joueurs, defiList);
 		adapt.notifyDataSetChanged();
 		if(pRapide!=-1 && partieRapideRequested) {
 			partieRapideRequested = false;

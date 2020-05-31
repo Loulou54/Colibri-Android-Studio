@@ -200,4 +200,13 @@
 	<string name="google_sign_in">Sign In with Google</string>
 	<string name="standard_sign_in">Standard Sign In</string>
 	<string name="google_sign_in_error">Error…|Google Sign In was unsuccessful.%1$s</string>
+	<string name="supprDefiComplConf">Do you really wish to delete the challenge \"%1$s\" for everyone?</string>
+	<string name="supprParticipConfTitle">Remove current participants</string>
+	<string name="supprParticipConf">Do you really wish to remove the following players from the challenge \"%1$s\"? \n%2$s</string>
+	<string name="participants">Participants:</string>
+	<string name="modifDefiMsg">%1$s has modified the challenge %2$s:</string>
+	<string name="modifDefiRemovedMsg">- Removed: %1$s</string>
+	<string name="modifDefiAddedMsg">+ Added: %1$s</string>
+	<string name="removePartMsg">%1$s has cancelled your participation to the challenge %2$s!</string>
+	<string name="removeDefiMsg">%1$s has cancelled the challenge %2$s!</string>
 </resources>

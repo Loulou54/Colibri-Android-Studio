@@ -20,14 +20,14 @@ public class DefiExpandableAdapter extends BaseExpandableListAdapter {
 	
 	private Context context;
 	private int user;
-	private ArrayList<Defi> adversaires;
+	private ArrayList<Defi> defiList;
 	private boolean launchEnabled = true;
 	private Typeface font1, font2;
 	
 	public DefiExpandableAdapter(Context c, int user, ArrayList<Defi> defis) {
 		context = c;
 		this.user = user;
-		adversaires = defis;
+		defiList = defis;
 		font1 = Typeface.createFromAsset(c.getAssets(),"fonts/YummyCupcakes.ttf");
 		font2 = Typeface.createFromAsset(c.getAssets(),"fonts/Passing Notes.ttf");
 	}
@@ -42,7 +42,7 @@ public class DefiExpandableAdapter extends BaseExpandableListAdapter {
 	
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		return adversaires.get(groupPosition).participants.valueAt(childPosition);
+		return defiList.get(groupPosition).participants.valueAt(childPosition);
 	}
 
 	@Override
@@ -88,17 +88,17 @@ public class DefiExpandableAdapter extends BaseExpandableListAdapter {
 	
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return adversaires.get(groupPosition).participants.size();
+		return defiList.get(groupPosition).participants.size();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return adversaires.get(groupPosition);
+		return defiList.get(groupPosition);
 	}
 
 	@Override
 	public int getGroupCount() {
-		return adversaires.size();
+		return defiList.size();
 	}
 
 	@Override

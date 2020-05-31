@@ -20,10 +20,12 @@ public class JoueursAdapter extends ArrayAdapter<Joueur> {
 	
 	private PaperDialog box;
 	private Typeface font;
+	private boolean includesUser;
 	
 	public JoueursAdapter(Context context, int resource, List<Joueur> objects) {
 		super(context, resource, objects);
 		font = Typeface.createFromAsset(context.getAssets(),"fonts/Passing Notes.ttf");
+		this.includesUser = !objects.isEmpty();
 	}
 	
 	public void setDialogBox(PaperDialog box) {
@@ -31,7 +33,7 @@ public class JoueursAdapter extends ArrayAdapter<Joueur> {
 	}
 	
 	public void updateTextView() {
-		box.setTitle(getContext().getText(R.string.adversaires)+" "+getCount());
+		box.setTitle(getContext().getText(includesUser ? R.string.participants : R.string.adversaires)+" "+getCount());
 	}
 	
 	@Override
@@ -69,7 +71,7 @@ public class JoueursAdapter extends ArrayAdapter<Joueur> {
 			h.poubelle.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					JoueursAdapter.this.remove((Joueur) h.poubelle.getTag());
+					JoueursAdapter.this.remove(h.joueur);
 					updateTextView();
 				}
 			});
@@ -89,12 +91,13 @@ public class JoueursAdapter extends ArrayAdapter<Joueur> {
 		h.score.setText(String.format("%,.2f", j.getScore()));
 		h.poubelle.setVisibility(View.GONE);
 		h.poubelle.setClickable(false);
-		h.poubelle.setTag(j);
+		h.joueur = j;
 		return convertView;
 	}
 	
 	static class ViewHolder {
 		ImageView avatar, pays, poubelle;
 		TextView nom, exp, score;
+		Joueur joueur;
 	}
 }

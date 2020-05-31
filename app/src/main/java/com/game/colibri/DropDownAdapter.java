@@ -55,7 +55,7 @@ public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 		client = new DefaultHttpClient();
 		post = new HttpPost(SERVER_URL+"/suggestions.php");
-		this.user = user;
+		this.user = joueurs.isEmpty() ? user : 0; // Si joueurs est non vide, on est dans ModifDefi et user est inclu dans les joueurs
 		this.joueurs = joueurs;
 	}
 	
