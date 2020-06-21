@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -26,20 +25,20 @@ public class Carte extends RelativeLayout {
 	
 	public static int ww,wh; // windowWidth/Height
 	public static double cw,ch; // caseWidth/Height en pixels
-	private static final int LIG=12, COL=20;
+	public static final int LIG=12, COL=20;
 	
 	private double cwi,chi; // cwi & chi de l'instance
 	public Niveau niv=null; // Le niveau à afficher
 	public int n_fleur,n_dyna; // Le nombre de fleurs sur la carte et le nombre de dynamites ramassées.
-	private int index_dyna; // L'index de l'animation courante d'explosion.
 	private Bitmap menhir,fleur,fleurm,dyna,menhir_rouge,rainbow;
 	public Colibri colibri;
 	public LinkedList<Vache> vaches = new LinkedList<>(); // La liste des vaches du niveau
 	public LinkedList<Chat> chats = new LinkedList<>(); // La liste des chats du niveau
-	public LinkedList<View> explo = new LinkedList<>(); // La liste des explosions
+	public LinkedList<Dynamite> dynamites = new LinkedList<>(); // La liste des dynamites posées
 	public SparseArray<int[]> rainbows = new SparseArray<>();
 	private int[] colors = new int[] {0x50FAE96C, 0x50552DA2, 0x502FE0D6, 0x50FA9B44, 0x50FA95E5, 0x50F92722, 0x5000FF54};
 	public View mort,sang,fond;
+	private RelativeLayout dynaLayer;
 
     public Carte(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -116,14 +115,17 @@ public class Carte extends RelativeLayout {
 		removeAllViews();
 		vaches.clear();
 		chats.clear();
-		explo.clear();
+		dynamites.clear();
 		rainbows.clear();
-    	
+
 		cw = cwi; ch = chi; // 
 		niv=niveau;
 		addView(fond);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ww,wh);
 	    fond.setLayoutParams(params);
+		dynaLayer = new RelativeLayout(getContext());
+		addView(dynaLayer);
+	    dynaLayer.setLayoutParams(params);
 	    
 	    /*
 	    Random ran = new Random();
@@ -133,19 +135,11 @@ public class Carte extends RelativeLayout {
 	    */
     	n_dyna=0;
     	n_fleur=0;
-    	index_dyna=0;
     	for(int l=0; l<LIG; l++) {
     		for(int c=0; c<COL; c++) {
     			if(niv.carte[l][c]==2 || niv.carte[l][c]==3)
     				n_fleur++;
-    			else if(niv.carte[l][c]==4) {
-    				index_dyna++;
-    				View e = new View(this.getContext());
-    		    	explo.addLast(e);
-    		    	e.setBackgroundResource(R.drawable.explosion);
-    		    	addView(e);
-    		    	e.setVisibility(INVISIBLE);
-    			} else if(niv.carte[l][c]>=10) {
+    			else if(niv.carte[l][c]>=10) {
     				int[] autre = rainbows.get(niv.carte[l][c]);
     				if(autre!=null) { // On ajoute la case correspondante à celle déjà enregistrée.
     					autre[2]=l;
@@ -189,23 +183,15 @@ public class Carte extends RelativeLayout {
     	mort.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.dead_anim));
     	sang.startAnimation(AnimationUtils.loadAnimation(this.getContext(), R.anim.blood_anim));
     }
-    
-    /**
-     * Effectue l'animation d'explosion d'un menhir par une dynamite.
-     */
-    public void animBoom(int l, int c) {
-    	index_dyna--;
-    	View e = explo.get(index_dyna);
-    	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)(3*cwi/2), (int)(3*chi/2));
-		params.leftMargin = (int)(c*cwi-cwi/4);
-	    params.topMargin = (int)(l*chi);
-	    params.bottomMargin = (int)((LIG-l)*chi+3*chi/2);
-	    e.setLayoutParams(params);
-    	e.setVisibility(VISIBLE);
-    	((AnimationDrawable) e.getBackground()).start();
+
+    public void poseDynamite(int l, int c, int frame) {
+    	dynamites.addLast(new Dynamite(this.getContext(), cwi, chi, l, c, frame));
+    	dynaLayer.addView(dynamites.getLast());
     }
-    
-    
+
+    public void cancelLastDynamite() {
+    	dynaLayer.removeView(dynamites.pollLast());
+	}
     
     // Événement utilisé pour récupérer les dimensions de la View.
     /* (non-Javadoc)

@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 public class Vache extends Animal {
 	
 	private int[][] itineraire=null; // itinéraire des vaches/chats. Coordonnées de chaque point de passage. (au moins 2) Ex : {{1,1},{1,4},{3,4}}
-	private int chkpt=0; // le prochain checkpoint de l'animal dans itineraire.
+	public int chkpt=0; // le prochain checkpoint de l'animal dans itineraire.
 	public Path path; // Permet de dessiner le chemin de l'animal (utilisé dans le onDraw de Carte).
 	
 	public Vache(Context context, double w, double h, int[][] itin) {

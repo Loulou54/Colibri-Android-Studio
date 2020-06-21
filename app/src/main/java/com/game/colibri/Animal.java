@@ -65,9 +65,7 @@ public abstract class Animal extends ImageView {
 	
 	/**
 	 * Donne la direction de déplacement de l'animal, en attribuant les valeurs mx et my.
-	 * 		@param dir un couple donnant la direction x/y de déplacement de l'animal. (ex : {0,-1} = vers la gauche)
-	 * Donne la direction de déplacement de l'animal, en attribuant les valeurs mx et my.
-	 * 		@param dir un couple donnant la direction x/y de déplacement de l'animal. (ex : {0,-1} = vers la gauche)
+	 * 		@param dir un couple donnant la direction x/y de déplacement de l'animal. (ex : {0,-1} = vers le haut)
 	 */
 	public void setDirection(int[] dir) {
 		mx=dir[0];
@@ -124,14 +122,29 @@ public abstract class Animal extends ImageView {
 	public int getCol() {
 		return (int)(xx+ww/2);
 	}
-	
+
+	/**
+	 * Retourne la prochaine prochaine ligne selon la direction de l'animal.
+	 * @return ligne pouvant être hors de la carte
+	 */
+	public int getNextRow() {
+		return getRow()+my;
+	}
+
+	/**
+	 * Retourne la prochaine prochaine colonne selon la direction de l'animal.
+	 * @return colonne pouvant être hors de la carte
+	 */
+	public int getNextCol() {
+		return getCol()+mx;
+	}
+
 	/**
 	 * Commencer l'animation
 	 */
 	public void start() {
 		((AnimationDrawable) this.getBackground()).start();
 	}
-	
 	
 	/**
 	 * Stopper l'animation

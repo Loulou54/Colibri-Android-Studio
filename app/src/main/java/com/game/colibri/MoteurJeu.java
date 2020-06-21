@@ -23,7 +23,6 @@ public class MoteurJeu {
 	private static int SEUIL=15; // seuil de vitesse de glissement du doigt sur l'écran.
 	public static final int PERIODE_NORMALE=1000/25; // pour 25 frames par secondes
 	public static int PERIODE=PERIODE_NORMALE; // Peut être modifiée pour accélérer le jeu
-	public static final int DYNA_DELAY=22;
 	public static final int MENHIR=1;
 	public static final int FLEUR=2;
 	public static final int FLEURM=3;
@@ -35,18 +34,19 @@ public class MoteurJeu {
 	
 	public int frame = 0, total_frames;
 	private long timeSave = 0;
-	private Carte carte;
+	public Carte carte;
 	public Niveau niv;
 	private Jeu jeu;
 	public int state = PAUSED;
 	private int dejaPasse = 0;
-	private int wait = 0;
-	private int directionDyna = 0;
-	private LinkedList <int[]> buf; // la file d'attente des touches
+	public int wait = 0;
+	public int directionDyna = 0;
+	public LinkedList <int[]> buf; // la file d'attente des touches
 	// private LinkedList <int[]> mouvements; // Les mouvements effectués
-	private int[] lastMove=new int[] {0,0};
+	public int[] lastMove=new int[] {0,0};
+	public boolean isMoving;
 	private int[][] trace_diff; // Contient le différentiel de position lors des ACTION_MOVE.
-	private LinkedList <int[]> dynaExploQueue; // où chaque élément correspond à {frameRemoveDyna, dynaRow, dynaCol}
+	public MoveHistory moveHistory;
 	
 	/**
 	 * Handler de rafraîchissement
@@ -87,10 +87,10 @@ public class MoteurJeu {
 		carte = c;
 		jeu = activ;
 		buf = new LinkedList<>();
-		dynaExploQueue = new LinkedList<>();
 		// mouvements = new LinkedList<int[]>();
 		trace_diff=new int[3][2];
 		SEUIL = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, activ.getResources().getDisplayMetrics());
+		moveHistory = new MoveHistory(this);
 	}
 
 	/**
@@ -100,13 +100,16 @@ public class MoteurJeu {
 		moveHandler.removeMessages(jeu.n_niv);
 		niv=carte.niv; // pour avoir une référence locale vers le niveau en cours et un nom moins long
 		buf.clear();
-		dynaExploQueue.clear();
 		// mouvements.clear();
 		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 		timeSave = 0;
 		total_frames = replay ? total_frames+frame : 0;
 		frame = 0;
 		wait = 0;
+		lastMove[0] = 1;
+		lastMove[1] = 0;
+		isMoving = false;
+		moveHistory.reset();
 	}
 	
 	/**
@@ -143,6 +146,18 @@ public class MoteurJeu {
 			total_frames = 0;
 			frame = 0;
 			timeSave = 0;
+		}
+	}
+
+	public void cancelLastMove() {
+		moveHistory.queueCancelLastMove();
+	}
+
+	public void updateDynaButton(int target_n_dyna) {
+		if(target_n_dyna != carte.n_dyna) {
+			jeu.bout_dyna.setText(Integer.toString(target_n_dyna));
+			if(target_n_dyna == 0) jeu.hideDyna();
+			else if(carte.n_dyna == 0 && target_n_dyna == 1) jeu.showDyna();
 		}
 	}
 	
@@ -182,7 +197,8 @@ public class MoteurJeu {
 	private void move() {
 		frame++;
 		jeu.updateMenuLateral();
-		if (carte.colibri.mx==0 & carte.colibri.my==0) { // Le colibri est à l'arrêt
+		if (carte.colibri.mx==0 && carte.colibri.my==0) { // Le colibri est à l'arrêt
+			isMoving = false;
 			if (buf.size()>0) {
 				int[] mov=buf.getFirst();
 				if(mov[2]!=0)
@@ -195,7 +211,7 @@ public class MoteurJeu {
 					carte.colibri.setDirection(mov); // On effectue le prochain mouvement de la file.
 					carte.colibri.setSpriteDirection(); // On choisit la direction de l'image.
 					if(carte.n_dyna>0) removeMenhirRouge(mov); // On enlève si nécessaire le menhir rouge de sélection.
-					if(mov[0]==mov[1]) { // <=> mov=={0,0} : pose une dynamite.
+					if(mov[0]==mov[1] && carte.n_dyna>0) { // <=> mov=={0,0} : pose une dynamite.
 						if(DEBUG)
 							System.out.println("DYNAMITE : "+frame);
 						exploseMenhir();
@@ -206,25 +222,26 @@ public class MoteurJeu {
 			else carte.colibri.step=0; // La vitesse est mise à 0. Dans le premier cas, la vitesse est conservée.
 		} else { // Le colibri est en mouvement
 			ramasser(); // On ramasse l'item potentiel
-			int[] dir= carte.colibri.getDirection();
-			int ml=dir[1] , mc=dir[0];
-			int l=carte.colibri.getRow(); // ligne du colibri
-			int c=carte.colibri.getCol(); //  colone du colibri
-			// On détecte si l'on arrive contre un obstacle
-			boolean outOfMap=l+ml<0 || l+ml>=LIG || c+mc<0 || c+mc>=COL;
-			if(outOfMap || niv.carte[l+ml][c+mc]==MENHIR){
+			int l=carte.colibri.getRow();
+			int c=carte.colibri.getCol();
+			int nl=carte.colibri.getNextRow();
+			int nc=carte.colibri.getNextCol();
+			boolean outOfMap = nl<0 || nl>=LIG || nc<0 || nc>=COL;
+			if(outOfMap || niv.carte[nl][nc]==MENHIR){
 				carte.colibri.mx=0;
 				carte.colibri.my=0;
 				carte.colibri.setPos(c, l);
 				if(DEBUG)
 					System.out.println("Frame : "+frame+" Pos : "+l+","+c);
 				if(!outOfMap && carte.n_dyna>0) {
-					niv.carte[l+ml][c+mc]=MENHIR_ROUGE;
+					niv.carte[nl][nc]=MENHIR_ROUGE;
 					carte.fond.invalidate();
 				}
 			}
-			else
+			else {
 				carte.colibri.deplacer();
+				isMoving = true;
+			}
 		}
 		for(Vache v : carte.vaches) {
 			v.deplacer();
@@ -234,11 +251,16 @@ public class MoteurJeu {
 			c.deplacer();
 			collisionChat(c);
 		}
-		if(!dynaExploQueue.isEmpty() && dynaExploQueue.peek()[0]==frame) {
-			int[] dynaExplo = dynaExploQueue.pollFirst();
-			finExplosion(dynaExplo[1], dynaExplo[2]);
+		for(Dynamite d : carte.dynamites) {
+			d.animStep(frame);
+			if(d.shouldRemoveMenhir(frame))
+				finExplosion(d.getLigne(), d.getColonne());
 		}
 		if(state==RUNNING) moveHandler.sleep(PERIODE);
+		// Si le colibri s'est arrêté durant cet appel
+		if(isMoving && carte.colibri.mx==0 && carte.colibri.my==0) {
+			moveHistory.startNextMove();
+		}
 	}
 	
 	/**
@@ -258,7 +280,7 @@ public class MoteurJeu {
 			int l=carte.colibri.getRow(), c=carte.colibri.getCol();
 			if(niv.carte[l][c]>=10 && dejaPasse!=niv.carte[l][c] && !(l==va.getRow() && c==va.getCol())) // Pour éviter de se faire bloquer AVANT de passer dans un arc.
 				return;
-			if(carte.n_dyna>0) removeMenhirRouge(lastMove); // On enlève le menhir rouge mais on ne rafraîchit pas.
+			if(carte.n_dyna>0) removeMenhirRouge(null); // On enlève le menhir rouge mais on ne rafraîchit pas.
 			boolean plutotHoriz=1-Math.abs(vx-cx) < 1-Math.abs(vy-cy);
 			boolean clairementSurHoriz=plutotHoriz && 0.75 < Math.abs(vx-cx);
 			boolean clairementSurVert=!plutotHoriz && 0.75 < Math.abs(vy-cy);
@@ -331,16 +353,19 @@ public class MoteurJeu {
 			niv.carte[l][c]=VIDE;
 			carte.n_fleur--;
 			carte.fond.invalidate();
+			moveHistory.addChange(l, c, FLEUR);
 		} else if(niv.carte[l][c]==FLEURM) {
 			niv.carte[l][c]=MENHIR;
 			carte.n_fleur--;
 			carte.fond.invalidate();
+			moveHistory.addChange(l, c, FLEURM);
 		} else if(niv.carte[l][c]==DYNA) {
 			niv.carte[l][c]=VIDE;
 			carte.n_dyna++;
 			jeu.bout_dyna.setText(Integer.toString(carte.n_dyna));
 			if(carte.n_dyna==1) jeu.showDyna();
 			carte.fond.invalidate();
+			moveHistory.addChange(l, c, DYNA);
 		} else if(niv.carte[l][c]>=10) { // Passage dans un arc-en-ciel.
 			if(dejaPasse!=niv.carte[l][c]) { // Pour éviter de se téléporter dans l'autre sens.
 				int[] dest = carte.rainbows.get(niv.carte[l][c]);
@@ -361,13 +386,13 @@ public class MoteurJeu {
 	/**
 	 * Enlève le menhir rouge de sélection si besoin.
 	 */
-	private void removeMenhirRouge(int[] mov) {
+	public void removeMenhirRouge(int[] mov) {
 		int l=carte.colibri.getRow();
 		int c=carte.colibri.getCol();
 		int ml=lastMove[1], mc=lastMove[0];
 		if(l+ml>=0 && l+ml<LIG && c+mc>=0 && c+mc<COL && niv.carte[l+ml][c+mc]==MENHIR_ROUGE) {
 			niv.carte[l+ml][c+mc]=MENHIR;
-			if(ml!=mov[1] || mc!=mov[0]) carte.fond.invalidate();
+			if(mov==null || ml!=mov[1] || mc!=mov[0]) carte.fond.invalidate();
 		}
 	}
 	
@@ -381,17 +406,17 @@ public class MoteurJeu {
 		if(l+ml>=0 && l+ml<LIG && c+mc>=0 && c+mc<COL && niv.carte[l+ml][c+mc]==MENHIR && ml+mc!=0) {
 			if(buf.size()!=0) {
 				int[] next = buf.getFirst();
-				if(next[0]==mc && next[1]==ml && next[2]-frame < DYNA_DELAY)
-					next[2] = frame+DYNA_DELAY;
+				if(next[0]==mc && next[1]==ml && next[2]-frame < Dynamite.REMOVE_MENHIR_DELAY)
+					next[2] = frame + Dynamite.REMOVE_MENHIR_DELAY;
 			} else {
 				directionDyna = getDirection(mc,ml);
-				wait = frame+DYNA_DELAY;
+				wait = frame + Dynamite.REMOVE_MENHIR_DELAY;
 			}
 			carte.n_dyna--;
-			carte.animBoom(l+ml,c+mc); // Gère l'animation de l'explosion.
+			carte.poseDynamite(l+ml,c+mc, frame-2);
 			jeu.bout_dyna.setText(Integer.toString(carte.n_dyna));
 			if(carte.n_dyna==0) jeu.hideDyna();
-			dynaExploQueue.addLast(new int[] {frame + DYNA_DELAY - 2, l+ml, c+mc});
+			moveHistory.dropDynaAndStartNextMove();
 		}
 	}
 	
@@ -401,6 +426,7 @@ public class MoteurJeu {
 	private void finExplosion(int l, int c) {
 		niv.carte[l][c]=VIDE;
 		carte.fond.invalidate();
+		moveHistory.addChange(l, c, MENHIR);
 	}
 	
 	/**

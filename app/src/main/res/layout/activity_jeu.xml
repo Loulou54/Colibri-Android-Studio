@@ -13,21 +13,21 @@
 	    android:background="@drawable/herbe_nv2" />
 
 	<Button
-        android:id="@+id/bout_dyna"
-        android:layout_width="90dp"
-        android:layout_height="34dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="80dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/bouton_dyna"
-        android:alpha="0.7"
-        android:visibility="gone"
-        android:gravity="center_vertical"
-        android:paddingLeft="48dp"
-        android:paddingRight="0dp"
-        android:onClick="exploser"
-        android:textSize="16sp" />
+		android:id="@+id/bout_dyna"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_marginRight="100dp"
+		android:layout_marginTop="-24dp"
+		android:background="@drawable/bouton_lateral"
+		android:alpha="0.7"
+		android:visibility="gone"
+		android:gravity="center_vertical"
+		android:paddingLeft="16dp"
+		android:paddingTop="18dp"
+		android:drawableLeft="@drawable/dynamite_icon"
+		android:onClick="exploser"
+		android:textSize="16sp"/>
 
 	<com.game.colibri.PathViewer
 	    android:id="@+id/path_viewer"

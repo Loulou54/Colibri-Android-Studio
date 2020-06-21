@@ -165,7 +165,7 @@ public class Artifices extends RelativeLayout {
 			this.removeMessages(0);
 			sendMessageDelayed(obtainMessage(0), delayMillis);
 		}
-	};
+	}
 	
 	static private class Explosion {
 		

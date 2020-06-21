@@ -1,6 +1,7 @@
 package com.game.colibri;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
@@ -8,6 +9,7 @@ public class Colibri extends Animal {
 	
 	private double xf=10,yf=10; // Pour le colibri du menu de sélection : définit les coord en pixels de la position visée.
 	private boolean versDroite=false;
+	private boolean inGame = false;
 	
 	public Colibri(Context context, double dbx, double dby, double w, double h) {
 		super(context,dbx,dby,w,h);
@@ -15,6 +17,7 @@ public class Colibri extends Animal {
 		acc=0.1;
 		v_max=0.7501;
 	    step=0;
+	    inGame = true;
 	}
 	
 	/**
@@ -39,11 +42,13 @@ public class Colibri extends Animal {
 	}
 	
 	public void setSpriteDirection() {
+		boolean running = ((AnimationDrawable) this.getBackground()).isRunning();
 		if(mx==1)
 			this.setBackgroundResource(R.drawable.colibri_d);
 		else if(mx==-1)
 			this.setBackgroundResource(R.drawable.colibri_g);
-		this.start();
+		if(running)
+			this.start();
 	}
 	
 	/**
@@ -74,6 +79,7 @@ public class Colibri extends Animal {
 	@Override
 	protected void onAnimationEnd() {
 	    super.onAnimationEnd();
-	    setPosFinAnim();
+	    if(!inGame)
+		    setPosFinAnim();
 	}
 }

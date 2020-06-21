@@ -87,15 +87,15 @@ public class Jeu extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					MoteurJeu.PERIODE = 1000/50; // Vitesse * 2
-					break;
-				case MotionEvent.ACTION_UP:
-					MoteurJeu.PERIODE = 1000/25;
-					v.performClick();
-					break;
-				default:
-					break;
+					case MotionEvent.ACTION_DOWN:
+						MoteurJeu.PERIODE = 1000/50; // Vitesse * 2
+						break;
+					case MotionEvent.ACTION_UP:
+						MoteurJeu.PERIODE = 1000/25;
+						v.performClick();
+						break;
+					default:
+						break;
 				}
 				return false;
 			}
@@ -622,6 +622,10 @@ public class Jeu extends Activity {
 		} else {
 			finish();
 		}
+	}
+
+	public void cancelMove(View v) {
+		play.cancelLastMove();
 	}
 	
 	public void coliBrainHelp(View v) {
