@@ -52,14 +52,32 @@
 	    android:layout_below="@+id/bout1"
 	    android:layout_marginTop="10dp"
 	    android:visibility="invisible"/>
-    
-    <Button
-        style="@style/button_blue"
-        android:id="@+id/bout4"
-        android:layout_alignLeft="@+id/bout3"
-        android:layout_below="@+id/bout3"
-        android:text="@string/multi"
-        android:onClick="multijoueur" />
+
+	<LinearLayout
+		style="@style/button_blue"
+		android:id="@+id/bout4"
+		android:layout_alignLeft="@+id/bout3"
+		android:layout_below="@+id/bout3"
+		android:onClick="multijoueur">
+
+		<TextView
+			android:id="@+id/multi_count"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:drawableLeft="@android:drawable/presence_invisible"
+			android:textColor="@color/theme_vert"
+			android:textSize="@dimen/text14"/>
+
+		<TextView
+			android:id="@+id/multi_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:text="@string/multi"
+			android:textColor="@android:color/white"
+			android:textSize="@dimen/text16"/>
+
+	</LinearLayout>
     
     <Button
         style="@style/button_blue"

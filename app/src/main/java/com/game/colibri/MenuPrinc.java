@@ -28,6 +28,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
+
+import static com.network.colibri.CommonUtilities.SERVER_URL;
+
 /**
  * Menu principal : activité lancée au démarage.
  */
@@ -45,6 +52,7 @@ public class MenuPrinc extends Activity {
 	private View instrus, infos, coliBrainsInfos;
 	private float initialX;
 	private double[][] points = new double[][] {{0.07625, 0.8145833333333333}, {0.18875, 0.7645833333333333}, {0.31625, 0.7354166666666667}, {0.24875, 0.8208333333333333}, {0.1125, 0.94375}, {0.25, 0.9458333333333333}, {0.405, 0.9208333333333333}, {0.52, 0.9416666666666667}, {0.6275, 0.9333333333333333}, {0.765, 0.9354166666666667}, {0.765, 0.8166666666666667}, {0.83, 0.74375}};
+	private boolean startGameFirstTime = false;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -235,6 +243,43 @@ public class MenuPrinc extends Activity {
 		}
 		if(screen==1 && hasFocus)
 			campagne(carte); // Permet de rafraîchir la progression lorsque l'on quitte le jeu et revient au menu de sélection.
+		else if(screen==0 && hasFocus) {
+			updateMultiplayerCount();
+		}
+	}
+
+	/**
+	 * Mets à jour le nombre de joueurs connectés en requêtant le serveur.
+	 */
+	private void updateMultiplayerCount() {
+		final TextView multiCount = (TextView) findViewById(R.id.multi_count);
+		multiCount.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(android.R.drawable.presence_away), null, null, null);
+		multiCount.setText("");
+		final AsyncHttpClient client = new AsyncHttpClient();
+		client.setMaxRetriesAndTimeout(2, 500);
+		client.get(SERVER_URL + "/multiplayer_count.php", null, new TextHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String responseString) {
+				int drawable;
+				try {
+					int count = Integer.parseInt(responseString);
+					drawable = android.R.drawable.presence_online;
+					multiCount.setText(""+count);
+				} catch (Exception e) {
+					drawable = android.R.drawable.presence_invisible;
+					System.err.println("multiplayer_count.php response:\n"+responseString);
+					e.printStackTrace();
+				}
+				multiCount.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+				multiCount.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(android.R.drawable.presence_invisible), null, null, null);
+				System.err.println("multiplayer_count.php error ("+statusCode+") response:\n"+responseString);
+
+			}
+		});
 	}
 	
 	/**
@@ -244,7 +289,7 @@ public class MenuPrinc extends Activity {
 		int[] boutons = new int[] {R.id.bout1,R.id.bout2,R.id.bout3,R.id.bout4,R.id.bout5};
 		Typeface font = Typeface.createFromAsset(getAssets(),"fonts/Passing Notes.ttf");
 		for(int i=0; i<boutons.length; i++) {
-			Button btn_lay = (Button)findViewById(boutons[i]);
+			View btn_lay = findViewById(boutons[i]);
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btn_lay.getLayoutParams();
 			if(i==0) {
 				layoutParams.leftMargin = ww*5/9;
@@ -253,7 +298,12 @@ public class MenuPrinc extends Activity {
 		    layoutParams.width = 4*ww/10;
 		    layoutParams.height = 23*wh/250;
 		    btn_lay.setLayoutParams(layoutParams);
-		    btn_lay.setTypeface(font);
+		    if(btn_lay instanceof Button) {
+				((Button) btn_lay).setTypeface(font);
+			} else { // Bouton multijoueur
+				((TextView) btn_lay.findViewById(R.id.multi_count)).setTypeface(font);
+				((TextView) btn_lay.findViewById(R.id.multi_label)).setTypeface(font);
+			}
 		    Animation a = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
 		    a.setStartOffset(800+i*150);
 		    a.setDuration(1000);
@@ -307,15 +357,15 @@ public class MenuPrinc extends Activity {
     	    		public void onAnimationEnd(Animation an) { // On réaffiche le menu principal une fois que les déplacements sont finis
 						opt_aleat.setVisibility(View.INVISIBLE);
 						Animation a = AnimationUtils.loadAnimation(MenuPrinc.this, R.anim.aleat_opt_anim);
-						((Button)findViewById(R.id.bout1)).startAnimation(a);
-						((Button)findViewById(R.id.bout2)).startAnimation(a);
-						((Button)findViewById(R.id.bout4)).startAnimation(a);
-						((Button)findViewById(R.id.bout5)).startAnimation(a);
-						((Button)findViewById(R.id.bout1)).setClickable(true);
-						((Button)findViewById(R.id.bout2)).setClickable(true);
-						((Button)findViewById(R.id.bout3)).setClickable(true);
-						((Button)findViewById(R.id.bout4)).setClickable(true);
-						((Button)findViewById(R.id.bout5)).setClickable(true);
+						findViewById(R.id.bout1).startAnimation(a);
+						findViewById(R.id.bout2).startAnimation(a);
+						findViewById(R.id.bout4).startAnimation(a);
+						findViewById(R.id.bout5).startAnimation(a);
+						findViewById(R.id.bout1).setClickable(true);
+						findViewById(R.id.bout2).setClickable(true);
+						findViewById(R.id.bout3).setClickable(true);
+						findViewById(R.id.bout4).setClickable(true);
+						findViewById(R.id.bout5).setClickable(true);
     	    		}
     	    	});
 			}
@@ -392,9 +442,17 @@ public class MenuPrinc extends Activity {
 	 * 		@param v le bouton appuyé.
 	 */
 	public void continuer(View v) {
-		opt_infos.setVisibility(View.INVISIBLE);
-		if(MyApp.avancement==1)
+		if(MyApp.avancement==1) {
+			startGameFirstTime = true;
 			((TextView) findViewById(R.id.bout1)).setText(R.string.jouer);
+			instrus(v);
+			return;
+		}
+		opt_infos.setVisibility(View.INVISIBLE);
+		continuer();
+	}
+
+	private void continuer() {
 		Intent intent = new Intent(this, Jeu.class);
 		intent.putExtra("mode", Niveau.CAMPAGNE);
 		intent.putExtra("n_niv", Math.min(MyApp.avancement,Jeu.NIV_MAX));
@@ -499,15 +557,15 @@ public class MenuPrinc extends Activity {
 	
 	public void aleatoire(View v) {
 		opt_infos.setVisibility(View.INVISIBLE);
-		((Button)findViewById(R.id.bout1)).setClickable(false);
-		((Button)findViewById(R.id.bout2)).setClickable(false);
-		((Button)findViewById(R.id.bout4)).setClickable(false);
-		((Button)findViewById(R.id.bout5)).setClickable(false);
+		findViewById(R.id.bout1).setClickable(false);
+		findViewById(R.id.bout2).setClickable(false);
+		findViewById(R.id.bout4).setClickable(false);
+		findViewById(R.id.bout5).setClickable(false);
 		Animation a = AnimationUtils.loadAnimation(this, R.anim.menu_right);
-		((Button)findViewById(R.id.bout1)).startAnimation(a);
-		((Button)findViewById(R.id.bout2)).startAnimation(a);
-		((Button)findViewById(R.id.bout4)).startAnimation(a);
-		((Button)findViewById(R.id.bout5)).startAnimation(a);
+		findViewById(R.id.bout1).startAnimation(a);
+		findViewById(R.id.bout2).startAnimation(a);
+		findViewById(R.id.bout4).startAnimation(a);
+		findViewById(R.id.bout5).startAnimation(a);
 		Button btn_aleat = (Button)findViewById(R.id.bout3);
 		btn_aleat.setClickable(false);
 		btn_aleat.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bouton_aleat_up));
@@ -608,6 +666,12 @@ public class MenuPrinc extends Activity {
 	}
 	
 	public void quitInstrus(View v) {
+		if(startGameFirstTime) {
+			if(v != null) {
+				continuer();
+			}
+			startGameFirstTime = false;
+		}
 		instrus.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
 		instrus.setVisibility(View.GONE);
 	}

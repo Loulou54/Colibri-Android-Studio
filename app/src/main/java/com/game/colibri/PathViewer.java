@@ -56,7 +56,6 @@ public class PathViewer extends RelativeLayout {
 	private float blurProgress;
 	private float pathWidth, blurRadius;
 	private DecelerateInterpolator interpolator = new DecelerateInterpolator();
-	private boolean quickHint = false;
 
 	public PathViewer(Context context) {
 		super(context);
@@ -235,7 +234,6 @@ public class PathViewer extends RelativeLayout {
 	 */
 	public void setPathAndAnimate(int rd, int cd, LinkedList<Solver.Move> moves, boolean quickHint) {
 		this.moves = moves;
-		this.quickHint = quickHint;
 		xd = (float) (cd*Carte.cw);
 		yd = (float) (rd*Carte.ch);
 		solPath = new Path();
