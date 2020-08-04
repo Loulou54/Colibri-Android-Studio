@@ -209,4 +209,5 @@
 	<string name="modifDefiAddedMsg">+ Added: %1$s</string>
 	<string name="removePartMsg">%1$s has cancelled your participation to the challenge %2$s!</string>
 	<string name="removeDefiMsg">%1$s has cancelled the challenge %2$s!</string>
+	<string name="no_solution_go_back">You\'re stuck!|Try to go back in time or restart!</string>
 </resources>

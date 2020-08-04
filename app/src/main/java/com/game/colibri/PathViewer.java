@@ -36,7 +36,7 @@ public class PathViewer extends RelativeLayout {
 	private static final int DURATION_BLUR_ANIM_BASE = 800;
 	private static final int DURATION_BLUR_ANIM_PROP = 30;
 	private static final int DURATION_FRAME = 1000/25;
-	private static final int STEPS_COLIBRI = 6;
+	public static int STEPS_COLIBRI = 6;
 	public static MoteurJeu mj;
 	
 	private LinkedList<Solver.Move> moves;
@@ -56,6 +56,7 @@ public class PathViewer extends RelativeLayout {
 	private float blurProgress;
 	private float pathWidth, blurRadius;
 	private DecelerateInterpolator interpolator = new DecelerateInterpolator();
+	private boolean quickHint = false;
 
 	public PathViewer(Context context) {
 		super(context);
@@ -232,14 +233,21 @@ public class PathViewer extends RelativeLayout {
 	 * @param cd colonne départ
 	 * @param moves les déplacements
 	 */
-	public void setPathAndAnimate(int rd, int cd, LinkedList<Solver.Move> moves) {
+	public void setPathAndAnimate(int rd, int cd, LinkedList<Solver.Move> moves, boolean quickHint) {
 		this.moves = moves;
+		this.quickHint = quickHint;
 		xd = (float) (cd*Carte.cw);
 		yd = (float) (rd*Carte.ch);
+		solPath = new Path();
+		if(quickHint) {
+			setBackgroundResource(0); // On enlève le filtre sombre
+			blurProgress = -1;
+			animBlurPath();
+			return;
+		}
 		// Init phase 1 :
 		moveTime = MOVE_TIME_FAST;
 		movesIterator = moves.listIterator();
-		solPath = new Path();
 		dynaPos.clear();
 		vachePos.clear();
 		waitPos.clear();

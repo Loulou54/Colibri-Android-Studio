@@ -33,7 +33,9 @@ public class MoteurJeu {
 	public static final int PAUSED=0, RUNNING=1, PAUSE_MENU=2, MORT=3, GAGNE=4, SOL_RESEARCH=5, SOL_READY=6;
 	
 	public int frame = 0, total_frames;
-	private long timeSave = 0;
+	public int lastMoveFrame, lastFlowerFrame;
+	private int framesNoMoveForHelp, framesNoFlowerForHelp;
+	public long timeSave = 0;
 	public Carte carte;
 	public Niveau niv;
 	private Jeu jeu;
@@ -94,9 +96,12 @@ public class MoteurJeu {
 	}
 
 	/**
-	 *  Initialise les variables du moteur de jeu (buffer, niv, ...) : appelé après chaque appel de carte.loadNiveau
+	 * Initialise les variables du moteur de jeu (buffer, niv, ...) : appelé après chaque appel de carte.loadNiveau
+	 * @param replay true si on rejoue la même carte
+	 * @param framesNoMoveForHelp le nombre de frames depuis le dernier mouvement avant de proposer une aide ColiBrain.
+	 * @param framesNoFlowerForHelp le nombre de frames depuis la dernière fleur ramassée avant de proposer une aide ColiBrain.
 	 */
-	public void init(boolean replay) {
+	public void init(boolean replay, int framesNoMoveForHelp, int framesNoFlowerForHelp) {
 		moveHandler.removeMessages(jeu.n_niv);
 		niv=carte.niv; // pour avoir une référence locale vers le niveau en cours et un nom moins long
 		buf.clear();
@@ -105,6 +110,10 @@ public class MoteurJeu {
 		timeSave = 0;
 		total_frames = replay ? total_frames+frame : 0;
 		frame = 0;
+		lastMoveFrame = 0;
+		lastFlowerFrame = 0;
+		this.framesNoMoveForHelp = framesNoMoveForHelp;
+		this.framesNoFlowerForHelp = framesNoFlowerForHelp;
 		wait = 0;
 		lastMove[0] = 1;
 		lastMove[1] = 0;
@@ -131,6 +140,8 @@ public class MoteurJeu {
 	 * Met le jeu sur pause et dans l'état spécifié.
 	 */
 	public void pause(int etat) {
+		if(Solver.instance != null && etat != SOL_RESEARCH)
+			Solver.instance.cancel(true);
 		MyApp.addPlayTime(frame*PERIODE_NORMALE - timeSave);
 		timeSave = frame*PERIODE_NORMALE;
 		state = etat;
@@ -218,8 +229,20 @@ public class MoteurJeu {
 					}
 					lastMove=mov;
 				}
+				if(Solver.instance != null) {
+					Solver.instance.cancel(true);
+				}
+			} else {
+				carte.colibri.step = 0; // La vitesse est mise à 0. Dans le premier cas, la vitesse est conservée.
+				if(Solver.instance != null) {
+					lastMoveFrame = frame + 50;
+					lastFlowerFrame = frame + 50;
+				} else if(frame > lastMoveFrame + framesNoMoveForHelp || (frame > lastFlowerFrame + framesNoFlowerForHelp && frame > lastMoveFrame + 20)) {
+					jeu.coliBrainAutoHint();
+					lastMoveFrame = frame + 50;
+					lastFlowerFrame = frame + 50;
+				}
 			}
-			else carte.colibri.step=0; // La vitesse est mise à 0. Dans le premier cas, la vitesse est conservée.
 		} else { // Le colibri est en mouvement
 			ramasser(); // On ramasse l'item potentiel
 			int l=carte.colibri.getRow();
@@ -231,6 +254,7 @@ public class MoteurJeu {
 				carte.colibri.mx=0;
 				carte.colibri.my=0;
 				carte.colibri.setPos(c, l);
+				lastMoveFrame = frame;
 				if(DEBUG)
 					System.out.println("Frame : "+frame+" Pos : "+l+","+c);
 				if(!outOfMap && carte.n_dyna>0) {
@@ -312,6 +336,7 @@ public class MoteurJeu {
 				carte.colibri.setPos(cx , cy);
 				if(Math.abs(vy0-cy)<0.5) mort(true);
 			}
+			lastMoveFrame = frame;
 			ramasser(); // On ramasse l'item potentiel
 			int nl=carte.colibri.getRow(), nc=carte.colibri.getCol();
 			// Si le colibri a été poussé sur une autre case, il faut changer le menhir rouge de sélection !
@@ -352,11 +377,13 @@ public class MoteurJeu {
 		if(niv.carte[l][c]==FLEUR) {
 			niv.carte[l][c]=VIDE;
 			carte.n_fleur--;
+			lastFlowerFrame = frame;
 			carte.fond.invalidate();
 			moveHistory.addChange(l, c, FLEUR);
 		} else if(niv.carte[l][c]==FLEURM) {
 			niv.carte[l][c]=MENHIR;
 			carte.n_fleur--;
+			lastFlowerFrame = frame;
 			carte.fond.invalidate();
 			moveHistory.addChange(l, c, FLEURM);
 		} else if(niv.carte[l][c]==DYNA) {

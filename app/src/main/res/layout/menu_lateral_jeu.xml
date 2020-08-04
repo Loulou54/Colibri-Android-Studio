@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/temps"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:gravity="center"
         android:textColor="@color/theme_beige"
         android:textStyle="bold"
@@ -29,13 +29,14 @@
 	    android:alpha="0.8" >
 
 	    <ImageButton
+			android:id="@+id/back_in_time"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="-16dp"
-	        android:contentDescription="@string/recommencer"
-	        android:src="@drawable/repeat"
+	        android:contentDescription="@string/annuler"
+	        android:src="@drawable/revert"
 	        android:background="@drawable/bouton_lateral"
-	        android:onClick="recommencer" />
+	        android:onClick="cancelMove" />
 	    
 	    <ImageButton
 	        android:id="@+id/av_rapide"
@@ -61,27 +62,15 @@
 	        android:onClick="coliBrainHelp" />
 
 		<ImageButton
-			android:id="@+id/cancel_move"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="-34dp"
 			android:layout_marginTop="-10dp"
 			android:paddingLeft="22dp"
-			android:contentDescription="@string/annuler"
-			android:src="@drawable/revert"
+			android:contentDescription="@string/jouer"
+			android:src="@drawable/next"
 			android:background="@drawable/bouton_lateral"
-			android:onClick="cancelMove" />
-	    
-	    <ImageButton
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="-40dp"
-	        android:layout_marginTop="-10dp"
-	        android:paddingLeft="30dp"
-	        android:contentDescription="@string/jouer"
-	        android:src="@drawable/next"
-	        android:background="@drawable/bouton_lateral"
-	        android:onClick="passer" />
+			android:onClick="passer" />
 
     </LinearLayout>
 </LinearLayout>

@@ -148,6 +148,8 @@ class MoveHistory {
 			// Retour à la frame du début (mais en comptant le temps perdu dans total_frames)
 			mj.total_frames += mj.frame - startFrame;
 			mj.frame = startFrame;
+			mj.lastMoveFrame = startFrame;
+			mj.lastFlowerFrame = startFrame;
 			// Autres variables d'état
 			mj.carte.n_fleur = n_fleur;
 			mj.carte.n_dyna = n_dyna;
@@ -259,7 +261,6 @@ class MoveHistory {
 		moves.clear();
 		animationHandler.reset();
 		startNextMove();
-		System.out.println("MoveHistory length: "+moves.size());
 	}
 
 	void cancelLastMove() {
@@ -272,7 +273,6 @@ class MoveHistory {
 		}
 		lastMove.cancelMove(mj, animationHandler);
 		startNextMove(); // Nouveau Move courant
-		System.out.println("MoveHistory length: "+moves.size());
 	}
 
 	void queueCancelLastMove() {

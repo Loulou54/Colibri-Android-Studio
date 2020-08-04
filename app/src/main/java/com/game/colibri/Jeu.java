@@ -27,6 +27,8 @@ import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -57,7 +59,7 @@ public class Jeu extends Activity {
 	public int n_niv;
 	private Bundle opt, savedInstanceState;
 	private Defi defi=null;
-	
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -83,6 +85,13 @@ public class Jeu extends Activity {
 		bout_dyna = (Button) findViewById(R.id.bout_dyna);
 		// Menu latéral
 		menu_lateral = (ViewGroup) findViewById(R.id.menu_lateral);
+		menu_lateral.findViewById(R.id.back_in_time).setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				recommencer(view);
+				return true;
+			}
+		});
 		menu_lateral.findViewById(R.id.av_rapide).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -221,7 +230,7 @@ public class Jeu extends Activity {
 	@Override
 	public boolean onTouchEvent (MotionEvent ev) {
 		if(play.state==MoteurJeu.RUNNING) {
-			menuLateral(play.onTouch(ev), ev);
+			menuLateral(play.onTouch(ev), ev.getX());
 		} else if(play.state==MoteurJeu.SOL_READY) {
 			play.start();
 			play.onTouch(ev);
@@ -245,7 +254,7 @@ public class Jeu extends Activity {
 				play.direction(MoteurJeu.DOWN);
 			} else if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_ESCAPE) {
 				play.pause(MoteurJeu.PAUSE_MENU);
-				menuLateral(0,null);
+				menuLateral(0,0);
 				pause.setVisibility(View.VISIBLE);
 				setLevelInfo();
 				pause.startAnimation(AnimationUtils.loadAnimation(this, R.anim.aleat_opt_anim));
@@ -387,7 +396,7 @@ public class Jeu extends Activity {
 		gagne.setVisibility(View.VISIBLE);
 		play.pause(MoteurJeu.GAGNE);
 		if(carte.n_dyna>0) hideDyna();
-		menuLateral(0,null);
+		menuLateral(0,0);
 		// Détermination de l'expérience
 		int exp;
 		if(opt.getInt("mode",0)>0) {
@@ -500,11 +509,12 @@ public class Jeu extends Activity {
 	 * selon la position du clic. Utilise plusieurs "tricks" pour adapter la disposition
 	 * des boutons selon l'emplacement du menu (gauche ou droite).
 	 * @param disp 0:cacher ; 1:afficher ; 2:rien
+	 * @param xClic la coordonnée en x du clic
 	 */
-	private void menuLateral(int disp, MotionEvent ev) {
+	private void menuLateral(int disp, float xClic) {
 		if(disp==1 && menu_lateral.getVisibility()!=View.VISIBLE) { // Afficher
 			int ww = findViewById(R.id.lay).getWidth();
-			int cote = (int) Math.signum(2*ev.getX()-ww); // -1=LEFT ; +1=RIGHT
+			int cote = (int) Math.signum(2*xClic-ww); // -1=LEFT ; +1=RIGHT
 			// Positionnement menu
 			RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) menu_lateral.getLayoutParams();
 			p.addRule(10-cote, 0); // pour annuler l'autre contrainte
@@ -541,6 +551,9 @@ public class Jeu extends Activity {
 	 * S'occupe de charger un niveau dans la "carte" et de lancer le moteur de jeu "play".
 	 */
 	private void launch_niv(boolean replay) {
+		if(Solver.instance != null) {
+			Solver.instance.cancel(true);
+		}
 		if(replay) {
 			niv.replay();
 		} else {
@@ -573,7 +586,9 @@ public class Jeu extends Activity {
 			}
 		}
 		carte.loadNiveau(niv);
-		play.init(replay);
+		// Selon le niveau d'expérience, le temps avant d'obtenir une aide ColiBrain augmente.
+		double progressFactor = 1. - Math.exp(-MyApp.experience/200000.);
+		play.init(replay, (int)(25*(3. + 7*progressFactor)), (int)(25*(5. + 9*progressFactor)));
 		updateColiBrains();
 		if(savedInstanceState!=null) {
 			pause.setVisibility(View.VISIBLE);
@@ -612,7 +627,7 @@ public class Jeu extends Activity {
 		gagne.setVisibility(View.GONE);
 		perdu.setVisibility(View.GONE);
     	if(carte.n_dyna>0) hideDyna();
-    	menuLateral(0,null);
+    	menuLateral(0,0);
     	launch_niv(true);
 	}
 	
@@ -631,7 +646,7 @@ public class Jeu extends Activity {
 	public void coliBrainHelp(View v) {
 		if(play.state!=MoteurJeu.RUNNING || (MyApp.coliBrains <= 0 && !infiniteColiBrains()))
 			return;
-		menuLateral(0,null);
+		menuLateral(0,0);
 		play.pause(MoteurJeu.SOL_RESEARCH);
 		final PathViewer pv = (PathViewer) findViewById(R.id.path_viewer);
 		(new Solver(niv, new Solver.SolverInterface() {
@@ -642,7 +657,8 @@ public class Jeu extends Activity {
 					MyApp.getApp().saveData();
 					updateColiBrains();
 				}
-				pv.setPathAndAnimate(r, c, path.getMoves());
+				PathViewer.STEPS_COLIBRI = 6;
+				pv.setPathAndAnimate(r, c, path.getMoves(), false);
 			}
 			@Override
 			public void progressUpdate(int r, int c, LinkedList<Move> moves) {
@@ -654,8 +670,14 @@ public class Jeu extends Activity {
 				pv.setVisibility(View.VISIBLE);
 			}
 			@Override
-			public void cancel() {
+			public void cancel(int reason) {
 				pv.cancelResearch();
+				if(reason == CANCELLED)
+					Toast.makeText(MyApp.getApp(), R.string.cancel_sol, Toast.LENGTH_SHORT).show();
+				else if(reason == NO_SOLUTION)
+					Toast.makeText(MyApp.getApp(), R.string.no_solution, Toast.LENGTH_SHORT).show();
+				else if(reason == OUT_OF_MEMORY)
+					Toast.makeText(MyApp.getApp(), R.string.out_of_memory, Toast.LENGTH_LONG).show();
 			}
 		})).execute(play.frame, carte.colibri.getRow(), carte.colibri.getCol(), carte.n_fleur, carte.n_dyna, 1);
 	}
@@ -695,8 +717,14 @@ public class Jeu extends Activity {
 				pv.setVisibility(View.VISIBLE);
 			}
 			@Override
-			public void cancel() {
+			public void cancel(int reason) {
 				pv.cancelResearch();
+				if(reason == CANCELLED)
+					Toast.makeText(MyApp.getApp(), R.string.cancel_sol, Toast.LENGTH_SHORT).show();
+				else if(reason == NO_SOLUTION)
+					Toast.makeText(MyApp.getApp(), R.string.no_solution, Toast.LENGTH_SHORT).show();
+				else if(reason == OUT_OF_MEMORY)
+					Toast.makeText(MyApp.getApp(), R.string.out_of_memory, Toast.LENGTH_LONG).show();
 			}
 		})).execute(play.frame, carte.colibri.getRow(), carte.colibri.getCol(), carte.n_fleur, carte.n_dyna, 1);
 	}
@@ -761,5 +789,35 @@ public class Jeu extends Activity {
 		}
 		launch_niv(false);
 	}
-	
+
+	public void coliBrainAutoHint() {
+		final PathViewer pv = (PathViewer) findViewById(R.id.path_viewer);
+		(new Solver(niv, new Solver.SolverInterface() {
+			@Override
+			public void result(int r, int c, Solver.Path path) {
+				PathViewer.STEPS_COLIBRI = 4;
+				pv.clear();
+				pv.setVisibility(View.VISIBLE);
+				pv.setPathAndAnimate(r, c, path.getMoves(), true);
+			}
+			@Override
+			public void progressUpdate(int r, int c, LinkedList<Move> moves) {}
+			@Override
+			public void preExecute() {}
+			@Override
+			public void cancel(int reason) {
+				if(reason == NO_SOLUTION) {
+					Toast.makeText(MyApp.getApp(), R.string.no_solution_go_back, Toast.LENGTH_LONG).show();
+					if(menu_lateral.getVisibility()!=View.VISIBLE)
+						menuLateral(1, Carte.ww-10);
+					AlphaAnimation anim = new AlphaAnimation(1f, 0.4f);
+					anim.setDuration(200);
+					anim.setRepeatMode(Animation.REVERSE);
+					anim.setRepeatCount(5);
+					menu_lateral.findViewById(R.id.back_in_time).startAnimation(anim);
+				} else if(reason == OUT_OF_MEMORY)
+					Toast.makeText(MyApp.getApp(), R.string.out_of_memory, Toast.LENGTH_LONG).show();
+			}
+		})).execute(play.frame + 25, carte.colibri.getRow(), carte.colibri.getCol(), carte.n_fleur, carte.n_dyna, 1);
+	}
 }

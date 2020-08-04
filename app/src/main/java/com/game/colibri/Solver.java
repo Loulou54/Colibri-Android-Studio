@@ -43,9 +43,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	private LinkedList<Niveau.Occurrence> emptyCell = new LinkedList<Niveau.Occurrence>(); // Utilisé par DynaGrid.obstacle pour les cases sans obstacles.
 	
 	public interface SolverInterface {
+		public static final int CANCELLED=0, NO_SOLUTION=1, OUT_OF_MEMORY=2;
 		public void preExecute();
 		public void progressUpdate(int r, int c, LinkedList<Move> moves);
-		public void cancel();
+		public void cancel(int reason);
 		public void result(int r, int c, Path path);
 	}
 
@@ -69,6 +70,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	@Override
 	protected void onPreExecute() {
 		solverInterface.preExecute();
+		System.gc();
 		super.onPreExecute();
 	}
 	
@@ -95,9 +97,9 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	
 	@Override
 	protected void onCancelled() {
-		Toast.makeText(MyApp.getApp(), R.string.cancel_sol, Toast.LENGTH_SHORT).show();
-		solverInterface.cancel();
-		instance = null;
+		solverInterface.cancel(SolverInterface.CANCELLED);
+		if(instance==this) // Dans le cas où cette instance a été remplacée par une nouvelle, ne pas supprimer la nouvelle
+			instance = null;
 		super.onCancelled();
 	}
 	
@@ -107,11 +109,7 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		if(result.length>0) {
 			solverInterface.result(sol_r, sol_c, result);
 		} else {
-			if(result.t_cumul==0)
-				Toast.makeText(MyApp.getApp(), R.string.no_solution, Toast.LENGTH_SHORT).show();
-			else
-				Toast.makeText(MyApp.getApp(), R.string.out_of_memory, Toast.LENGTH_LONG).show();
-			solverInterface.cancel();
+			solverInterface.cancel(result.t_cumul == 0 ? SolverInterface.NO_SOLUTION : SolverInterface.OUT_OF_MEMORY);
 		}
 		instance = null;
 		super.onPostExecute(result);
@@ -157,7 +155,12 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		OPT_TIME = opt_time;
 		buildCollectibleIndexes();
 		heuristic.prepareRootState();
-		Path solution = findSolution(frame, r,c,nFleurs,nDynas);
+		Path solution;
+		try {
+			solution = findSolution(frame, r, c, nFleurs, nDynas);
+		} catch(CancelledSolutionRequest e) {
+			solution = new Path(0);
+		}
 		if(DEBUG) {
 			System.out.println("direction, wait, travel, rf, cf");
 			System.out.println("Temps : "+(solution.t_cumul - frame)+" ; Moves : "+solution.length);
@@ -221,6 +224,12 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 	
 	
 	// Structures
+
+	private class CancelledSolutionRequest extends RuntimeException {
+		public CancelledSolutionRequest() {
+			super();
+		}
+	}
 	
 	private static class Hash {
 		// Chaque bit représente l'état des objets ramassables (1=ramassé), dans l'ordre de leur disposition.
@@ -602,6 +611,10 @@ public class Solver extends AsyncTask<Integer, LinkedList<Solver.Move>, Solver.P
 		 * @return contenu de la case
 		 */
 		public int getCell(SimplePos pos) {
+			// Dans le cas d'un restart, niv.carte change avant la fin de l'exécution de doInBackground et getCell peut donner des résultats incohérents
+			if(isCancelled()) {
+				throw new CancelledSolutionRequest();
+			}
 			if(pos.isOut())
 				return -1;
 			int origCell = niv.carte[pos.r][pos.c];
