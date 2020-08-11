@@ -1,24 +1,11 @@
 package com.game.colibri;
 
 import static com.network.colibri.CommonUtilities.SERVER_URL;
+import static com.network.colibri.CommonUtilities.addServerCACertToClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,10 +14,15 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
+
 public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 	
-	private HttpClient client;
-	private HttpPost post;
+	private SyncHttpClient client;
 	private int user;
 	private List<Joueur> joueurs;
 	
@@ -51,10 +43,8 @@ public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 	
 	public DropDownAdapter(Context context, int resource, int user, List<Joueur> joueurs) {
 		super(context, resource, new ArrayList<NameAndId>());
-		HttpParams params = new BasicHttpParams();
-		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-		client = new DefaultHttpClient();
-		post = new HttpPost(SERVER_URL+"/suggestions.php");
+		client = new SyncHttpClient();
+		addServerCACertToClient(context, client);
 		this.user = joueurs.isEmpty() ? user : 0; // Si joueurs est non vide, on est dans ModifDefi et user est inclu dans les joueurs
 		this.joueurs = joueurs;
 	}
@@ -71,10 +61,10 @@ public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 	
 	@Override
 	public Filter getFilter() {
-		Filter filtre = new Filter() {
+		return new Filter() {
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
-				if(results==null)
+				if(results==null || results.values==null)
 					return;
 				try {
 					JSONArray sug = new JSONArray((String) results.values);
@@ -92,26 +82,22 @@ public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 			}
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
-				if(constraint!=null) {
-					try {
-				        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				        nameValuePairs.add(new BasicNameValuePair("entree", (String) constraint));
-				        post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				        HttpResponse response = client.execute(post);
-				        String jsonRe = EntityUtils.toString(response.getEntity(), "UTF-8");
-				        FilterResults res = new FilterResults();
-				        res.values = jsonRe;
-				        return res;
-				    } catch (ClientProtocolException e) {
-				        e.printStackTrace();
-				    } catch (IOException e) {
-				        e.printStackTrace();
-				    }
-				}
-				return null;
+				if(constraint==null)
+					return null;
+				final FilterResults res = new FilterResults();
+				final RequestParams params = new RequestParams();
+				params.put("entree", (String)constraint);
+				client.post(SERVER_URL + "/suggestions.php", params, new TextHttpResponseHandler() {
+					@Override
+					public void onSuccess(int statusCode, Header[] headers, String responseString) {
+						res.values = responseString;
+					}
+					@Override
+					public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {}
+				});
+				return res;
 			}
 		};
-		return filtre;
 	}
 	
 }

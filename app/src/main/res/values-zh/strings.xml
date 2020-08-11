@@ -195,4 +195,18 @@
 	<string name="google_sign_in">使用Google登录</string>
 	<string name="standard_sign_in">标准登录</string>
 	<string name="google_sign_in_error">错误…| Google登录失败。%1$s</string>
+	<string name="supprDefiComplConf">您是否真的要为所有人删除挑战 \"%1$s\"？</string>
+	<string name="supprParticipConfTitle">删除参与者</string>
+	<string name="supprParticipConf">您是否真的要从挑战 \"%1$s\" 中删除以下玩家？ \n%2$s</string>
+	<string name="participants">参加者:</string>
+	<string name="modifDefiMsg">%1$s 修改了挑战 %2$s:</string>
+	<string name="modifDefiRemovedMsg">- 已删除: %1$s</string>
+	<string name="modifDefiAddedMsg">+ 添加: %1$s</string>
+	<string name="removePartMsg">%1$s 已取消您对挑战 %2$s 的参与！</string>
+	<string name="removeDefiMsg">%1$s 已取消挑战 %2$s！</string>
+	<string name="no_solution_go_back">您被卡住了！|尝试返回过去或重新启动！</string>
+	<string name="unlock_cb_title">不再需要ColiBrain！</string>
+	<string name="unlock_cb_text">观看广告以免费解锁ColiBrain！</string>
+	<string name="unlock_cb_ok">看！</string>
+	<string name="cb_ad_load_failed">糟糕！|无法加载广告…</string>
 </resources>

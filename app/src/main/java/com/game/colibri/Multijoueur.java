@@ -4,6 +4,8 @@ import static com.network.colibri.CommonUtilities.BROADCAST_MESSAGE_ACTION;
 import static com.network.colibri.CommonUtilities.EXTRA_MESSAGE;
 import static com.network.colibri.CommonUtilities.SERVER_URL;
 import static com.network.colibri.CommonUtilities.APP_TOKEN;
+import static com.network.colibri.CommonUtilities.addServerCACertToClient;
+import static com.network.colibri.CommonUtilities.upgradeMessage;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -76,6 +78,7 @@ public class Multijoueur extends Activity {
 		connect = new ConnectionDetector(this);
 		client = new AsyncHttpClient();
 		client.setMaxRetriesAndTimeout(5, 500);
+		addServerCACertToClient(this, client);
 		base = new DBController(this);
 		joueurs = new SparseArray<Joueur>();
 		defiList = new ArrayList<Defi>();
@@ -385,7 +388,7 @@ public class Multijoueur extends Activity {
 		MyApp.last_update = -Math.abs(MyApp.last_update);
 		syncData();
 	}
-	
+
 	private void disconnect() {
 		final ProgressDialog prgDialog = new ProgressDialog(this);
 		prgDialog.setMessage(getString(R.string.progress));
@@ -403,6 +406,10 @@ public class Multijoueur extends Activity {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				prgDialog.dismiss();
+				if(response.equalsIgnoreCase("upgrade")) {
+					upgradeMessage(Multijoueur.this);
+					return;
+				}
 				base.clearDB();
 				boolean musique = MyApp.getApp().pref.getBoolean("musique", true);
 				MyApp.getApp().editor.clear().commit();
@@ -639,7 +646,7 @@ public class Multijoueur extends Activity {
 			System.out.println(def);
 			res = false;
 			if(def.equalsIgnoreCase("upgrade"))
-				Toast.makeText(Multijoueur.this, R.string.maj_req, Toast.LENGTH_LONG).show();
+				upgradeMessage(this);
 			else
 				Toast.makeText(Multijoueur.this, R.string.err500, Toast.LENGTH_LONG).show();
 		}

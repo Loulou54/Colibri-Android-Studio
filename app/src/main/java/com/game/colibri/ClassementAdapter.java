@@ -1,6 +1,7 @@
 package com.game.colibri;
 
 import static com.network.colibri.CommonUtilities.SERVER_URL;
+import static com.network.colibri.CommonUtilities.addServerCACertToClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +46,7 @@ public class ClassementAdapter extends ArrayAdapter<Joueur> {
 		super(c, R.layout.element_classement, new ArrayList<Joueur>());
 		client = new AsyncHttpClient();
 		client.setMaxRetriesAndTimeout(5, 500);
+		addServerCACertToClient(getContext(), client);
 		classements = c;
 		type = t;
 		font = Typeface.createFromAsset(c.getAssets(),"fonts/Passing Notes.ttf");

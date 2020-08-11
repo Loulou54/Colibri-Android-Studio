@@ -150,6 +150,7 @@ class MoveHistory {
 			mj.frame = startFrame;
 			mj.lastMoveFrame = startFrame;
 			mj.lastFlowerFrame = startFrame;
+			mj.lastHelpFrame = startFrame;
 			// Autres variables d'état
 			mj.carte.n_fleur = n_fleur;
 			mj.carte.n_dyna = n_dyna;

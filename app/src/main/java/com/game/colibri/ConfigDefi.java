@@ -30,6 +30,7 @@ import cz.msebera.android.httpclient.Header;
 import static com.network.colibri.CommonUtilities.SERVER_URL;
 
 public abstract class ConfigDefi {
+	private static final int MAX_PLAYERS = 50;
 
 	Context context;
 	int user;
@@ -122,6 +123,10 @@ public abstract class ConfigDefi {
 	}
 	
 	private void addJoueur(NameAndId j) {
+		if(jAdapter.getCount() + (modifDefi ? 0 : 1) >= MAX_PLAYERS) {
+			Toast.makeText(context, R.string.nojoueurfound, Toast.LENGTH_LONG).show();
+			return;
+		}
 		prgDialog.show();
 		RequestParams params = new RequestParams();
 		params.setHttpEntityIsRepeatable(true);

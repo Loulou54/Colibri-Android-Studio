@@ -1,17 +1,24 @@
 package com.game.colibri;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Map;
 
 import android.util.SparseArray;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.network.colibri.DBController;
 
 public class Defi {
@@ -28,20 +35,46 @@ public class Defi {
 	public long limite;
 	public int type;
 	public int resVus;
+
+	private static class SparseArrayAdapter<T> implements JsonSerializer<SparseArray<T>>, JsonDeserializer<SparseArray<T>> {
+		private final Class<T> classOfT;
+
+		public SparseArrayAdapter(Class<T> classOfT) {
+			this.classOfT = classOfT;
+		}
+
+		@Override
+		public JsonElement serialize(SparseArray<T> src, Type typeOfSrc, JsonSerializationContext context) {
+			final JsonObject sparseArrayJson = new JsonObject();
+			final int nParts = src.size();
+			for(int i=0; i < nParts; i++) {
+				sparseArrayJson.add(""+src.keyAt(i), context.serialize(src.valueAt(i)));
+			}
+			return sparseArrayJson;
+		}
+
+		@Override
+		public SparseArray<T> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+			final JsonObject jsonObject = json.getAsJsonObject();
+			final SparseArray<T> sparseArray = new SparseArray<>(jsonObject.size());
+			for(Map.Entry<String,JsonElement> entry : jsonObject.entrySet()) {
+				sparseArray.put(Integer.parseInt(entry.getKey()), classOfT.cast(context.deserialize(entry.getValue(), classOfT)));
+			}
+			return sparseArray;
+		}
+	}
+
+	private static Gson getGsonSerializer() {
+		final Type participationSparseArrayType = new TypeToken<SparseArray<Participation>>() {}.getType();
+		return new GsonBuilder()
+				.registerTypeAdapter(participationSparseArrayType, new SparseArrayAdapter<>(Participation.class))
+				.create();
+	}
 	
-	public static Defi DefiFromJSON(String jsonDefi) throws JSONException {
+	public static Defi DefiFromJSON(String jsonDefi) throws JsonSyntaxException {
 		if(jsonDefi==null)
 			return null;
-		Gson g = new Gson();
-		Defi d = g.fromJson(jsonDefi, Defi.class);
-		JSONObject jso = (new JSONObject(jsonDefi)).getJSONObject("participants"); // Gson ne parvient pas à reconstruire les participations de SparseArray donc on le fait nous même.
-		JSONArray pArray = jso.getJSONArray("mValues"); // Participations
-		JSONArray kArray = jso.getJSONArray("mKeys"); // Clés (id joueurs)
-		int nP = jso.getInt("mSize"); // Taille de la SparseArray
-		for(int i=0; i<nP; i++) {
-			d.participants.put(kArray.getInt(i), g.fromJson(pArray.getString(i), Participation.class));
-		}
-		return d;
+		return getGsonSerializer().fromJson(jsonDefi, Defi.class);
 	}
 	
 	public Defi(int id, String nom, SparseArray<Participation> p, int nMatch, String nivCours, String nivFini, int t_m, int lim, int type, int resVus) {
@@ -67,7 +100,7 @@ public class Defi {
 	}
 	
 	public String toJSON() {
-		return (new Gson()).toJson(this, Defi.class);
+		return getGsonSerializer().toJson(this, Defi.class);
 	}
 
 	/**
@@ -234,6 +267,5 @@ public class Defi {
 			progressMin=pm;
 			exp=e;
 		}
-		
 	}
 }

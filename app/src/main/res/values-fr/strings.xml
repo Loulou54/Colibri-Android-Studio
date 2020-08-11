@@ -200,4 +200,18 @@
 	<string name="google_sign_in">Connexion avec Google</string>
 	<string name="standard_sign_in">Connexion Standard</string>
 	<string name="google_sign_in_error">Erreur…|La connexion par Google n\'a pas abouti.%1$s</string>
+	<string name="supprDefiComplConf">Souhaitez-vous vraiment supprimer le défi \"%1$s\" pour tout le monde?</string>
+	<string name="supprParticipConfTitle">Supprimer des participants</string>
+	<string name="supprParticipConf">Souhaitez-vous vraiment supprimer les participants suivants du défi \"%1$s\"? \n%2$s</string>
+	<string name="participants">Participants:</string>
+	<string name="modifDefiMsg">%1$s a modifié le défi %2$s:</string>
+	<string name="modifDefiRemovedMsg">- Supprimé: %1$s</string>
+	<string name="modifDefiAddedMsg">+ Ajouté: %1$s</string>
+	<string name="removePartMsg">%1$s a annulé votre participation au défi %2$s!</string>
+	<string name="removeDefiMsg">%1$s a annulé le défi %2$s!</string>
+	<string name="no_solution_go_back">Bloqué !|Essayez de remonter le temps ou recommencez !</string>
+	<string name="unlock_cb_title">Plus de ColiBrain!</string>
+	<string name="unlock_cb_text">Regardez une publicité pour obtenir un ColiBrain !</string>
+	<string name="unlock_cb_ok">Regarder !</string>
+	<string name="cb_ad_load_failed">Oups !|Échec du téléchargement de la pub…</string>
 </resources>

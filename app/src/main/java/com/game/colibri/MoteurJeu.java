@@ -30,11 +30,11 @@ public class MoteurJeu {
 	public static final int MENHIR_ROUGE=5; // Menhir sur lequel on déposerait une dynamite.
 	public static final char VIDE=0;
 	public static final int UP=1,RIGHT=2,LEFT=3,DOWN=4;
-	public static final int PAUSED=0, RUNNING=1, PAUSE_MENU=2, MORT=3, GAGNE=4, SOL_RESEARCH=5, SOL_READY=6;
+	public static final int PAUSED=0, RUNNING=1, PAUSE_MENU=2, MORT=3, GAGNE=4, SOL_RESEARCH=5, SOL_READY=6, DIALOG=7;
 	
 	public int frame = 0, total_frames;
-	public int lastMoveFrame, lastFlowerFrame;
-	private int framesNoMoveForHelp, framesNoFlowerForHelp;
+	public int lastMoveFrame, lastFlowerFrame, lastHelpFrame;
+	private int framesNoFlowerForHelp, framesNoHelpForHelp;
 	public long timeSave = 0;
 	public Carte carte;
 	public Niveau niv;
@@ -98,10 +98,10 @@ public class MoteurJeu {
 	/**
 	 * Initialise les variables du moteur de jeu (buffer, niv, ...) : appelé après chaque appel de carte.loadNiveau
 	 * @param replay true si on rejoue la même carte
-	 * @param framesNoMoveForHelp le nombre de frames depuis le dernier mouvement avant de proposer une aide ColiBrain.
 	 * @param framesNoFlowerForHelp le nombre de frames depuis la dernière fleur ramassée avant de proposer une aide ColiBrain.
+	 * @param framesNoHelpForHelp le nombre de frames depuis la dernière aide ColiBrain auto avant de proposer un aide ColiBrain.
 	 */
-	public void init(boolean replay, int framesNoMoveForHelp, int framesNoFlowerForHelp) {
+	public void init(boolean replay, int framesNoFlowerForHelp, int framesNoHelpForHelp) {
 		moveHandler.removeMessages(jeu.n_niv);
 		niv=carte.niv; // pour avoir une référence locale vers le niveau en cours et un nom moins long
 		buf.clear();
@@ -112,8 +112,9 @@ public class MoteurJeu {
 		frame = 0;
 		lastMoveFrame = 0;
 		lastFlowerFrame = 0;
-		this.framesNoMoveForHelp = framesNoMoveForHelp;
+		lastHelpFrame = 0;
 		this.framesNoFlowerForHelp = framesNoFlowerForHelp;
+		this.framesNoHelpForHelp = framesNoHelpForHelp;
 		wait = 0;
 		lastMove[0] = 1;
 		lastMove[1] = 0;
@@ -235,12 +236,13 @@ public class MoteurJeu {
 			} else {
 				carte.colibri.step = 0; // La vitesse est mise à 0. Dans le premier cas, la vitesse est conservée.
 				if(Solver.instance != null) {
-					lastMoveFrame = frame + 50;
-					lastFlowerFrame = frame + 50;
-				} else if(frame > lastMoveFrame + framesNoMoveForHelp || (frame > lastFlowerFrame + framesNoFlowerForHelp && frame > lastMoveFrame + 20)) {
+					lastMoveFrame = frame + 100;
+					lastFlowerFrame = frame + 100;
+				} else if(frame > lastHelpFrame + framesNoHelpForHelp &&
+						frame > lastFlowerFrame + framesNoFlowerForHelp &&
+						frame > lastMoveFrame + 20) {
+					lastHelpFrame = frame;
 					jeu.coliBrainAutoHint();
-					lastMoveFrame = frame + 50;
-					lastFlowerFrame = frame + 50;
 				}
 			}
 		} else { // Le colibri est en mouvement

@@ -29,6 +29,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static com.network.colibri.CommonUtilities.APP_TOKEN;
 import static com.network.colibri.CommonUtilities.SERVER_URL;
+import static com.network.colibri.CommonUtilities.upgradeMessage;
 
 public class RegisterUser {
 	
@@ -290,7 +291,9 @@ public class RegisterUser {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				prgDialog.dismiss();
-				if(response.equalsIgnoreCase("pris")) { // Nom déjà pris
+				if(response.equalsIgnoreCase("upgrade")) {
+					upgradeMessage(context);
+				} else if(response.equalsIgnoreCase("pris")) { // Nom déjà pris
 					Toast.makeText(context, R.string.deja_pris, Toast.LENGTH_LONG).show();
 				} else if(response.equalsIgnoreCase("google authentication failed")) { // Erreur d'authentification par le tokenId
 					Toast.makeText(context,
@@ -336,7 +339,9 @@ public class RegisterUser {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String response) {
 				prgDialog.dismiss();
-				if(response.equalsIgnoreCase("not registered")) { // Le pseudo n'existe pas
+				if(response.equalsIgnoreCase("upgrade")) {
+					upgradeMessage(context);
+				} else if(response.equalsIgnoreCase("not registered")) { // Le pseudo n'existe pas
 					Toast.makeText(context, R.string.not_registered, Toast.LENGTH_LONG).show();
 				} else if(response.equalsIgnoreCase("wrong password")) { // Mauvais mot de passe
 					Toast.makeText(context, R.string.wrong_password, Toast.LENGTH_LONG).show();

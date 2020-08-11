@@ -28,12 +28,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
 import static com.network.colibri.CommonUtilities.SERVER_URL;
+import static com.network.colibri.CommonUtilities.addServerCACertToClient;
 
 /**
  * Menu principal : activité lancée au démarage.
@@ -69,6 +73,12 @@ public class MenuPrinc extends Activity {
 			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 			multijoueur(null);
 		}
+		MobileAds.initialize(this, new OnInitializationCompleteListener() {
+			@Override
+			public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+			}
+		});
 		// ATTENTION: This was auto-generated to handle app links.
 		/*Intent appLinkIntent = getIntent();
 		String appLinkAction = appLinkIntent.getAction();
@@ -257,6 +267,7 @@ public class MenuPrinc extends Activity {
 		multiCount.setText("");
 		final AsyncHttpClient client = new AsyncHttpClient();
 		client.setMaxRetriesAndTimeout(2, 500);
+		addServerCACertToClient(this, client);
 		client.get(SERVER_URL + "/multiplayer_count.php", null, new TextHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String responseString) {
@@ -277,7 +288,6 @@ public class MenuPrinc extends Activity {
 			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 				multiCount.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(android.R.drawable.presence_invisible), null, null, null);
 				System.err.println("multiplayer_count.php error ("+statusCode+") response:\n"+responseString);
-
 			}
 		});
 	}
@@ -322,6 +332,7 @@ public class MenuPrinc extends Activity {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			if(screen!=0) {
 				displayMenu();
+				updateMultiplayerCount();
 			}
 			else if (opt_infos.getVisibility()==View.VISIBLE) {
 				opt_infos.setVisibility(View.INVISIBLE);

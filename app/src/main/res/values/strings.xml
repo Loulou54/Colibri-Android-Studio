@@ -201,7 +201,7 @@
 	<string name="standard_sign_in">Standard Sign In</string>
 	<string name="google_sign_in_error">Error…|Google Sign In was unsuccessful.%1$s</string>
 	<string name="supprDefiComplConf">Do you really wish to delete the challenge \"%1$s\" for everyone?</string>
-	<string name="supprParticipConfTitle">Remove current participants</string>
+	<string name="supprParticipConfTitle">Remove participants</string>
 	<string name="supprParticipConf">Do you really wish to remove the following players from the challenge \"%1$s\"? \n%2$s</string>
 	<string name="participants">Participants:</string>
 	<string name="modifDefiMsg">%1$s has modified the challenge %2$s:</string>
@@ -210,4 +210,8 @@
 	<string name="removePartMsg">%1$s has cancelled your participation to the challenge %2$s!</string>
 	<string name="removeDefiMsg">%1$s has cancelled the challenge %2$s!</string>
 	<string name="no_solution_go_back">You\'re stuck!|Try to go back in time or restart!</string>
+	<string name="unlock_cb_title">No more ColiBrain!</string>
+	<string name="unlock_cb_text">Watch an ad to unlock a ColiBrain for free!</string>
+	<string name="unlock_cb_ok">Watch!</string>
+	<string name="cb_ad_load_failed">Oops!|Couldn\'t load the ad…</string>
 </resources>

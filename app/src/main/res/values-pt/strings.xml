@@ -196,4 +196,18 @@
 	<string name="google_sign_in">Conexão com o Google</string>
 	<string name="standard_sign_in">Conexão padrão</string>
 	<string name="google_sign_in_error">Erro…|A conexão do Google não teve êxito.%1$s</string>
+	<string name="supprDefiComplConf">Deseja realmente excluir o desafio \"%1$s\" para todos?</string>
+	<string name="supprParticipConfTitle">Remover participantes</string>
+	<string name="supprParticipConf">Deseja realmente remover os seguintes jogadores do desafio \"%1$s\"? \n%2$s</string>
+	<string name="participants">Participantes:</string>
+	<string name="modifDefiMsg">%1$s modificou o desafio %2$s:</string>
+	<string name="modifDefiRemovedMsg">- Removido: %1$s</string>
+	<string name="modifDefiAddedMsg">+ Adicionado: %1$s</string>
+	<string name="removePartMsg">%1$s cancelou sua participação no desafio %2$s!</string>
+	<string name="removeDefiMsg">%1$s cancelou o desafio %2$s!</string>
+	<string name="no_solution_go_back">Você está preso!|Tente voltar no tempo ou reinicie!</string>
+	<string name="unlock_cb_title">Não há mais ColiBrain!</string>
+	<string name="unlock_cb_text">Assista a um anúncio para obter um ColiBrain!</string>
+	<string name="unlock_cb_ok">Ver!</string>
+	<string name="cb_ad_load_failed">Ups!|Não foi possível carregar o anúncio…</string>
 </resources>

@@ -3,8 +3,6 @@ package com.game.colibri;
 import java.lang.ref.WeakReference;
 import java.util.Comparator;
 
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.JsonSyntaxException;
 
 public class Resultats extends Activity {
 	
@@ -74,7 +74,7 @@ public class Resultats extends Activity {
 			defi = Defi.DefiFromJSON(defi_list[defi_displayed]);
 			resVus[defi_displayed] = defi.id;
 			defi_displayed++;
-		} catch (JSONException e) {
+		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 			finish();
 			return;

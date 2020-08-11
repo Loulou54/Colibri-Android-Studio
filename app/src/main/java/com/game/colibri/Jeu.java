@@ -6,12 +6,20 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Random;
 
-import org.json.JSONException;
-
 import com.game.colibri.Solver.Move;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.gson.JsonSyntaxException;
 import com.network.colibri.DBController;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -38,6 +46,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 /**
  * Activité gérant le jeu proprement dit. Elle affiche notamment la View "Carte" en plein écran.
  */
@@ -59,6 +69,8 @@ public class Jeu extends Activity {
 	public int n_niv;
 	private Bundle opt, savedInstanceState;
 	private Defi defi=null;
+	private InterstitialAd endLevelAd;
+	private boolean quitAction = false;
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -71,7 +83,7 @@ public class Jeu extends Activity {
 		if(multi) {
 			try {
 				defi = Defi.DefiFromJSON(opt.getString("defi"));
-			} catch(JSONException e) {
+			} catch(JsonSyntaxException e) {
 				e.printStackTrace();
 				finish();
 			}
@@ -175,6 +187,26 @@ public class Jeu extends Activity {
 			MyApp.getApp().editor.putInt("defi_fuit", defi.id);
 			MyApp.getApp().editor.commit();
 		}
+		endLevelAd = new InterstitialAd(this);
+		endLevelAd.setAdUnitId("ca-app-pub-4419736604084888/5266386581"); // Prod ad
+		//endLevelAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // Test ad
+		endLevelAd.setAdListener(new AdListener() {
+			@Override
+			public void onAdOpened() {
+				super.onAdOpened();
+				MyApp.stopActivity();
+			}
+			@Override
+			public void onAdClosed() {
+				super.onAdClosed();
+				MyApp.resumeActivity();
+				if(quitAction) {
+					finish();
+				} else {
+					suivant();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -218,7 +250,7 @@ public class Jeu extends Activity {
 			brandNew=false;
 		} else if(!hasFocus && play.state==MoteurJeu.RUNNING) {
 			play.pause(MoteurJeu.PAUSE_MENU);
-		} else if(hasFocus && play.state!=MoteurJeu.RUNNING && perdu.getVisibility()!=View.VISIBLE && gagne.getVisibility()!=View.VISIBLE) {
+		} else if(hasFocus && play.state==MoteurJeu.PAUSE_MENU && perdu.getVisibility()!=View.VISIBLE && gagne.getVisibility()!=View.VISIBLE) {
 			pause.setVisibility(View.VISIBLE);
 			setLevelInfo();
 		}
@@ -322,7 +354,7 @@ public class Jeu extends Activity {
 	
 	private void updateColiBrains() {
 		ImageButton coliBrains = (ImageButton) findViewById(R.id.colibrains_ingame);
-		coliBrains.setEnabled(MyApp.coliBrains > 0 || infiniteColiBrains());
+		//coliBrains.setEnabled(MyApp.coliBrains > 0 || infiniteColiBrains());
 		((ColiBrain) coliBrains.getDrawable())
 			.setProgress(MyApp.expProgCB/(float)MyApp.EXP_LEVEL_PER_COLI_BRAIN)
 			.setText(infiniteColiBrains() ? "∞" : ""+MyApp.coliBrains);
@@ -397,6 +429,9 @@ public class Jeu extends Activity {
 		play.pause(MoteurJeu.GAGNE);
 		if(carte.n_dyna>0) hideDyna();
 		menuLateral(0,0);
+		if(!endLevelAd.isLoaded() && !endLevelAd.isLoading()) { // Si la pub ne s'est pas chargée avant (soit par erreur, soit car la limite de fréquence était atteinte)
+			endLevelAd.loadAd(new AdRequest.Builder().build());
+		}
 		// Détermination de l'expérience
 		int exp;
 		if(opt.getInt("mode",0)>0) {
@@ -557,6 +592,9 @@ public class Jeu extends Activity {
 		if(replay) {
 			niv.replay();
 		} else {
+			if(!endLevelAd.isLoaded() && !endLevelAd.isLoading()) {
+				endLevelAd.loadAd(new AdRequest.Builder().build());
+			}
 			forfait = false;
 			solved = false;
 			first_time = 0;
@@ -588,7 +626,7 @@ public class Jeu extends Activity {
 		carte.loadNiveau(niv);
 		// Selon le niveau d'expérience, le temps avant d'obtenir une aide ColiBrain augmente.
 		double progressFactor = 1. - Math.exp(-MyApp.experience/200000.);
-		play.init(replay, (int)(25*(3. + 7*progressFactor)), (int)(25*(5. + 9*progressFactor)));
+		play.init(replay, (int)(25*(6. + 9*progressFactor)), (int)(25*(15. + 15*progressFactor)));
 		updateColiBrains();
 		if(savedInstanceState!=null) {
 			pause.setVisibility(View.VISIBLE);
@@ -616,7 +654,7 @@ public class Jeu extends Activity {
 	public void reprendre(View v) {
 		pause.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
 		pause.setVisibility(View.GONE);
-        play.start(); 
+        play.start();
 	}
 	
 	public void recommencer(View v) {
@@ -630,10 +668,13 @@ public class Jeu extends Activity {
     	menuLateral(0,0);
     	launch_niv(true);
 	}
-	
+
 	public void quitter(View v) {
 		if(multi && !solved) {
-			passer(v);
+			passer(null);
+		} else if(solved && endLevelAd.isLoaded()) {
+			quitAction = true;
+			endLevelAd.show();
 		} else {
 			finish();
 		}
@@ -642,9 +683,88 @@ public class Jeu extends Activity {
 	public void cancelMove(View v) {
 		play.cancelLastMove();
 	}
+
+	private void coliBrainRewardedAd() {
+		final RewardedAd coliBrainAd = new RewardedAd(this, "ca-app-pub-4419736604084888/1889839232"); // Prod ad
+		//final RewardedAd coliBrainAd = new RewardedAd(this, "ca-app-pub-3940256099942544/5224354917"); // Test ad
+		final boolean[] launchReqAndLoadFailCbAd = new boolean[] {false, false}; // 0: l'utilisateur a demandé à regarder la pub mais elle n'est pas chargée ; 1: le chargement de la pub a échoué
+		final RewardedAdCallback coliBrainAdCallback = new RewardedAdCallback() {
+			@Override
+			public void onRewardedAdOpened() {
+				super.onRewardedAdOpened();
+				MyApp.stopActivity();
+			}
+			@Override
+			public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+				MyApp.updateExpProgCB(MyApp.EXP_LEVEL_PER_COLI_BRAIN);
+			}
+			@Override
+			public void onRewardedAdClosed() {
+				super.onRewardedAdClosed();
+				MyApp.resumeActivity();
+				play.start();
+				if(MyApp.coliBrains > 0)
+					coliBrainHelp(null);
+			}
+		};
+		coliBrainAd.loadAd(new AdRequest.Builder().build(), new RewardedAdLoadCallback() {
+			@Override
+			public void onRewardedAdLoaded() {
+				super.onRewardedAdLoaded();
+				if(launchReqAndLoadFailCbAd[0]) {
+					coliBrainAd.show(Jeu.this, coliBrainAdCallback);
+				}
+			}
+			@Override
+			public void onRewardedAdFailedToLoad(LoadAdError loadAdError) {
+				super.onRewardedAdFailedToLoad(loadAdError);
+				if(launchReqAndLoadFailCbAd[0]) {
+					Toast.makeText(Jeu.this, R.string.cb_ad_load_failed, Toast.LENGTH_LONG).show();
+					play.start();
+				} else {
+					launchReqAndLoadFailCbAd[1] = true;
+				}
+			}
+		});
+		play.pause(MoteurJeu.DIALOG);
+		final PaperDialog unlockCbBox = new PaperDialog(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog), 0);
+		unlockCbBox.setTitle(R.string.unlock_cb_title);
+		unlockCbBox.setMessage(R.string.unlock_cb_text);
+		unlockCbBox.setPositiveButton(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(coliBrainAd.isLoaded()) {
+					coliBrainAd.show(Jeu.this, coliBrainAdCallback);
+				} else if(launchReqAndLoadFailCbAd[1]) {
+					Toast.makeText(Jeu.this, R.string.cb_ad_load_failed, Toast.LENGTH_LONG).show();
+					play.start();
+				} else
+					launchReqAndLoadFailCbAd[0] = true;
+				unlockCbBox.dismiss();
+			}
+		}, getResources().getString(R.string.unlock_cb_ok));
+		unlockCbBox.setNegativeButton(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				unlockCbBox.dismiss();
+				play.start();
+			}
+		}, null);
+		unlockCbBox.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialogInterface) {
+				play.start();
+			}
+		});
+		unlockCbBox.show();
+	}
 	
 	public void coliBrainHelp(View v) {
-		if(play.state!=MoteurJeu.RUNNING || (MyApp.coliBrains <= 0 && !infiniteColiBrains()))
+		if(MyApp.coliBrains <= 0 && !infiniteColiBrains()) { // Rewarded ad
+			menuLateral(0,0);
+			coliBrainRewardedAd();
+			return;
+		} else if(play.state!=MoteurJeu.RUNNING)
 			return;
 		menuLateral(0,0);
 		play.pause(MoteurJeu.SOL_RESEARCH);
@@ -740,13 +860,13 @@ public class Jeu extends Activity {
 				gagne(Participation.FORFAIT);
 			return;
 		}
+		play.pause(MoteurJeu.DIALOG);
 		final PaperDialog forfait = new PaperDialog(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog), 0);
 		forfait.setTitle(R.string.forfait);
 		forfait.setMessage(R.string.forfait_msg);
 		forfait.setPositiveButton(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				pause.setVisibility(View.GONE);
 				gagne(Participation.FORFAIT);
 				forfait.dismiss();
 			}
@@ -755,18 +875,34 @@ public class Jeu extends Activity {
 			@Override
 			public void onClick(View v) {
 				forfait.dismiss();
+				play.start();
 			}
 		}, null);
+		forfait.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialogInterface) {
+				play.start();
+			}
+		});
 		forfait.show();
 	}
-	
+
 	public void suivant(View v) {
+		if(endLevelAd.isLoaded()) {
+			quitAction = false;
+			endLevelAd.show();
+		} else {
+			suivant();
+		}
+	}
+	
+	public void suivant() {
 		gagne.setVisibility(View.GONE);
 		if(bout_dyna.getVisibility()==View.VISIBLE) hideDyna();
 		if(opt.getInt("mode", 0)==Niveau.CAMPAGNE) {
 			if(n_niv==NIV_MAX) {
 				setResult(2);
-				quitter(v);
+				quitter(null);
 				return;
 			}
 			n_niv++;

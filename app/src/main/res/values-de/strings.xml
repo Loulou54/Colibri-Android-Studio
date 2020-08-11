@@ -195,4 +195,18 @@
 	<string name="google_sign_in">Anmeldung mit Google</string>
 	<string name="standard_sign_in">Connexion Standard</string>
 	<string name="google_sign_in_error">Fehler…|Google-Anmeldung war nicht erfolgreich.%1$s</string>
+	<string name="supprDefiComplConf">Möchten Sie das Spiel \"%1$s\" wirklich für alle löschen?</string>
+	<string name="supprParticipConfTitle">Teilnehmer entfernen</string>
+	<string name="supprParticipConf">Möchten Sie wirklich die folgenden Spieler aus dem Spiel \"%1$s\" entfernen? \n%2$s</string>
+	<string name="participants">Teilnehmer:</string>
+	<string name="modifDefiMsg">%1$s hat das Spiel %2$s geändert:</string>
+	<string name="modifDefiRemovedMsg">- Entfernt: %1$s</string>
+	<string name="modifDefiAddedMsg">+ Hinzugefügt: %1$s</string>
+	<string name="removePartMsg">%1$s hat Ihre Teilnahme am Spiel %2$s abgesagt!</string>
+	<string name="removeDefiMsg">%1$s hat das Spiel %2$s abgesagt!</string>
+	<string name="no_solution_go_back">Verstopft!|Versuchen Sie, in der Zeit zurück zu gehen oder neu zu starten!</string>
+	<string name="unlock_cb_title">Kein ColiBrain mehr!</string>
+	<string name="unlock_cb_text">Sehen Sie sich eine Anzeige an, um ein ColiBrain zu erhalten!</string>
+	<string name="unlock_cb_ok">Sehen!</string>
+	<string name="cb_ad_load_failed">Hoppla!|Die Anzeige konnte nicht geladen werden.</string>
 </resources>
