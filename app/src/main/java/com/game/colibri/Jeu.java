@@ -223,12 +223,16 @@ public class Jeu extends Activity {
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("forfait", forfait);
-		outState.putBoolean("solved", solved);
-		outState.putBoolean("finipartous", finipartous);
-		outState.putInt("total_frames", play.state==MoteurJeu.GAGNE ? 0 : play.total_frames+play.frame);
-		outState.putInt("first_time", first_time);
-		outState.putLong("seed", niv.seed);
+		if (savedInstanceState != null) {
+			outState.putAll(savedInstanceState);
+		} else {
+			outState.putBoolean("forfait", forfait);
+			outState.putBoolean("solved", solved);
+			outState.putBoolean("finipartous", finipartous);
+			outState.putInt("total_frames", play.state == MoteurJeu.GAGNE ? 0 : play.total_frames + play.frame);
+			outState.putInt("first_time", first_time);
+			outState.putLong("seed", niv.seed);
+		}
 		super.onSaveInstanceState(outState);
 	}
 	
@@ -307,6 +311,11 @@ public class Jeu extends Activity {
 		} else if(play.state==MoteurJeu.SOL_RESEARCH) { // Interrupt research
 			if(Solver.instance!=null)
 				Solver.instance.cancel(true);
+		} else if(play.state==MoteurJeu.DIALOG) { // Jeu en attente après un Dialog (ex: chargement RewardedAd trop long..)
+			if(keyCode == KeyEvent.KEYCODE_BACK)
+				play.start();
+			else
+				return false;
 		} else {
 			return false;
 		}
@@ -733,14 +742,15 @@ public class Jeu extends Activity {
 		unlockCbBox.setPositiveButton(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				unlockCbBox.dismiss();
 				if(coliBrainAd.isLoaded()) {
 					coliBrainAd.show(Jeu.this, coliBrainAdCallback);
 				} else if(launchReqAndLoadFailCbAd[1]) {
 					Toast.makeText(Jeu.this, R.string.cb_ad_load_failed, Toast.LENGTH_LONG).show();
 					play.start();
-				} else
+				} else {
 					launchReqAndLoadFailCbAd[0] = true;
-				unlockCbBox.dismiss();
+				}
 			}
 		}, getResources().getString(R.string.unlock_cb_ok));
 		unlockCbBox.setNegativeButton(new View.OnClickListener() {

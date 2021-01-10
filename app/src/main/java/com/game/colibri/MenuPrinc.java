@@ -37,7 +37,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
 
 import static com.network.colibri.CommonUtilities.SERVER_URL;
-import static com.network.colibri.CommonUtilities.addServerCACertToClient;
+import static com.network.colibri.CommonUtilities.SSL_SOCKET_FACTORY;
 
 /**
  * Menu principal : activité lancée au démarage.
@@ -267,7 +267,7 @@ public class MenuPrinc extends Activity {
 		multiCount.setText("");
 		final AsyncHttpClient client = new AsyncHttpClient();
 		client.setMaxRetriesAndTimeout(2, 500);
-		addServerCACertToClient(this, client);
+		client.setSSLSocketFactory(SSL_SOCKET_FACTORY);
 		client.get(SERVER_URL + "/multiplayer_count.php", null, new TextHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, String responseString) {

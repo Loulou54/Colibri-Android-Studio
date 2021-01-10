@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.game.colibri.MyApp;
 import com.game.colibri.R;
 import com.game.colibri.Toast;
-import com.loopj.android.http.AsyncHttpClient;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,15 +16,24 @@ import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+
+import cz.msebera.android.httpclient.conn.ssl.SSLContexts;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
+import cz.msebera.android.httpclient.conn.ssl.X509HostnameVerifier;
 
 public final class CommonUtilities {
 
-	// previous address: https://ssl17.ovh.net/~louisworix/
+	// previous cluster address: https://ssl17.ovh.net/~louisworix/
     // then: https://cluster017.hosting.ovh.net/~louisworix/
-    public static final String SERVER_URL = "https://cluster017.hosting.ovh.net/~louisworix/colibri";
+    private static final String CLUSTER_HOSTNAME = "cluster017.hosting.ovh.net";
+
+    public static final String SERVER_URL = "https://louisworkplace.net/colibri";
 
     // Communication token
     public static final String APP_TOKEN = "!,éà_fzsàç12e*rge<€4>";
@@ -59,11 +68,71 @@ public final class CommonUtilities {
         }
     }
 
-    public static void addServerCACertToClient(Context context, AsyncHttpClient client) {
+    public static SSLSocketFactory SSL_SOCKET_FACTORY = getCustomSSLSocketFactory();
+
+    /**
+     * Création d'une SSL Socket Factory spécifique pour supporter les anciennes versions d'Android qui:
+     * 1) Ne supportent pas SNI (Server Name Indication). Dans ce cas, l'appareil reçoit le certificat
+     *    de cluster017.hosting.ovh.net au lieu de louisworkplace.net.
+     * 2) N'ont pas le certificat de l'autorité de certification "USERTrust RSA Certification Authority"
+     *    qui est à la racine des certificats d'OVH pour le domaine cluster017.hosting.ovh.net.
+     * @return custom SSL Socket Factory or default
+     */
+    private static SSLSocketFactory getCustomSSLSocketFactory() {
+        KeyStore keystore = getKeystoreWithCA(MyApp.getApp().getResources().openRawResource(R.raw.cacert));
+        X509HostnameVerifier hostnameVerifier = new X509HostnameVerifier() {
+            @Override
+            public void verify(String host, SSLSocket ssl) throws IOException {
+                try {
+                    SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(host, ssl);
+                } catch (IOException e) {
+                    try {
+                        SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(CLUSTER_HOSTNAME, ssl);
+                    } catch (IOException e2) {
+                        e.printStackTrace();
+                        e2.printStackTrace();
+                        throw e; // On throw l'exception d'origine
+                    }
+                }
+            }
+            @Override
+            public void verify(String host, X509Certificate cert) throws SSLException {
+                try {
+                    SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(host, cert);
+                } catch (SSLException e) {
+                    try {
+                        SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(CLUSTER_HOSTNAME, cert);
+                    } catch (SSLException e2) {
+                        e.printStackTrace();
+                        e2.printStackTrace();
+                        throw e; // On throw l'exception d'origine
+                    }
+                }
+            }
+            @Override
+            public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException {
+                try {
+                    SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(host, cns, subjectAlts);
+                } catch (SSLException e) {
+                    try {
+                        SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(CLUSTER_HOSTNAME, cns, subjectAlts);
+                    } catch (SSLException e2) {
+                        e.printStackTrace();
+                        e2.printStackTrace();
+                        throw e; // On throw l'exception d'origine
+                    }
+                }
+            }
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER.verify(s, sslSession);
+            }
+        };
         try {
-            client.setSSLSocketFactory(new SSLSocketFactory(getKeystoreWithCA(context.getResources().openRawResource(R.raw.cacert))));
+            return new SSLSocketFactory(SSLContexts.custom().loadTrustMaterial(keystore).build(), hostnameVerifier);
         } catch (Exception e) {
             e.printStackTrace();
+            return SSLSocketFactory.getSocketFactory();
         }
     }
 

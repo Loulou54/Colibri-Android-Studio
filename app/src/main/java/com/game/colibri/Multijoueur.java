@@ -4,7 +4,7 @@ import static com.network.colibri.CommonUtilities.BROADCAST_MESSAGE_ACTION;
 import static com.network.colibri.CommonUtilities.EXTRA_MESSAGE;
 import static com.network.colibri.CommonUtilities.SERVER_URL;
 import static com.network.colibri.CommonUtilities.APP_TOKEN;
-import static com.network.colibri.CommonUtilities.addServerCACertToClient;
+import static com.network.colibri.CommonUtilities.SSL_SOCKET_FACTORY;
 import static com.network.colibri.CommonUtilities.upgradeMessage;
 
 import java.lang.ref.WeakReference;
@@ -78,7 +78,7 @@ public class Multijoueur extends Activity {
 		connect = new ConnectionDetector(this);
 		client = new AsyncHttpClient();
 		client.setMaxRetriesAndTimeout(5, 500);
-		addServerCACertToClient(this, client);
+		client.setSSLSocketFactory(SSL_SOCKET_FACTORY);
 		base = new DBController(this);
 		joueurs = new SparseArray<Joueur>();
 		defiList = new ArrayList<Defi>();

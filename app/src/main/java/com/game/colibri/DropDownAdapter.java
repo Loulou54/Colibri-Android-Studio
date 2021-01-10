@@ -1,7 +1,7 @@
 package com.game.colibri;
 
 import static com.network.colibri.CommonUtilities.SERVER_URL;
-import static com.network.colibri.CommonUtilities.addServerCACertToClient;
+import static com.network.colibri.CommonUtilities.SSL_SOCKET_FACTORY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class DropDownAdapter extends ArrayAdapter<DropDownAdapter.NameAndId> {
 	public DropDownAdapter(Context context, int resource, int user, List<Joueur> joueurs) {
 		super(context, resource, new ArrayList<NameAndId>());
 		client = new SyncHttpClient();
-		addServerCACertToClient(context, client);
+		client.setSSLSocketFactory(SSL_SOCKET_FACTORY);
 		this.user = joueurs.isEmpty() ? user : 0; // Si joueurs est non vide, on est dans ModifDefi et user est inclu dans les joueurs
 		this.joueurs = joueurs;
 	}
